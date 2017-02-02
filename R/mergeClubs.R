@@ -13,7 +13,7 @@
 
 
 
-mergeClub <- function(clubs,X,IDvar, yearVar, lastT, method='', divergent=FALSE, threshold = -1.65){
+mergeClubs <- function(clubs,X,IDvar, yearVar, lastT, method='', divergent=FALSE, threshold = -1.65){
 
     #initialise variables
     ll <- length(clubs$clubs)
