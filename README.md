@@ -13,4 +13,5 @@ To install the package, simply run the following code:
 if(!('devtools' %in% installed.packages())) install.packages("devtools")
 
 library(devtools)
+
 install_github("rhobis/ConvergenceClubs")
