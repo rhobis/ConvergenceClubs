@@ -3,7 +3,7 @@ Title: Find Convergence Clubs
 Version: 0.1.0
 Authors@R: as.person(c(
 	'Roberto Sichera <roberto.sichera@unipa.it> [aut, cre]', 
-	'Pietro Pizzuto <roberto.sichera@unipa.it> [aut]' ))
+	'Pietro Pizzuto <pietro.pizzuto02@unipa.it> [aut]' ))
 Description: Functions to implement the Convergence Club clustering procedure.
 Depends:
     R (>= 3.3.1)
