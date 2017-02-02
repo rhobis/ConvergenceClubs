@@ -1,24 +1,17 @@
-###########################################################
-###
-### mergeClub function takes as input:
-### clubs: a club list (created by findClub function)
-### X: matrix or dataframe with data
-### IDVar: column index of regions
-### yearVar: indici delle colonne degli anni
-### lastT: column index of the last time period (clustering variable)
-###
-### It returns as output a list with merged clubs.
-###
-###
-###
-###
-### author:         Roberto Sichera
-### last modified:  17/10/2016
-###
+#' Merges a list of clubs created with the function findClubs
+#' by either Phillips and Sul method or von Lyncker and Thoennessen procedure
+#'
+#' Returns as output a list with merged clubs.
+#'
+#' @export
+#'
+#' @param clubs a club list (created by findClub function)
+#' @param X matrix or dataframe with data
+#' @param IDVar column index of regions
+#' @param yearVar column indices of year variables
+#' @param lastT column index of the last time period (clustering variable)
 
-# source('~/R/Funzioni/ClubConvergenza/computeH.R')
-# source('~/R/Funzioni/ClubConvergenza/estimateMod.R')
-# source('~/R/Funzioni/ClubConvergenza/mergeDivergent.R')
+
 
 mergeClub <- function(clubs,X,IDvar, yearVar, lastT, method='', divergent=FALSE, threshold = -1.65){
 
