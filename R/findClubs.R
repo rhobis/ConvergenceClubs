@@ -1,25 +1,15 @@
-# library(checkpoint)
-# checkpoint("2017-01-20")
-#
-# source('computeH.R')
-# source('estimateMod.R')
-# source('coreG.R')
-# source('club.R')
+#' Finds convergence clubs by means of Phillips and Sul  clustering procedure.
+#'
+#' @param X matrix or dataframe containing data
+#' @param yearVar vector containing the indices of the variable columns (e.g. GDP of years 2000 to 2016)
+#' @param lastT column index of the last time period, representing the clustering variable
+#' @param cstar threshold value for test t (c*)
+#'
+#' @export
 
-################################################################################
-### Main Function, finds convergence clubs by means of Phillips and Sul
-### cluster procedure.
-###
-### authors:        Roberto Sichera, Pietro Pizzuto
-### last modified:  22/01/2017
+
 
 findClubs<- function(X, IDvar, yearVar, lastT, cstar = 0){
-    ### X matrix or dataframe containing data
-    ### IDVar: column index of regions
-    ### yearVar: vector containing the indices of the variable columns (e.g. GDP of years 2000 to 2016)
-    ### lastT: column index of the last time period, representing the clustering variable
-    ### cstar = threshold value for test t (c*)
-    ###
     ### returns a list of convergence clubs and divergent regions;
     ###     output is composed of two lists:
     ###     $clubs, which includes all clubs, each defined by a list:
