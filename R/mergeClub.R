@@ -1,14 +1,14 @@
 ###########################################################
 ###
-### mergeClub function takes as input: 
-### clubs: a club list (created by findClub function) 
+### mergeClub function takes as input:
+### clubs: a club list (created by findClub function)
 ### X: matrix or dataframe with data
 ### IDVar: column index of regions
 ### yearVar: indici delle colonne degli anni
 ### lastT: column index of the last time period (clustering variable)
 ###
 ### It returns as output a list with merged clubs.
-### 
+###
 ###
 ###
 ###
@@ -16,20 +16,20 @@
 ### last modified:  17/10/2016
 ###
 
-source('~/R/Funzioni/ClubConvergenza/computeH.R')
-source('~/R/Funzioni/ClubConvergenza/estimateMod.R')
-source('~/R/Funzioni/ClubConvergenza/mergeDivergent.R')
+# source('~/R/Funzioni/ClubConvergenza/computeH.R')
+# source('~/R/Funzioni/ClubConvergenza/estimateMod.R')
+# source('~/R/Funzioni/ClubConvergenza/mergeDivergent.R')
 
 mergeClub <- function(clubs,X,IDvar, yearVar, lastT, method='', divergent=FALSE, threshold = -1.65){
-    
+
     #initialise variables
     ll <- length(clubs$clubs)
     pclub <- list()
     n <- 0
     appendLast <- FALSE
-    
+
     if(ll<2) stop('There is only one club')
-    
+
     i <- 1
     while(i<ll){
         regions <- clubs$clubs[[i]]$regions
@@ -58,8 +58,8 @@ mergeClub <- function(clubs,X,IDvar, yearVar, lastT, method='', divergent=FALSE,
                         # rmod <- mod
                     }else break
                 }else{#method by Phillips and Sul (2009)
-                    #if so, store units and names of clubs tested 
-                    #until now, then keep scanning the club list 
+                    #if so, store units and names of clubs tested
+                    #until now, then keep scanning the club list
                     # and repeat thetest adding another club
                     units <- c(units,addunits)
                     regions <- c(regions,addregions)
@@ -70,7 +70,7 @@ mergeClub <- function(clubs,X,IDvar, yearVar, lastT, method='', divergent=FALSE,
                     appendLast <- TRUE
                 }
                 #end if
-                #if not, store in output the highest club (i) 
+                #if not, store in output the highest club (i)
                 #and start again from i+1
                 break
             }
@@ -83,7 +83,7 @@ mergeClub <- function(clubs,X,IDvar, yearVar, lastT, method='', divergent=FALSE,
         pclub[[paste('club',n,sep='')]]$id<- units
         H <- computeH(X, id=units,yearVar)
         pclub[[paste('club',n,sep='')]]$model <- estimateMod(H,yearVar)
-        
+
         if(appendLast){
             pclub[[paste('club',n+2,sep='')]]$clubs <- names(clubs$clubs)[ll]
             pclub[[paste('club',n+2,sep='')]]$regions <- clubs$clubs[[ll]]$regions
