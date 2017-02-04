@@ -3,13 +3,13 @@
 #'
 #' Returns as output a list with merged clubs.
 #'
-#' @export
-#'
 #' @param clubs a club list (created by findClub function)
 #' @param X matrix or dataframe with data
 #' @param IDVar column index of regions
 #' @param yearVar column indices of year variables
 #' @param lastT column index of the last time period (clustering variable)
+#' 
+#' @export
 
 
 
