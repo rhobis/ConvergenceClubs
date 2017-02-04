@@ -10,8 +10,11 @@ mergeClubs(): applies Phillips and Sul or von Lyncker and Thoennessen merging pr
 
 To install the package, simply run the following code:
 
+``` r
+# if not present, install 'devtools' package
 if(!('devtools' %in% installed.packages())) install.packages("devtools")
 
+# install ConvergenceClubs package
 library(devtools)
-
 install_github("rhobis/ConvergenceClubs")
+```
