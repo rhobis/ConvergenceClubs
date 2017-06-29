@@ -1,3 +1,5 @@
+#' Merge convergence clubs
+#' 
 #' Merges a list of clubs created with the function findClubs
 #' by either Phillips and Sul method or von Lyncker and Thoennessen procedure
 #'
@@ -32,14 +34,14 @@ mergeClubs <- function(clubs,X,IDvar, yearVar, lastT, method='', divergent=FALSE
         for(k in (i+1):ll){
             addunits <- clubs$clubs[[k]]$id
             addregions <- clubs$clubs[[k]]$regions
-            H <- computeH(X, id=c(units,addunits),yearVar)
+            H <- computeH(X, id=c(units,addunits), yearVar)
             # rmod <- mod #model to be returned
             mod <- estimateMod(H,yearVar)
             tvalue <- mod$tvalue
             #check if a couple of clubs can be merged
             if(tvalue > -1.65){
-                if(method=='vLT' & k < ll-2){#method by von Lyncker and Rasmus Thoennessen (2016)
-                    nextcouple <- c(clubs$clubs[[k+1]]$id,clubs$clubs[[k+2]]$id)
+                if(method=='vLT' & k <= ll-1){#method by von Lyncker and Rasmus Thoennessen (2016)
+                    nextcouple <- c(clubs$clubs[[k]]$id,clubs$clubs[[k+1]]$id)
                     H <- computeH(X, id=nextcouple,yearVar)
                     # rmod <- mod #model to be returned
                     mod2 <- estimateMod(H,yearVar)
