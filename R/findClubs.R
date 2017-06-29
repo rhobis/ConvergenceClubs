@@ -21,7 +21,7 @@ findClubs<- function(X, IDvar, yearVar, lastT, cstar = 0){
     ###     $divergent, which includes all divergent regions and
     ###                 their indices in the original dataset X
 
-    # require(lmtest)
+    # require(lmtest) 
     # require(sandwich)
 
     #Sort data by clustering variable (decreasing)
@@ -32,11 +32,14 @@ findClubs<- function(X, IDvar, yearVar, lastT, cstar = 0){
     clubs <- list()
     l <- 1
     while(TRUE){
-        if (dim(dati)[1] < 2)
+        if (dim(dati)[1] < 2){
+            clubs$divergent <- list(regions = as.character(dati[,IDvar]),
+                                    id = which(X[,IDvar] %in% as.character(dati[,IDvar])))
             break #break while loop if out of regions
+        }
 
         #Test all regions
-        H_all <- computeH(dati,id = 1:nrow(dati))
+        H_all <- computeH(dati,id = 1:nrow(dati),yearVar)
         mod_all <- estimateMod(H_all,yearVar)
         t_all <- mod_all$tvalue
         # if tvalue > -1.65, they all form one club,
@@ -57,7 +60,7 @@ findClubs<- function(X, IDvar, yearVar, lastT, cstar = 0){
 
         coreGroup <- coreG(X = dati, lastT)
         #if no more groups are found, add divergent to output and return
-        if (identical(coreGroup, FALSE)) {
+        if (identical(coreGroup, FALSE) ) {
             nl <- length(clubs)
             clubs$divergent <-
                 list(regions = as.character(dati[,IDvar]),
