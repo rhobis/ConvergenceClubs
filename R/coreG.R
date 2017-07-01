@@ -65,7 +65,7 @@ coreG <- function(X,lastT,type="max"){
     
     #output
     if(type=="max"){#group of units for which t is max
-        return(lgroup[[which(vt==max(vt))]])    
+        return( lgroup[[ which(abs(vt) == max(abs(vt)) )]] )    
     }else if(type== "all"){#all units
         return(lgroup[[length(lgroup)]])
     }else stop("Invalid value for 'type' argument. Should be one of 'max' or 'all'! ")
