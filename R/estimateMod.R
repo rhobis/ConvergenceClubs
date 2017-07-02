@@ -9,11 +9,11 @@
 
 estimateMod <- function(H,y){
     # H: vector with H values
-    # y: response variable
+    # y: indeces of year variables
     # returns a list with different quantities:
     #  parameters, std. deviation, tvalue and pvalue of the model
     nT <- length(y)
-    rT <- (round(nT/3)):nT
+    rT <- (round(nT/3)+1):nT
     logt <- log(rT)
     rH <- log(H[1]/H[rT]) - 2*log(logt)
 
