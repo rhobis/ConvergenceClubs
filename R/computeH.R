@@ -14,7 +14,7 @@ computeH <- function(X,id,yearvar){
     ### returns a vector with H quantities
     
     h <- apply(X[id,yearVar], 2, function(x) x/mean(x))
-    H <- apply(h, 1, function(h) mean((h-1)^2) )
+    H <- apply(h, 2, function(h) mean((h-1)^2) )
     
     # N <- length(id)
     # nT <- length(yearVar)
