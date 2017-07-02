@@ -12,22 +12,26 @@ computeH <- function(X,id,yearvar){
     ### yearVar:    vector containing the indices of the variable columns
     ###
     ### returns a vector with H quantities
-    N <- length(id)
-    nT <- length(yearVar)
-    # yearVar1 <- yearVar[rT]
-    h <- matrix(0,length(id),nT) 
-    i <- 0
-    for(x in id){#for sulle regioni
-        i <- i + 1
-        j <- 0
-        for(t in yearVar){#for sul tempo
-            j <- j+1
-            h[i,j] = X[x,t]/mean(X[id,t])
-        }
-    }
-    H <- vector(length=nT)
-    for(t in 1:length(yearVar)){
-        H[t] <- sum((h[,t] - 1)^2)/N
-    }
+    
+    h <- apply(X[id,yearVar], 2, function(x) x/mean(x))
+    H <- apply(h, 1, function(h) mean((h-1)^2) )
+    
+    # N <- length(id)
+    # nT <- length(yearVar)
+    # # yearVar1 <- yearVar[rT]
+    # h <- matrix(0,length(id),nT) 
+    # i <- 0
+    # for(x in id){#for sulle regioni
+    #     i <- i + 1
+    #     j <- 0
+    #     for(t in yearVar){#for sul tempo
+    #         j <- j+1
+    #         h[i,j] = X[x,t]/mean(X[id,t])
+    #     }
+    # }
+    # H <- vector(length=nT)
+    # for(t in 1:length(yearVar)){
+    #     H[t] <- sum((h[,t] - 1)^2)/N
+    # }
     return(H)
 }
