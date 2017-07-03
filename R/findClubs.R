@@ -32,10 +32,12 @@ findClubs<- function(X, IDvar, yearVar, lastT, cstar = 0){
     clubs <- list()
     l <- 1
     while(TRUE){
-        if (dim(dati)[1] < 2){
+        if (nrow(dati) == 1){
             clubs$divergent <- list(regions = as.character(dati[,IDvar]),
                                     id = which(X[,IDvar] %in% as.character(dati[,IDvar])))
             break #break while loop if out of regions
+        }else if(nrow(dati) == 0){
+            clubs$divergent <- "there are no divergent units"
         }
 
         #Test all regions
@@ -80,7 +82,7 @@ findClubs<- function(X, IDvar, yearVar, lastT, cstar = 0){
         unitINclub <- c(unitINclub, xidclub)
 
         #take the club found off the dataset
-        dati <- X[-unitINclub,]
+        dati <- dati[-unitINclub,]
     }#end of while, end of clustering
 
     #return output
