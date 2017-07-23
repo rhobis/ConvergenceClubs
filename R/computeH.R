@@ -6,7 +6,7 @@
 ### authors:        Roberto Sichera, Pietro Pizzuto
 ### last modified:  13/10/2016
 
-computeH <- function(X,id,yearvar){
+computeH <- function(X,id,yearVar){
     ### X:          matrix or data.frame with data
     ### id:         row indices of regions for which H is to be computed
     ### yearVar:    vector containing the indices of the variable columns
