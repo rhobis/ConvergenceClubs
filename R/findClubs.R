@@ -82,7 +82,7 @@ findClubs<- function(X, IDvar, yearVar, lastT, cstar = 0){
         unitINclub <- c(unitINclub, xidclub)
 
         #take the club found off the dataset
-        dati <- dati[-unitINclub,]
+        dati <- dati[-which(dati[,IDvar] %in% as.character(clubConv$units)),]
     }#end of while, end of clustering
 
     #return output
