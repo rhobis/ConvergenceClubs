@@ -20,7 +20,7 @@ findClubs<- function(X, #data matrix or data.frame
                      regions = NULL, #column index of regions, if present
                      refCol, #column index of year to be used as reference (lastT)
                      time_trim = 1/3, #portion of years to remove from computations (a value between >0 and <1)
-                     cstar = 0, #c* value for the second step
+                     cstar = 0, #c* value for the second step,
                      HACmethod = c('FQSB','AQSB')){ 
     
     
@@ -30,8 +30,9 @@ findClubs<- function(X, #data matrix or data.frame
     N <- nrow(X)
     t <- ncol(X) - as.numeric(returnRegions)
     
-    clubs <- list() #output
+    threshold <- -1.65
     
+    clubs <- list() #output
     ### Check inputs -----------------------------------------------------------
 
     #regions
@@ -44,15 +45,15 @@ findClubs<- function(X, #data matrix or data.frame
     if(length(regions) > 1) stop('regions must be an integer-valued scalar')
     if( returnRegions & (regions %% 1 != 0) ) stop('regions must be an integer-valued scalar')
     
-
     #X
     if(returnRegions){
         if(!all(apply(X[,-regions],2,is.numeric)) ) stop('Some of the data columns are non-numeric')
+        dataCols <- c(1:ncol(X))[-regions] #vector of indeces of data columns
     }else{
         if(!all(apply(X,2,is.numeric)) ) stop('Some of the data columns are non-numeric')
+        dataCols <- 1:ncol(X)
     }
 
-        
     #length of time series
     if(t < 2) stop('At least two time periods are needed to run this procedure')
     
@@ -83,77 +84,77 @@ findClubs<- function(X, #data matrix or data.frame
     
     ### Other preliminary operations -------------------------------------------
     
+    #add id column to dataset
+    X$id <- 1:N
     #Sort data by clustering variable (decreasing)
     dati <- X[order(X[,refCol],decreasing = TRUE),]
     
-    
-    
-    
     ### Find clubs -------------------------------------------------------------
-    
-    
-    
-    # #Cluster procedure
-    # unitINclub <- vector()
-    # # l <- 1
-    # while(TRUE){
-    #     if (nrow(dati) == 1){
-    #         clubs$divergent <- list(regions = as.character(dati[,IDvar]),
-    #                                 id = which(X[,IDvar] %in% as.character(dati[,IDvar])))
-    #         break #break while loop if out of regions
-    #     }else if(nrow(dati) == 0){
-    #         clubs$divergent <- "there are no divergent units"
-    #     }
-    #     
-    #     #Test all regions
-    #     H_all <- computeH(dati,id = 1:nrow(dati),yearVar)
-    #     mod_all <- estimateMod(H_all,yearVar)
-    #     t_all <- mod_all$tvalue
-    #     # if tvalue > -1.65, they all form one club,
-    #     #otherwise go one with clustering
-    #     if (t_all > -1.65) {
-    #         return(clubs$clubs[[paste('club',l,sep = '')]] <- list(
-    #             regions = as.character(dati[,IDvar]),
-    #             id =  which(X[,IDvar] %in% as.character(dati[,IDvar])),
-    #             model = list(
-    #                 threshold = -1.65,
-    #                 beta = mod_all$beta,
-    #                 st.dev = mod_all$st.dev,
-    #                 tvalue = mod_all$tvalue,
-    #                 pvalue = mod_all$pvalue
-    #             )
-    #         ))
-    #     }
-    #     
-    #     coreGroup <- coreG(X = dati, lastT)
-    #     #if no more groups are found, add divergent to output and return
-    #     if (identical(coreGroup, FALSE) ) {
-    #         nl <- length(clubs)
-    #         clubs$divergent <-
-    #             list(regions = as.character(dati[,IDvar]),
-    #                  id = which(X[,IDvar] %in% as.character(dati[,IDvar])))
-    #         return(clubs)
-    #     }
-    #     clubConv <- club(X = dati, cstar = cstar, coreG = coreGroup)
-    #     # newcstar <- clubConv$model$cstar
-    #     
-    #     xidclub <- which(X[,IDvar] %in% as.character(clubConv$units))
-    #     clubs$clubs[[paste('club',l,sep = '')]] <- list(
-    #         regions = as.character(clubConv$units),
-    #         id = xidclub,
-    #         model = clubConv$model
-    #     )
-    #     l <- l + 1
-    #     unitINclub <- c(unitINclub, xidclub)
-    #     
-    #     #take the club found off the dataset
-    #     dati <- dati[-which(dati[,IDvar] %in% as.character(clubConv$units)),]
-    # }#end of while, end of clustering
-    # 
-    
-    
-    ### Return 
-    
+    #Cluster procedure
+    l <- 1
+    while(TRUE){
+        if (nrow(dati) == 1){
+            clubs$divergent$id <- list(id = dati$id)
+            break #break while loop if out of regions
+        }else if(nrow(dati) == 0){
+            clubs$divergent$message <- "there are no divergent regions"
+            break
+        }
+
+        #Test all regions
+        H_all <- computeH(dati, id = 1:nrow(dati), dataCols)
+        mod_all <- estimateMod(H_all, dataCols, time_trim)
+        t_all <- mod_all$tvalue
+        # if tvalue > -1.65, they all form one club,
+        #otherwise go one with clustering
+        if (t_all > threshold) {
+            clubs[[paste('club',l,sep = '')]] <- list(
+                # regions = as.character(dati[,IDvar]),
+                id =  dati$id,
+                model = list(
+                    # threshold = threshold,
+                    beta = mod_all$beta,
+                    st.dev = mod_all$st.dev,
+                    tvalue = t_all,
+                    pvalue = mod_all$pvalue
+                )
+            )
+            return(clubs)
+        }
+        
+        #find core group
+        coreGroup <- coreG(X=dati, refCol, dataCols, time_trim, threshold, type="max")
+        #if no more groups are found, add divergent to output and return
+        if (identical(coreGroup, FALSE) ){
+            # nl <- length(clubs)
+            clubs$divergent$id <- list(id = dati$id)
+            return(clubs)
+        }
+        
+        #add regions to core group
+        convClub <- club(X = dati, coreG = coreGroup, time_trim, cstar = cstar)
+        # newcstar <- clubConv$model$cstar
+        # xidclub <- which(X[,IDvar] %in% as.character(clubConv$units))
+        clubs[[paste('club',l,sep = '')]] <- list( id = convClub$id_regions,
+                                                   model = convClub$model
+        )
+        #     regions = as.character(clubConv$units),
+        #     id = xidclub,
+        #     model = clubConv$model
+        # )
+        l <- l + 1
+        # unitINclub <- c(unitINclub, xidclub)
+
+        #remove the club found from the dataset
+        dati <- dati[-clubConv$rows,]
+    }#end of while, end of clustering
+
+    ### Return -----------------------------------------------------------------
     #if returnRegions, then add region codes to output #################
-    return(clubs)
+    if(returnRegions){
+        for(i in 1:(length(clubs)-1) ){
+            clubs[[i]]$regions <- dati[clubs[[i]]$id, regions]
+        }
+        if(!is.null(clubs$divergent$id)) clubs$divergent$regions <- dati[clubs$divergent$id, regions]
+    }else return(clubs)
 }
