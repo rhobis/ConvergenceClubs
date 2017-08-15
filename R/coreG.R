@@ -1,4 +1,4 @@
-#' Finds core group
+#' Find core group
 #'
 #' @param X matrix or dataframe containing data
 #' @param refCol integer scalar indicating the index of the column of the time period 
