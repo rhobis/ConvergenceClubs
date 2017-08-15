@@ -132,7 +132,7 @@ findClubs<- function(X, #data matrix or data.frame
         }
         
         #add regions to core group
-        convClub <- club(X = dati, coreG = coreGroup, time_trim, cstar = cstar)
+        convClub <- club(X = dati, core = coreGroup, time_trim, cstar = cstar)
         # newcstar <- clubConv$model$cstar
         # xidclub <- which(X[,IDvar] %in% as.character(clubConv$units))
         clubs[[paste('club',l,sep = '')]] <- list( id = convClub$id_regions,
