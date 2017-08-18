@@ -3,7 +3,7 @@
 #' @param X matrix or dataframe containing data
 #' @param refCol integer scalar indicating the index of the column of the time period 
 #' to which the relative convergence must be referred
-#' @param dataCols integer vector with thecolumn numers of the data 
+#' @param dataCols integer vector with the column indices of the data 
 #' @param time_trim a numeric value between 0 and 1, representing the portion of 
 #' time periods to ignore when computing tvalues
 #' @param threshold numeric value indicating the threshold to be used to perform
@@ -12,8 +12,8 @@
 #' pass the test t in the core, the latter one includes only the region with the maximum t-value;
 #' currently, only the option "max" is 
 #' 
-#' @return A numeric vector containing the id's of the regions included in the core group;
-#' if a core group cannot be found, returns FALSE
+#' @return A numeric vector containing the row indices of the regions included 
+#' in the core group; if a core group cannot be found, returns FALSE
 
 coreG <- function(X,
                   refCol,
@@ -32,7 +32,7 @@ coreG <- function(X,
         #select a couple of regions (i, i+1)
         i <- i + 1
         # j <- j + 1
-        H <- computeH(X, id=c(i-1,i), dataCols)
+        H <- computeH( X[c(i-1,i),], dataCols)
         tvalue <- estimateMod(H, dataCols, time_trim)$tvalue
         #t-test (if t>-1.65 --> next step; otherwise repeat
         # for regions (i+1,i+2) )
