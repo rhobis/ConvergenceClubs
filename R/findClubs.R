@@ -1,6 +1,6 @@
 #' Finds convergence clubs by means of Phillips and Sul  clustering procedure.
 #'
-#' @param X matrix or dataframe containing data
+#' @param X dataframe containing data
 #' @param regions integer scalar indicating, if present, the index of a column 
 #' with codes of the regions
 #' @param refCol integer scalar indicating the index of the column to use for ordering
@@ -46,6 +46,7 @@ findClubs<- function(X, #data matrix or data.frame
     if( returnRegions & (regions %% 1 != 0) ) stop('regions must be an integer-valued scalar')
     
     #X
+    if(!is.data.frame(X)) stop('X must be an object of class data.frame')
     if(returnRegions){
         if(!all(apply(X[,-regions],2,is.numeric)) ) stop('Some of the data columns are non-numeric')
         dataCols <- c(1:ncol(X))[-regions] #vector of indeces of data columns
@@ -73,10 +74,10 @@ findClubs<- function(X, #data matrix or data.frame
     
     
     ### Set methods  -----------------------------------------------------------
-    #select functions to compute tvalues
-    computeH <<- if(HACmethod=='FQSB'){
-        computeH_fqsb
-    }else computeH_aqsb
+    #select functions to compute t-values
+    # computeH <<- if(HACmethod=='FQSB'){
+    #     computeH_fqsb
+    # }else computeH_aqsb
     estimateMod <<- if(HACmethod=='FQSB'){
         estimateMod_fqsb
     }else estimateMod_aqsb

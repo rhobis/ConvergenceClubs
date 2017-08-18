@@ -57,7 +57,7 @@ coreG <- function(X,
         # Groups obtained adding regions sequentially until t > -1.65
         k <- k + 1
         units <- c(units, k)
-        H <- computeH(X, units, dataCols)
+        H <- computeH(X[units, ], dataCols)
         tvalue <- estimateMod(H, dataCols, time_trim)$tvalue
         if(tvalue > threshold){
             vt <- c(vt,tvalue)    
