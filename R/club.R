@@ -28,7 +28,7 @@ club <- function(X, dataCols, core, time_trim, cstar = 0){
     ### t-test for core + one unit ---------------------------------------------
     for(k in 1:nrow(unitsNoCore)){
         #compute H
-        H <- computeH( X[ c(core,unitsNoCore$row[k]), ], dataCols)
+        H <- computeH( X[ c(core,unitsNoCore$row[k]), dataCols ])
         tvalue <- c(tvalue, estimateMod(H, time_trim)$tvalue)
     }
     #Find group (core + regions) such that (core + i)  gives t > cstar
@@ -39,7 +39,7 @@ club <- function(X, dataCols, core, time_trim, cstar = 0){
     clubId <- c(X[core, 'id'], clubCandidates_id)
     clubRows <- c(core, clubCandidates_row)
 
-    H <- computeH(X[clubRows,], dataCols)
+    H <- computeH(X[clubRows, dataCols])
     mod <- estimateMod(H, time_trim)
     # tvalue <- mod$tvalue
 
