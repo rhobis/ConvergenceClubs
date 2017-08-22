@@ -1,37 +1,34 @@
-############################################################
-### Helper function: computes H values, given the dataset, 
-### the units for which H must be computed and the indices 
-### of the column in the dataset to compute H for
-###
-### authors:        Roberto Sichera, Pietro Pizzuto
-### last modified:  13/10/2016
+#' H values
+#'
+#' Computes H values (cross sectional variance)
+#'
+#' @param X matrix or dataframe containing data
+# @param dataCols integer vector with the column indices of the data
+#' @param id optional; row index of regions for which H values are to be computed;
+#' if missing, all regions are used
+#'
+#'
 
-computeH <- function(X,id,yearVar){
-    ### X:          matrix or data.frame with data
-    ### id:         row indices of regions for which H is to be computed
-    ### yearVar:    vector containing the indices of the variable columns
-    ###
-    ### returns a vector with H quantities
-    
-    h <- apply(X[id,yearVar], 2, function(x) x/mean(x))
+# computeH <- function(X, dataCols, id){
+#     # if(missing(id)) id <- 1:nrow(X)
+#     if(missing(id)){
+#         xx <- X[,dataCols]
+#     }else xx <- X[id,dataCols]
+#
+#     h <- apply(xx, 2, function(x) x/mean(x))
+#     H <- apply(h, 2, function(h) mean((h-1)^2) )
+#
+#     return(H)
+# }
+
+
+computeH <- function(X, id){
+    if(missing(id)){
+        xx <- X
+    }else xx <- X[id,]
+
+    h <- apply(xx, 2, function(x) x/mean(x))
     H <- apply(h, 2, function(h) mean((h-1)^2) )
-    
-    # N <- length(id)
-    # nT <- length(yearVar)
-    # # yearVar1 <- yearVar[rT]
-    # h <- matrix(0,length(id),nT) 
-    # i <- 0
-    # for(x in id){#for sulle regioni
-    #     i <- i + 1
-    #     j <- 0
-    #     for(t in yearVar){#for sul tempo
-    #         j <- j+1
-    #         h[i,j] = X[x,t]/mean(X[id,t])
-    #     }
-    # }
-    # H <- vector(length=nT)
-    # for(t in 1:length(yearVar)){
-    #     H[t] <- sum((h[,t] - 1)^2)/N
-    # }
+
     return(H)
 }
