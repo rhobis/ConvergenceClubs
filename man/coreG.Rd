@@ -10,12 +10,12 @@ coreG(X, refCol, dataCols, time_trim, threshold = -1.65, type = c("max",
 \arguments{
 \item{X}{matrix or dataframe containing data}
 
-\item{refCol}{integer scalar indicating the index of the column of the time period 
+\item{refCol}{integer scalar indicating the index of the column of the time period
 to which the relative convergence must be referred}
 
 \item{dataCols}{integer vector with the column indices of the data}
 
-\item{time_trim}{a numeric value between 0 and 1, representing the portion of 
+\item{time_trim}{a numeric value between 0 and 1, representing the portion of
 time periods to ignore when computing tvalues}
 
 \item{threshold}{numeric value indicating the threshold to be used to perform
@@ -26,7 +26,7 @@ pass the test t in the core, the latter one includes only the region with the ma
 currently, only the option "max" is}
 }
 \value{
-A numeric vector containing the row indices of the regions included 
+A numeric vector containing the row indices of the regions included
 in the core group; if a core group cannot be found, returns FALSE
 }
 \description{

@@ -2,24 +2,49 @@
 % Please edit documentation in R/mergeClubs.R
 \name{mergeClubs}
 \alias{mergeClubs}
-\title{Merges a list of clubs created with the function findClubs
-by either Phillips and Sul method or von Lyncker and Thoennessen procedure}
+\title{Merge convergence clubs}
 \usage{
-mergeClubs(clubs, X, IDvar, yearVar, lastT, method = "", divergent = FALSE,
-  threshold = -1.65)
+mergeClubs(clubs, X, dataCols, refCol, time_trim = 1/3,
+  HACmethod = c("FQSB", "AQSB"), mergeMethod = c("PS", "vLT"),
+  mergeDivergent = FALSE, threshold = -1.65)
 }
 \arguments{
 \item{clubs}{a club list (created by findClub function)}
 
-\item{X}{matrix or dataframe with data}
+\item{X}{dataframe containing data}
 
-\item{yearVar}{column indices of year variables}
+\item{dataCols}{integer vector with the column indices of the data}
 
-\item{lastT}{column index of the last time period (clustering variable)}
+\item{refCol}{integer scalar indicating the index of the column to use for ordering
+data}
 
-\item{IDVar}{column index of regions}
+\item{time_trim}{a numeric value between 0 and 1, representing the portion of
+time periods to ignore when computing tvalues}
+
+\item{HACmethod}{character string indicating whether a Fixed Quadratic Spheric Bandwidth (FQSB) or
+an Adaptive Quadratic Spheric Bandwidth (AQSB) should be used for......... ###########}
+
+\item{mergeMethod}{character string indicating the merging method to use. Methods
+available are \code{'PS'} for Phillips and Sul (2009) and \code{'vLT'} for
+von Lyncker and Thoennessen (2016).}
+
+\item{mergeDivergent}{logical, if TRUE, indicates that merging of divergent regions
+should be tried.}
+
+\item{cstar}{threshold for the tvalue for inclusion of regions in phase 3?.....}
+}
+\value{
+A list of Convergence Clubs, for each club a list is return with the
+following objects: \code{id}, a vector containing the row indices
+of the regions in the club; \code{model}, a list containing information
+about the model used to run the t-test on the regions in the club;
+\code{regions}, a vector containing the names of the regions of the club (optional,
+only included if it is present in the \code{clubs} object given in input.
 }
 \description{
+Merges a list of clubs created with the function findClubs
+by either Phillips and Sul method or von Lyncker and Thoennessen procedure
+}
+\details{
 Returns as output a list with merged clubs.
 }
-

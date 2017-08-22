@@ -4,25 +4,35 @@
 \alias{findClubs}
 \title{Finds convergence clubs by means of Phillips and Sul  clustering procedure.}
 \usage{
-findClubs(X, regions = NULL, refCol, time_trim = 1/3, cstar = 0,
+findClubs(X, dataCols, regions = NULL, refCol, time_trim = 1/3, cstar = 0,
   HACmethod = c("FQSB", "AQSB"))
 }
 \arguments{
 \item{X}{dataframe containing data}
 
-\item{regions}{integer scalar indicating, if present, the index of a column 
+\item{dataCols}{integer vector with the column indices of the data}
+
+\item{regions}{integer scalar indicating, if present, the index of a column
 with codes of the regions}
 
 \item{refCol}{integer scalar indicating the index of the column to use for ordering
 data}
 
-\item{time_trim}{a numeric value between 0 and 1, representing the portion of 
+\item{time_trim}{a numeric value between 0 and 1, representing the portion of
 time periods to ignore when computing tvalues}
 
 \item{cstar}{threshold for the tvalue for inclusion of regions in phase 3?.....}
 
-\item{HACmethod}{string indicating whether a Fixed Quadratic Spheric Bandwidth (FQSB) or 
+\item{HACmethod}{string indicating whether a Fixed Quadratic Spheric Bandwidth (FQSB) or
 an Adaptive Quadratic Spheric Bandwidth (AQSB) should be used for......... ###########}
+}
+\value{
+A list of Convergence Clubs, for each club a list is return with the
+following objects: \code{id}, a vector containing the row indices
+of the regions in the club; \code{model}, a list containing information
+about the model used to run the t-test on the regions in the club;
+\code{regions}, a vector containing the names of the regions of the club (optional,
+only included if parameter \code{regions} is given)
 }
 \description{
 Finds convergence clubs by means of Phillips and Sul  clustering procedure.

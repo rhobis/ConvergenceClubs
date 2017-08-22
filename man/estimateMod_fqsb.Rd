@@ -4,18 +4,16 @@
 \alias{estimateMod_fqsb}
 \title{Test convergence}
 \usage{
-estimateMod_fqsb(H, dataCols, time_trim)
+estimateMod_fqsb(H, time_trim)
 }
 \arguments{
 \item{H}{vector of H values}
 
-\item{dataCols}{integer vector with thecolumn numers of the data}
-
-\item{time_trim}{a numeric value between 0 and 1, representing the portion of 
+\item{time_trim}{a numeric value between 0 and 1, representing the portion of
 time periods to ignore when computing tvalues}
 }
 \value{
-a list containing information about the model used to run the t-test 
+a list containing information about the model used to run the t-test
 on the regions in the club: beta coefficient, standard deviation, t-statistics and p-value.
 }
 \description{

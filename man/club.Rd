@@ -13,16 +13,16 @@ club(X, dataCols, core, time_trim, cstar = 0)
 
 \item{core}{an integer vector containing the id's of units in core group}
 
-\item{time_trim}{a numeric value between 0 and 1, representing the portion of 
+\item{time_trim}{a numeric value between 0 and 1, representing the portion of
 time periods to ignore when computing tvalues}
 
 \item{cstar}{threshold for the tvalue for inclusion of regions in phase 3?.....}
 }
 \value{
 A list of three objects: \code{id}, a vector containing the row indices
-of club regions in the original dataframe (input of function \code{findClubs}); 
-\code{rows}, a vector of row indices of club units in the current dataset 
-(input of function \code{club}); \code{model}, a list containing information 
+of club regions in the original dataframe (input of function \code{findClubs});
+\code{rows}, a vector of row indices of club units in the current dataset
+(input of function \code{club}); \code{model}, a list containing information
 about the model used to run the t-test on the regions in the club.
 }
 \description{

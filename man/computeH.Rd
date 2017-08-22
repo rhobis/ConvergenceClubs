@@ -4,14 +4,12 @@
 \alias{computeH}
 \title{H values}
 \usage{
-computeH(X, dataCols, id)
+computeH(X, id)
 }
 \arguments{
 \item{X}{matrix or dataframe containing data}
 
-\item{dataCols}{integer vector with the column indices of the data}
-
-\item{id}{optional; row index of regions for which H values are to be computed; 
+\item{id}{optional; row index of regions for which H values are to be computed;
 if missing, all regions are used}
 }
 \description{
