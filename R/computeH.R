@@ -7,19 +7,7 @@
 #' @param id optional; row index of regions for which H values are to be computed;
 #' if missing, all regions are used
 #'
-#'
-
-# computeH <- function(X, dataCols, id){
-#     # if(missing(id)) id <- 1:nrow(X)
-#     if(missing(id)){
-#         xx <- X[,dataCols]
-#     }else xx <- X[id,dataCols]
-#
-#     h <- apply(xx, 2, function(x) x/mean(x))
-#     H <- apply(h, 2, function(h) mean((h-1)^2) )
-#
-#     return(H)
-# }
+#' @export
 
 
 computeH <- function(X, id){
