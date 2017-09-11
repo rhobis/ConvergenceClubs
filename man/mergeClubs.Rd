@@ -48,3 +48,4 @@ by either Phillips and Sul method or von Lyncker and Thoennessen procedure
 \details{
 Returns as output a list with merged clubs.
 }
+

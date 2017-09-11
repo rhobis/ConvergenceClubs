@@ -32,3 +32,4 @@ in the core group; if a core group cannot be found, returns FALSE
 \description{
 Find core group
 }
+

@@ -37,3 +37,4 @@ only included if parameter \code{regions} is given)
 \description{
 Finds convergence clubs by means of Phillips and Sul  clustering procedure.
 }
+

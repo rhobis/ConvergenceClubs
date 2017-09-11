@@ -15,3 +15,4 @@ a numeric value representing the long run variance of errors
 \description{
 Estimate long run variance of errors by Andrews method
 }
+

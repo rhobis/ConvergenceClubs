@@ -15,3 +15,4 @@ if missing, all regions are used}
 \description{
 Computes H values (cross sectional variance)
 }
+

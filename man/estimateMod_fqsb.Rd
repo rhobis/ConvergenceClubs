@@ -19,3 +19,4 @@ on the regions in the club: beta coefficient, standard deviation, t-statistics a
 \description{
 Test convergence
 }
+
