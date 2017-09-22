@@ -18,3 +18,5 @@ if(!('devtools' %in% installed.packages())) install.packages("devtools")
 library(devtools)
 install_github("rhobis/ConvergenceClubs")
 ```
+
+For more information or to ask for bug fixes and implementation of further functionalities, please write to roberto.sichera@unipa.it 
