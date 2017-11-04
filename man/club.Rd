@@ -2,21 +2,24 @@
 % Please edit documentation in R/club.R
 \name{club}
 \alias{club}
-\title{Core group}
+\title{Find a club}
 \usage{
 club(X, dataCols, core, time_trim, cstar = 0)
 }
 \arguments{
-\item{X}{matrix or dataframe containing data}
+\item{X}{matrix or dataframe containing data (preferably filtered data in order to remove business cycles)}
 
 \item{dataCols}{integer vector with the column indices of the data}
 
 \item{core}{an integer vector containing the id's of units in core group}
 
 \item{time_trim}{a numeric value between 0 and 1, representing the portion of
-time periods to ignore when computing tvalues}
+time periods to trim when running log t regression model.
+Phillips and Sul (2007, 2009) suggest to discard the first third of the period.}
 
-\item{cstar}{threshold for the tvalue for inclusion of regions in phase 3?.....}
+\item{cstar}{numeric scalar, indicating the threshold value of the sieve criterion \eqn{c^*}
+to include units in the detected core (primary) group (step 3 of Phillips and Sul (2007, 2009) clustering algorithm).
+The default value is 0.}
 }
 \value{
 A list of three objects: \code{id}, a vector containing the row indices
@@ -26,6 +29,11 @@ of club regions in the original dataframe (input of function \code{findClubs});
 about the model used to run the t-test on the regions in the club.
 }
 \description{
-Add units to core group to complete clubbing procedure
+Add units to core group according to step 3 of the clustering algorithm by
+Phillips and Sul (2007, 2009), in order to find the enlarged club.
 }
+\references{
+Phillips, P. C.; Sul, D., 2007. Transition modeling and econometric convergence tests. Econometrica 75 (6), 1771-1855.
 
+Phillips, P. C.; Sul, D., 2009. Economic transition and growth. Journal of Applied Econometrics 24 (7), 1153-1185.
+}

@@ -1,19 +1,44 @@
-#' Find core group
+#' Find core (primary) group
 #'
-#' @param X matrix or dataframe containing data
+#' Find the Core (primary) group according to step 2 of the clustering algorithm
+#' by Phillips and Sul (2007, 2009)
+#'
+#' @param X matrix or dataframe containing data (preferably filtered data in order to remove business cycles)
 #' @param refCol integer scalar indicating the index of the column of the time period
 #' to which the relative convergence must be referred
 #' @param dataCols integer vector with the column indices of the data
 #' @param time_trim a numeric value between 0 and 1, representing the portion of
-#' time periods to ignore when computing tvalues
+#' time periods to trim when running log t regression model.
+#' Phillips and Sul (2007, 2009) suggest to discard the first third of the period.
 #' @param threshold numeric value indicating the threshold to be used to perform
-#' the one-tail t test
-#' @param type one of "all" or "max", the first option includes all regions that
-#' pass the test t in the core, the latter one includes only the region with the maximum t-value;
-#' currently, only the option "max" is
+#' the one-tail t test; default is -1.65.
+#' @param type one of "max" or "all";
+#'             "max" includes only the region with maximum t-value. The default option is "max";
+#'             "all" includes all regions that pass the test t in the core formation (step 2).
 #'
 #' @return A numeric vector containing the row indices of the regions included
 #' in the core group; if a core group cannot be found, returns FALSE
+#'
+#' @details According to the second step of the Phillips and Sul clustering algorithm (2007, 2009),
+#'          the \emph{log t} regression should be run for the first k units \eqn{2 < k < N}
+#'          maximizing k under the condition that \eqn{t-value > -1.65}.
+#'          In other words, the core group size \eqn{k^*}{k*} is chosen as follows:
+#'              \deqn{ k^* = argmax_k {t_k}}{k* = argmax{ t(k) }}  subject to \deqn{min{t_k} > -1.65}{min{ t(k)} > -1.65}
+#
+#'          Such behavior is obtained with \code{type="max"}; if \code{type="all"},
+#'          all units that satisfy \eqn{t_k > -1.65}{t(k) > -1.65} are added to core group.
+#'
+#'
+#'          If the condition \eqn{t_k > -1.65}{t(k) > -1.65} does not hold for \eqn{k = 2} (the first two units),
+#'          the algorithm drops the first unit and repeats the same procedure for the next pair of units.
+#'          If \eqn{t_k > -1.65}{t(k) > -1.65} does not hold for any couple of units, the whole panel diverges.
+#'
+#' @references
+#' Phillips, P. C.; Sul, D., 2007. Transition modeling and econometric convergence tests. Econometrica 75 (6), 1771-1855.
+#'
+#' Phillips, P. C.; Sul, D., 2009. Economic transition and growth. Journal of Applied Econometrics 24 (7), 1153-1185.
+#'
+
 
 coreG <- function(X,
                   refCol,

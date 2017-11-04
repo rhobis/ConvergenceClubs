@@ -3,18 +3,20 @@
 #' Merges a list of clubs created with the function findClubs
 #' by either Phillips and Sul method or von Lyncker and Thoennessen procedure
 #'
-#' Returns as output a list with merged clubs.
 #'
 #' @param clubs a club list (created by findClub function)
-#' @param X dataframe containing data
+#' @param X dataframe containing data (preferably filtered data in order to remove business cycles)
 #' @param dataCols integer vector with the column indices of the data
 #' @param refCol integer scalar indicating the index of the column to use for ordering
 #' data
 #' @param time_trim a numeric value between 0 and 1, representing the portion of
-#' time periods to ignore when computing tvalues
-#' @param cstar threshold for the tvalue for inclusion of regions in phase 3?.....
-#' @param HACmethod character string indicating whether a Fixed Quadratic Spheric Bandwidth (FQSB) or
-#' an Adaptive Quadratic Spheric Bandwidth (AQSB) should be used for......... ###########
+#' time periods to trim when running log t regression model.
+#' Phillips and Sul (2007, 2009) suggest to discard the first third of the period.
+#' @param HACmethod string indicating whether a Fixed Quadratic Spheric Bandwidth (HACmethod="FQSB") or
+#' an Adaptive Quadratic Spheric Bandwidth (HACmethod="AQSB") should be used for the truncation
+#' of the Quadratic Spectral kernel in estimating the \emph{log t} regression model
+#' with heteroskedasticity and autocorrelation consistent standard errors.
+#' The default method is "FQSB".
 #' @param mergeMethod character string indicating the merging method to use. Methods
 #' available are \code{'PS'} for Phillips and Sul (2009) and \code{'vLT'} for
 #' von Lyncker and Thoennessen (2016).
@@ -28,8 +30,52 @@
 #' \code{regions}, a vector containing the names of the regions of the club (optional,
 #' only included if it is present in the \code{clubs} object given in input.
 #'
+#'
+#' @details Phillips and Sul (2009) suggest a "club merging algorithm" to avoid
+#' over determination due to the selection of the parameter \eqn{c*}.
+#' This algorithm suggests to merge for adjacent groups. In particular, it works as follows:
+#' \enumerate{
+#'     \item Take the first two groups detected in the basic clustering mechanism
+#'     and run the log-t test. If the t¬-statistic is larger than -1.65,
+#'     these groups together form a new convergence club;
+#'     \item Repeat the test adding the next group and continue until the
+#'     basic condition (t-statistic > -1.65) holds;
+#'     \item If convergence hypothesis is rejected, conclude that all previous groups
+#'     converge, except the last one. Hence, start again the test merging algorithm
+#'     beginning from the group for which the hypothesis of convergence did not hold.
+#'     On the other hand, von Lyncker and Thoennessen (2016), propose a modified version
+#'      of the club merging algorithm that works as follows:
+#'         \enumerate{
+#'             \item Take all the groups detected in the basic clustering mechanism (P)
+#'             and run the t-test for adjacent groups, obtaining a (M × 1) vector
+#'             of convergence test statistics t (where M = P – 1 and m = 1,.., M);
+#'             \item Merge for adjacent groups starting from the first, under the
+#'             conditions \eqn{t(m) > -1.65} and \eqn{t(m) > t(m+1)}.
+#'             In particular, if both conditions hold, the two clubs determining
+#'             \eqn{t(m)} are merged and the algorithm starts again from step 1,
+#'             otherwise it continues for all following pairs;
+#'             \item For the last element of vector M (the value of the last two clubs)
+#'             the only condition required for merging is \eqn{t(m=M) > -1.65}.
+#'         }
+#'
+#' }
+#'
+#'
+#' @references
+#' Phillips, P. C.; Sul, D., 2007. Transition modeling and econometric convergence tests. Econometrica 75 (6), 1771-1855.
+#'
+#' Phillips, P. C.; Sul, D., 2009. Economic transition and growth. Journal of Applied Econometrics 24 (7), 1153-1185.
+#'
+#' von Lyncker, K.; Thoennessen, R., 2016. Regional club convergence in the EU: evidence from a panel data analysis. Empirical Economics, doi:10.1007/s00181-016-1096-2, 1-29.
+#'
+#'
+#' @seealso
+#' \code{\link{findClubs}}, finds convergence clubs by means of Phillips and Sul clustering procedure.
+#'
+#' \code{\link{mergeDivergent}}, merges divergent units according to the algorithm proposed by von Lyncker and Thoennessen (2016).
+#'
+#'
 #' @export
-
 
 
 mergeClubs <- function(clubs,

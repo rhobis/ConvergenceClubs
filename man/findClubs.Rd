@@ -2,13 +2,13 @@
 % Please edit documentation in R/findClubs.R
 \name{findClubs}
 \alias{findClubs}
-\title{Finds convergence clubs by means of Phillips and Sul  clustering procedure.}
+\title{Finds convergence clubs}
 \usage{
 findClubs(X, dataCols, regions = NULL, refCol, time_trim = 1/3, cstar = 0,
   HACmethod = c("FQSB", "AQSB"))
 }
 \arguments{
-\item{X}{dataframe containing data}
+\item{X}{dataframe containing data (preferably filtered data in order to remove business cycles)}
 
 \item{dataCols}{integer vector with the column indices of the data}
 
@@ -19,12 +19,18 @@ with codes of the regions}
 data}
 
 \item{time_trim}{a numeric value between 0 and 1, representing the portion of
-time periods to ignore when computing tvalues}
+time periods to trim when running log t regression model.
+Phillips and Sul (2007, 2009) suggest to discard the first third of the period.}
 
-\item{cstar}{threshold for the tvalue for inclusion of regions in phase 3?.....}
+\item{cstar}{numeric scalar, indicating the threshold value of the sieve criterion \eqn{c^*}
+to include units in the detected core (primary) group (step 3 of Phillips and Sul (2007, 2009) clustering algorithm).
+The default value is 0.}
 
-\item{HACmethod}{string indicating whether a Fixed Quadratic Spheric Bandwidth (FQSB) or
-an Adaptive Quadratic Spheric Bandwidth (AQSB) should be used for......... ###########}
+\item{HACmethod}{string indicating whether a Fixed Quadratic Spheric Bandwidth (HACmethod="FQSB") or
+an Adaptive Quadratic Spheric Bandwidth (HACmethod="AQSB") should be used for the truncation
+of the Quadratic Spectral kernel in estimating the \emph{log t} regression model
+with heteroskedasticity and autocorrelation consistent standard errors.
+The default method is "FQSB".}
 }
 \value{
 A list of Convergence Clubs, for each club a list is return with the
@@ -35,6 +41,47 @@ about the model used to run the t-test on the regions in the club;
 only included if parameter \code{regions} is given)
 }
 \description{
-Finds convergence clubs by means of Phillips and Sul  clustering procedure.
+Find convergence clubs by means of Phillips and Sul clustering procedure.
 }
+\details{
+In order to investigate the presence of convergence clubs according
+to the Phillips and Sul clustering procedure, the following steps are implemented:
+   \enumerate{
+       \item (Cross section last observation ordering):
+             Sort units in descending order according to the last panel observation of the period;
+       \item (Core group formation):
+       Run the log t regression for the first k units \eqn{(2 < k < N)} maximizing k
+       under the condition \eqn{t-value > -1.65}. In other words, chose the core group size k* as follows:
 
+       \deqn{k^*= argmax_k t_k }{k* = argmax t(k)  }  subject to \deqn{ min\{t_k \} > -1.65}{min t(k) > 1.65}
+
+       If the condition \eqn{t_k >-1.65}{t(k) > -1.65} does not hold for \eqn{k = 2} (the first two units),
+       drop the first unit and repeat the same procedure. If \eqn{t_k >-1.65}{t(k) > -1.65} does not hold
+       for any units chosen, the whole panel diverges;
+       \item (Sieve the data for club membership): After the core group  is detected,
+       run the \emph{log-t}  regression for the core group adding (one by one)
+       each unit that does not belong to the latter. If \eqn{t_k }{t(k)} is greater than a critical value \eqn{c^*}{c*}
+       add the new unit in the convergence club.
+       All these units (those included in the core group \eqn{k^*}{k*} plus those added) form the first convergence club;
+       \item (Recursion and stopping rule): If there are units for which the
+       previous condition fails, gather all these units in one group and run
+       the \emph{log-t} test to see if  the condition \eqn{t_k >-1.65}{t(k) > -1.65} holds.
+       If the condition is satisfied, conclude that there are two convergence clubs.
+       Otherwise, step 1 to 3 should be repeated on the same group to determine
+       whether there are other subgroups that constitute convergence clubs.
+       If no further convergence clubs are found (hence, no k in step 2 satisfies
+       the condition \eqn{t_k >-1.65}{t(k) > -1.65} ), the remaining regions diverge.
+   }
+}
+\references{
+Phillips, P. C.; Sul, D., 2007. Transition modeling and econometric convergence tests. Econometrica 75 (6), 1771-1855.
+
+Phillips, P. C.; Sul, D., 2009. Economic transition and growth. Journal of Applied Econometrics 24 (7), 1153-1185.
+
+Andrews, D. W., 1991. Heteroskedasticity and autocorrelation consistent covariance matrix estimation. Econometrica: Journal of the Econometric Society, 817-858.
+}
+\seealso{
+\code{\link{mergeClubs}}, Merges a list of clubs created by \code{findClubs};
+
+\code{\link{mergeDivergent}}, Merges divergent units according to the algorithm proposed by von Lyncker and Thoennessen (2016)
+}

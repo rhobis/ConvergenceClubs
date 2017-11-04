@@ -2,19 +2,21 @@
 % Please edit documentation in R/mergeDivergent.R
 \name{mergeDivergent}
 \alias{mergeDivergent}
-\title{Merge convergence clubs}
+\title{Merge divergent units}
 \usage{
 mergeDivergent(clubs, X, dataCols, time_trim, threshold = -1.65)
 }
 \arguments{
-\item{clubs}{a club list (created by findClub or mergeClubs functions)}
+\item{clubs}{a club list (created by findClubs or mergeClubs functions)}
 
-\item{X}{dataframe containing data}
+\item{X}{dataframe containing data: they must be the same data passed to \code{findClubs}
+or \code{mergeClubs} to obtain the \code{clubs} object}
 
 \item{dataCols}{integer vector with the column indices of the data}
 
 \item{time_trim}{a numeric value between 0 and 1, representing the portion of
-time periods to ignore when computing tvalues}
+time periods to trim when running log t regression model.
+Phillips and Sul (2007, 2009) suggest to discard the first third of the period.}
 }
 \value{
 A list of Convergence Clubs, for each club a list is return with the
@@ -25,10 +27,37 @@ about the model used to run the t-test on the regions in the club;
 only included if it is present in the \code{clubs} object given in input).
 }
 \description{
-Merges a list of clubs created with the function findClubs
-by either Phillips and Sul method or von Lyncker and Thoennessen procedure
+Merges divergent units according the algorithm proposed by von Lyncker and Thoennessen (2016)
 }
 \details{
-Returns as output a list with merged clubs.
+von Lyncker and Thoennessen (2016) claim that units identified as divergent
+by the basic clustering procedure by Phillips and Sul might not necessarily still
+diverge in the case of new convergence clubs detected with the club merging algorithm.
+To test if divergent regions may be included in one of the new convergence clubs,
+they propose the following algorithm:
+\enumerate{
+    \item Run a log t-test for all diverging regions, and if \eqn{t_k > -1.65}{t(k) > -1.65}
+    all these regions form a convergence club (This step is implicitly included
+    in Phillips and Sul basic algorithm);
+    \item Run a log t-test for each diverging regions and each club, creating a
+    matrix of t-values with dimensions \eqn{d \times p}{d x p}, where each row d represents
+    a divergent region and each column p a convergence club;
+    \item Take the highest \eqn{t > e^*}{t-value > e*}
+    and add the respective region to the respective club and restart from the step 1.
+    the authors suggest to use \eqn{e^* = t = -1.65 }{e* = t = -1.65};
+    \item The algorithm stops when no t-value > e* is found in step 3,
+    and as a consequence all remaining regions are considered divergent.
 }
+}
+\references{
+Phillips, P. C.; Sul, D., 2007. Transition modeling and econometric convergence tests. Econometrica 75 (6), 1771-1855.
 
+Phillips, P. C.; Sul, D., 2009. Economic transition and growth. Journal of Applied Econometrics 24 (7), 1153-1185.
+
+von Lyncker, K.; Thoennessen, R., 2016. Regional club convergence in the EU: evidence from a panel data analysis. Empirical Economics, doi:10.1007/s00181-016-1096-2, 1-29.
+}
+\seealso{
+\code{\link{mergeClubs}}, Merges a list of clubs created by \code{findClubs};
+
+\code{\link{mergeDivergent}}, merges divergent units according to the algorithm proposed by von Lyncker and Thoennessen (2016).
+}
