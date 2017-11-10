@@ -70,6 +70,20 @@
 #' \code{\link{mergeDivergent}}, Merges divergent units according to the algorithm proposed by von Lyncker and Thoennessen (2016)
 #'
 #'
+#'
+#' @examples
+#' \dontrun{
+#' data("nutsGDP")
+#' nutsGDP[,2:16] <- log(X[,2:16])
+#'
+#' ### Cluster NUTS regions using GDP from year 2000 to year 2014
+#' clubs <- findClubs(nutsGDP, IDvar=1, yearVar=2:16, lastT=16, cstar=0,
+#'                    HACmethod='QSFM')
+#' clubs <- findClubs(nutsGDP, IDvar=1, yearVar=2:16, lastT=16, cstar=0,
+#'                    HACmethod='QSAM')
+#'}
+#'
+#'
 #' @export
 
 

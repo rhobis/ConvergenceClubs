@@ -49,6 +49,20 @@ they propose the following algorithm:
     and as a consequence all remaining regions are considered divergent.
 }
 }
+\examples{
+\dontrun{
+data("nutsGDP")
+nutsGDP[,2:16] <- log(X[,2:16])
+
+### Cluster NUTS regions using GDP from year 2000 to year 2014
+clubs <- findClubs(nutsGDP, IDvar=1, yearVar=2:16, lastT=16, cstar=0,
+                  HACmethod='QSFM')
+
+### Merge clusters and divergent regions
+mclubs <- mergeClubs(clubs, nutsGDP, IDvar=1, yearVar=2:16, lastT=16, divergent=TRUE)
+}
+
+}
 \references{
 Phillips, P. C.; Sul, D., 2007. Transition modeling and econometric convergence tests. Econometrica 75 (6), 1771-1855.
 
