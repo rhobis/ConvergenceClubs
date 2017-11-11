@@ -79,10 +79,10 @@ data("nutsGDP")
 nutsGDP[,2:16] <- log(X[,2:16])
 
 ### Cluster NUTS regions using GDP from year 2000 to year 2014
-clubs <- findClubs(nutsGDP, IDvar=1, yearVar=2:16, lastT=16, cstar=0,
-                   HACmethod='QSFM')
-clubs <- findClubs(nutsGDP, IDvar=1, yearVar=2:16, lastT=16, cstar=0,
-                   HACmethod='QSAM')
+clubs <- findClubs(nutsGDP, dataCols=2:16, regions = 1, refCol=16, time_trim = 1/3,
+                   cstar = 0, HACmethod = "FQSB")
+clubs <- findClubs(nutsGDP, dataCols=2:16, regions = 1, refCol=16, time_trim = 1/3,
+                   cstar = 0, HACmethod = "AQSB")
 }
 
 
