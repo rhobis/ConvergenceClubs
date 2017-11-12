@@ -4,19 +4,15 @@
 \alias{mergeDivergent}
 \title{Merge divergent units}
 \usage{
-mergeDivergent(clubs, X, dataCols, time_trim, threshold = -1.65)
+mergeDivergent(clubs, time_trim, threshold = -1.65)
 }
 \arguments{
-\item{clubs}{a club list (created by findClubs or mergeClubs functions)}
-
-\item{X}{dataframe containing data: they must be the same data passed to \code{findClubs}
-or \code{mergeClubs} to obtain the \code{clubs} object}
-
-\item{dataCols}{integer vector with the column indices of the data}
+\item{clubs}{an object of class \code{convergence.clubs} (created by \code{findClub}
+or \code{mergeClubs} function)}
 
 \item{time_trim}{a numeric value between 0 and 1, representing the portion of
-time periods to trim when running log t regression model.
-Phillips and Sul (2007, 2009) suggest to discard the first third of the period.}
+time periods to trim when running log t regression model; if omitted, the same
+value used for \code{clubs} is used.}
 }
 \value{
 A list of Convergence Clubs, for each club a list is return with the
@@ -50,17 +46,16 @@ they propose the following algorithm:
 }
 }
 \examples{
-\dontrun{
 data("nutsGDP")
-nutsGDP[,2:16] <- log(X[,2:16])
+nutsGDP[,2:16] <- log(nutsGDP[,2:16])
 
-### Cluster NUTS regions using GDP from year 2000 to year 2014
+# Cluster NUTS regions using GDP from year 2000 to year 2014
 clubs <- findClubs(nutsGDP, dataCols=2:16, regions = 1, refCol=16, time_trim = 1/3,
                   cstar = 0, HACmethod = "AQSB")
 
-### Merge clusters and divergent regions
-mclubs <- mergeClubs(clubs, nutsGDP, IDvar=1, yearVar=2:16, lastT=16, divergent=TRUE)
-}
+# Merge clusters and divergent regions
+mclubs <- mergeClubs(clubs, HACmethod='AQSB', mergeDivergent=TRUE)
+summary(mclubs)
 
 }
 \references{
