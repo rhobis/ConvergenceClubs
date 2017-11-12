@@ -18,6 +18,7 @@
 #' von Lyncker and Thoennessen (2016).
 #' @param mergeDivergent logical, if TRUE, indicates that merging of divergent regions
 #' should be tried.
+#' @param threshold a numeric value indicating the threshold to be used with the t-test.
 #'
 #' @return A list of Convergence Clubs, for each club a list is return with the
 #' following objects: \code{id}, a vector containing the row indices

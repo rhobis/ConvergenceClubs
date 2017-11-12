@@ -26,6 +26,8 @@ von Lyncker and Thoennessen (2016).}
 
 \item{mergeDivergent}{logical, if TRUE, indicates that merging of divergent regions
 should be tried.}
+
+\item{threshold}{a numeric value indicating the threshold to be used with the t-test.}
 }
 \value{
 A list of Convergence Clubs, for each club a list is return with the

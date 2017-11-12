@@ -4,7 +4,12 @@
 \alias{print.convergence.clubs}
 \title{Print method for S3 object \code{convergence.clubs}}
 \usage{
-\method{print}{convergence.clubs}(clubs)
+\method{print}{convergence.clubs}(x, ...)
+}
+\arguments{
+\item{x}{an object of class \code{convergence.clubs}.}
+
+\item{...}{other parameters to pass to function \code{summary()}.}
 }
 \description{
 Print method for S3 object \code{convergence.clubs}
