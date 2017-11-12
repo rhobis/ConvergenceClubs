@@ -40,3 +40,5 @@ vignettes/*.pdf
 .Rproj.user
 
 test\.R
+
+\.DS_Store
