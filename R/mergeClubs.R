@@ -4,14 +4,10 @@
 #' by either Phillips and Sul method or von Lyncker and Thoennessen procedure
 #'
 #'
-#' @param clubs a club list (created by findClub function)
-#' @param X dataframe containing data (preferably filtered data in order to remove business cycles)
-#' @param dataCols integer vector with the column indices of the data
-#' @param refCol integer scalar indicating the index of the column to use for ordering
-#' data
+#' @param clubs an object of class \code{convergence.clubs} (created by findClub function)
 #' @param time_trim a numeric value between 0 and 1, representing the portion of
-#' time periods to trim when running log t regression model.
-#' Phillips and Sul (2007, 2009) suggest to discard the first third of the period.
+#' time periods to trim when running log t regression model; if omitted, the same
+#' value used for \code{clubs} is used.
 #' @param HACmethod string indicating whether a Fixed Quadratic Spheric Bandwidth (HACmethod="FQSB") or
 #' an Adaptive Quadratic Spheric Bandwidth (HACmethod="AQSB") should be used for the truncation
 #' of the Quadratic Spectral kernel in estimating the \emph{log t} regression model
@@ -77,46 +73,48 @@
 #'
 #'
 #'@examples
-#'\dontrun{
 #'data("nutsGDP")
-#'nutsGDP[,2:16] <- log(X[,2:16])
+#'nutsGDP[,2:16] <- log(nutsGDP[,2:16])
 #'
-#'### Cluster NUTS regions using GDP from year 2000 to year 2014
+#'# Cluster NUTS regions using GDP from year 2000 to year 2014
 #'clubs <- findClubs(nutsGDP, dataCols=2:16, regions = 1, refCol=16, time_trim = 1/3,
 #'                   cstar = 0, HACmethod = "AQSB")
-#'### Merge clusters
-#'mclubs <- mergeClubs(clubs, nutsGDP, IDvar=1, yearVar=2:16, lastT=16, divergent=FALSE)
-#'}
+#'# Merge clusters
+#'mclubs <- mergeClubs(clubs, HACmethod='AQSB', mergeMethod='PS', mergeDivergent=FALSE)
+#'summary(mclubs)
+#'
+#'mclubs <- mergeClubs(clubs, HACmethod='AQSB', mergeMethod='vLT', mergeDivergent=FALSE)
+#'summary(mclubs)
 #'
 #' @export
 
 
 mergeClubs <- function(clubs,
-                       X,
-                       dataCols,
-                       refCol,
-                       time_trim=1/3,
+                       time_trim,
                        HACmethod = c('FQSB','AQSB'),
                        mergeMethod=c('PS','vLT'),
                        mergeDivergent=FALSE,
                        threshold = -1.65){
 
     ### Check inputs -----------------------------------------------------------
+    if(!inherits(clubs,'convergence.clubs')) stop('clubs must be an object of class convergence.clubs')
 
-    #X
-    if(!is.data.frame(X)) stop('X must be an object of class data.frame')
-
-    #dataCols
-    if(!all(apply(X[,dataCols],2,is.numeric)) ) stop('Some of the data columns are non-numeric')
+    X <- attr(clubs, 'data')
+    dataCols <- attr(clubs, 'dataCols')
+    refCol <- attr(clubs, 'refCol')
 
     #length of time series
     t <- length(dataCols)
     if(t < 2) stop('At least two time periods are needed to run this procedure')
 
-    #time_trim
-    if( length(time_trim) > 1 | !is.numeric(time_trim) ) stop('time_trim must be a numeric scalar')
-    if( time_trim > 1 | time_trim <= 0 ) stop('invalid value for time_trim; should be a value between 0 and 1')
-    if( (t - round(t*time_trim)) < 2) stop('either the number of time periods is too small or the value of time_trim is too high')
+    #trimming parameter of the time series
+    if(missing(time_trim)){
+        time_trim <- attr(clubs, 'time_trim')
+    } else{
+        if( length(time_trim) > 1 | !is.numeric(time_trim) ) stop('time_trim must be a numeric scalar')
+        if( time_trim > 1 | time_trim <= 0 ) stop('invalid value for time_trim; should be a value between 0 and 1')
+        if( (t - round(t*time_trim)) < 2) stop('either the number of time periods is too small or the value of time_trim is too high')
+    }
 
 
     ### Initialise variables ---------------------------------------------------
@@ -126,7 +124,16 @@ mergeClubs <- function(clubs,
     ll <- length(clubs) - 1 #the last element is 'divergent'
     if(ll<2) stop('There is only one club')
 
-    pclub <- list()
+    #output
+    pclub <- structure(list(),
+                       class = c("convergence.clubs", "list"),
+                       data = X,
+                       dataCols = dataCols,
+                       refCol = refCol,
+                       time_trim = time_trim,
+                       cstar = attr(clubs, 'cstar'),
+                       HACmethod = HACmethod
+    )
     n <- 0
     appendLast <- FALSE
     club_names <- names(clubs)
@@ -196,21 +203,11 @@ mergeClubs <- function(clubs,
                                                       id = clubs[[ll]]$id,
                                                       model = clubs[[ll]]$model
             )
-            if(returnRegions) pclub[[paste('club',n+2,sep='')]]$regions = clubs[[ll]]$regions
+            if(returnRegions) pclub[[paste('club',n+2,sep='')]]$regions <- clubs[[ll]]$regions
         }
     }
-    # ## If clubs list has regions, add them to output
-    # if(!is.null(clubs$club1$regions)){
-    #     for(new_club in names(pclub)){
-    #         addRegions <- vector()
-    #         for(old_club in pclub[[new_club]]$clubs){
-    #              addRegions <- c(addRegions, clubs[[old_club]]$regions)
-    #         }
-    #         pclub[[new_club]]$regions <- addRegions
-    #     }
-    # }
+    pclub$divergent <- clubs$divergent
     if(mergeDivergent){
-        pclub$divergent <- clubs$divergent
-        return(mergeDivergent(clubs=pclub, X, dataCols, time_trim, threshold))
+        return(mergeDivergent(pclub, time_trim, threshold))
     }else return(pclub)
 }

@@ -33,7 +33,8 @@ with heteroskedasticity and autocorrelation consistent standard errors.
 The default method is "FQSB".}
 }
 \value{
-A list of Convergence Clubs, for each club a list is return with the
+Ad object of class \code{convergence.clubs}, containing a list of
+Convergence Clubs, for each club a list is return with the
 following objects: \code{id}, a vector containing the row indices
 of the regions in the club; \code{model}, a list containing information
 about the model used to run the t-test on the regions in the club;
@@ -74,16 +75,15 @@ to the Phillips and Sul clustering procedure, the following steps are implemente
    }
 }
 \examples{
-\dontrun{
 data("nutsGDP")
-nutsGDP[,2:16] <- log(X[,2:16])
+nutsGDP[,2:16] <- log(nutsGDP[,2:16])
 
-### Cluster NUTS regions using GDP from year 2000 to year 2014
+# Cluster NUTS regions using GDP from year 2000 to year 2014
 clubs <- findClubs(nutsGDP, dataCols=2:16, regions = 1, refCol=16, time_trim = 1/3,
                    cstar = 0, HACmethod = "FQSB")
 clubs <- findClubs(nutsGDP, dataCols=2:16, regions = 1, refCol=16, time_trim = 1/3,
                    cstar = 0, HACmethod = "AQSB")
-}
+summary(clubs)
 
 
 }
