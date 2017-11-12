@@ -4,7 +4,12 @@
 \alias{summary.convergence.clubs}
 \title{Summary method for S3 object \code{convergence.clubs}}
 \usage{
-\method{summary}{convergence.clubs}(clubs)
+\method{summary}{convergence.clubs}(object, ...)
+}
+\arguments{
+\item{object}{an object of class \code{convergence.clubs}.}
+
+\item{...}{other parameters to pass to function \code{summary()}.}
 }
 \description{
 Summary method for S3 object \code{convergence.clubs}

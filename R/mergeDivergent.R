@@ -8,6 +8,7 @@
 #' @param time_trim a numeric value between 0 and 1, representing the portion of
 #' time periods to trim when running log t regression model; if omitted, the same
 #' value used for \code{clubs} is used.
+#' @param threshold a numeric value indicating the threshold to be used with the t-test.
 #'
 #' @return A list of Convergence Clubs, for each club a list is return with the
 #' following objects: \code{id}, a vector containing the row indices

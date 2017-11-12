@@ -12,13 +12,11 @@
 #' @details The cross sectional variation $H_{it}$ is computed as the quadratic
 #'          distance measure for the panel from the common limit and under the
 #'          hypothesis of the model should converge to zero as \emph{t} tends towards infinity:
-#'              \deqn{H_t = N^{-1} \sum_{i=1}^N (h_{it}-1)^2 \rightarrow 0  \qquad	\text{as}   t\rightarrow \inf}{
-#'                   H(t) = 1/N \sum [h(it)-1]^2 --> 0  	as   t-> infinity
-#'              }
+#'              \deqn{H_t = N^{-1} \sum_{i=1}^N (h_{it}-1)^2 \rightarrow 0 , \quad   t\rightarrow \infty}{
+#'                   H(t) = 1/N \sum [h(it)-1]^2 --> 0  	as   t -> infinity  }
 #'          where
 #'              \deqn{h_{it} = \frac{\log y_{it}}{(N^{-1} \sum_{i=1}^N log y_{it}} }{
-#'                   h(it) = N log[y(it)] / \sum log[y(it)]
-#'              }
+#'                   h(it) = N log[y(it)] / \sum log[y(it)]   }
 #' @references
 #' Phillips, P. C.; Sul, D., 2007. Transition modeling and econometric convergence tests. Econometrica 75 (6), 1771-1855.
 #'
