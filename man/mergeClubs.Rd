@@ -4,23 +4,15 @@
 \alias{mergeClubs}
 \title{Merge convergence clubs}
 \usage{
-mergeClubs(clubs, X, dataCols, refCol, time_trim = 1/3,
-  HACmethod = c("FQSB", "AQSB"), mergeMethod = c("PS", "vLT"),
-  mergeDivergent = FALSE, threshold = -1.65)
+mergeClubs(clubs, time_trim, HACmethod = c("FQSB", "AQSB"),
+  mergeMethod = c("PS", "vLT"), mergeDivergent = FALSE, threshold = -1.65)
 }
 \arguments{
-\item{clubs}{a club list (created by findClub function)}
-
-\item{X}{dataframe containing data (preferably filtered data in order to remove business cycles)}
-
-\item{dataCols}{integer vector with the column indices of the data}
-
-\item{refCol}{integer scalar indicating the index of the column to use for ordering
-data}
+\item{clubs}{an object of class \code{convergence.clubs} (created by findClub function)}
 
 \item{time_trim}{a numeric value between 0 and 1, representing the portion of
-time periods to trim when running log t regression model.
-Phillips and Sul (2007, 2009) suggest to discard the first third of the period.}
+time periods to trim when running log t regression model; if omitted, the same
+value used for \code{clubs} is used.}
 
 \item{HACmethod}{string indicating whether a Fixed Quadratic Spheric Bandwidth (HACmethod="FQSB") or
 an Adaptive Quadratic Spheric Bandwidth (HACmethod="AQSB") should be used for the truncation
@@ -78,16 +70,18 @@ This algorithm suggests to merge for adjacent groups. In particular, it works as
 }
 }
 \examples{
-\dontrun{
 data("nutsGDP")
-nutsGDP[,2:16] <- log(X[,2:16])
+nutsGDP[,2:16] <- log(nutsGDP[,2:16])
 
-### Cluster NUTS regions using GDP from year 2000 to year 2014
+# Cluster NUTS regions using GDP from year 2000 to year 2014
 clubs <- findClubs(nutsGDP, dataCols=2:16, regions = 1, refCol=16, time_trim = 1/3,
                   cstar = 0, HACmethod = "AQSB")
-### Merge clusters
-mclubs <- mergeClubs(clubs, nutsGDP, IDvar=1, yearVar=2:16, lastT=16, divergent=FALSE)
-}
+# Merge clusters
+mclubs <- mergeClubs(clubs, HACmethod='AQSB', mergeMethod='PS', mergeDivergent=FALSE)
+summary(mclubs)
+
+mclubs <- mergeClubs(clubs, HACmethod='AQSB', mergeMethod='vLT', mergeDivergent=FALSE)
+summary(mclubs)
 
 }
 \references{

@@ -3,13 +3,11 @@
 #' Merges divergent units according the algorithm proposed by von Lyncker and Thoennessen (2016)
 #'
 #'
-#' @param clubs a club list (created by findClubs or mergeClubs functions)
-#' @param X dataframe containing data: they must be the same data passed to \code{findClubs}
-#' or \code{mergeClubs} to obtain the \code{clubs} object
-#' @param dataCols integer vector with the column indices of the data
+#' @param clubs an object of class \code{convergence.clubs} (created by \code{findClub}
+#' or \code{mergeClubs} function)
 #' @param time_trim a numeric value between 0 and 1, representing the portion of
-#' time periods to trim when running log t regression model.
-#' Phillips and Sul (2007, 2009) suggest to discard the first third of the period.
+#' time periods to trim when running log t regression model; if omitted, the same
+#' value used for \code{clubs} is used.
 #'
 #' @return A list of Convergence Clubs, for each club a list is return with the
 #' following objects: \code{id}, a vector containing the row indices
@@ -52,44 +50,45 @@
 #'
 #'
 #' @examples
-#'\dontrun{
 #'data("nutsGDP")
-#'nutsGDP[,2:16] <- log(X[,2:16])
+#'nutsGDP[,2:16] <- log(nutsGDP[,2:16])
 #'
-#'### Cluster NUTS regions using GDP from year 2000 to year 2014
+#'# Cluster NUTS regions using GDP from year 2000 to year 2014
 #'clubs <- findClubs(nutsGDP, dataCols=2:16, regions = 1, refCol=16, time_trim = 1/3,
 #'                   cstar = 0, HACmethod = "AQSB")
 #'
-#'### Merge clusters and divergent regions
-#'mclubs <- mergeClubs(clubs, nutsGDP, IDvar=1, yearVar=2:16, lastT=16, divergent=TRUE)
-#'}
+#'# Merge clusters and divergent regions
+#'mclubs <- mergeClubs(clubs, HACmethod='AQSB', mergeDivergent=TRUE)
+#'summary(mclubs)
 #'
 #' @export
 
 
 
 mergeDivergent <- function(clubs,
-                           X,
-                           dataCols,
                            time_trim,
                            threshold = -1.65){
 
     ### Check inputs -----------------------------------------------------------
+    if(!inherits(clubs,'convergence.clubs')) stop('clubs must be an object of class convergence.clubs')
 
-    #X
-    if(!is.data.frame(X)) stop('X must be an object of class data.frame')
-
-    #dataCols
-    if(!all(apply(X[,dataCols],2,is.numeric)) ) stop('Some of the data columns are non-numeric')
+    X <- attr(clubs, 'data')
+    dataCols <- attr(clubs, 'dataCols')
+    refCol <- attr(clubs, 'refCol')
 
     #length of time series
     t <- length(dataCols)
     if(t < 2) stop('At least two time periods are needed to run this procedure')
 
-    #time_trim
-    if( length(time_trim) > 1 | !is.numeric(time_trim) ) stop('time_trim must be a numeric scalar')
-    if( time_trim > 1 | time_trim <= 0 ) stop('invalid value for time_trim; should be a value between 0 and 1')
-    if( (t - round(t*time_trim)) < 2) stop('either the number of time periods is too small or the value of time_trim is too high')
+    #trimming parameter of the time series
+    if(missing(time_trim)){
+        time_trim <- attr(clubs, 'time_trim')
+    } else{
+        if( length(time_trim) > 1 | !is.numeric(time_trim) ) stop('time_trim must be a numeric scalar')
+        if( time_trim > 1 | time_trim <= 0 ) stop('invalid value for time_trim; should be a value between 0 and 1')
+        if( (t - round(t*time_trim)) < 2) stop('either the number of time periods is too small or the value of time_trim is too high')
+    }
+
 
 
     ### Initialize variables ---------------------------------------------------
