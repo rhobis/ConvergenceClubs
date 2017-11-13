@@ -86,6 +86,16 @@ summary(mclubs)
 
 mclubs <- mergeClubs(clubs, HACmethod='AQSB', mergeMethod='vLT', mergeDivergent=FALSE)
 summary(mclubs)
+=======
+nutsGDP[,2:16] <- log(X[,2:16])
+
+### Cluster NUTS regions using GDP from year 2000 to year 2014
+clubs <- findClubs(nutsGDP, IDvar=1, yearVar=2:16, lastT=16, cstar=0,
+                  HACmethod='QSFM')
+### Merge clusters
+mclubs <- mergeClubs(clubs, nutsGDP, IDvar=1, yearVar=2:16, lastT=16, divergent=TRUE)
+
+>>>>>>> 443ae21... added data and examples
 
 }
 \references{
