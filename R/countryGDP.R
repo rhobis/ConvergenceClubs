@@ -1,11 +1,11 @@
-#' GDP of NUTS regions from 200x to 20xx.......
+#' GDP of 152 Countries from 1970 to 2003
 #'
-#' A dataset containing the GDP of 268 NUTS regions over 15 years.
+#' A dataset containing the GDP of 152 Countries over 34 years.
 #' Data were filtered in order  to remove business cycles.
 #'
 #'
 #' \describe{
-#'   \item{ID}{Country (character);}
+#'   \item{ID}{Country names (character);}
 #'   \item{Y1970, ..., Y2003}{GDP from year 1970 to 2003 (filtered in order
 #'    to remove business cycles).}
 #' }
