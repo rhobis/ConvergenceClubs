@@ -42,3 +42,5 @@ vignettes/*.pdf
 test\.R
 
 \.DS_Store
+
+data-raw/\.~lock\.countryGDP\.csv#
