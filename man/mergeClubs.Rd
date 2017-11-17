@@ -75,7 +75,7 @@ This algorithm suggests to merge for adjacent groups. In particular, it works as
 #' data("countryGDP")
 countryGDP[,2:35] <- log(countryGDP[,2:35])
 
-# Cluster NUTS regions using GDP from year 2000 to year 2014
+# Cluster Countries using GDP from year 2000 to year 2014
 clubs <- findClubs(countryGDP, dataCols=2:35, regions = 1, refCol=35, time_trim = 1/3,
                    cstar = 0, HACmethod = "AQSB")
 summary(clubs)
