@@ -69,7 +69,7 @@
 #'
 #'
 #'@examples
-#'#' data("countryGDP")
+#'data("countryGDP")
 #'countryGDP[,2:35] <- log(countryGDP[,2:35])
 #'
 #'# Cluster Countries using GDP from year 2000 to year 2014
