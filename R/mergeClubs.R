@@ -8,11 +8,6 @@
 #' @param time_trim a numeric value between 0 and 1, representing the portion of
 #' time periods to trim when running log t regression model; if omitted, the same
 #' value used for \code{clubs} is used.
-#' @param HACmethod string indicating whether a Fixed Quadratic Spheric Bandwidth (HACmethod="FQSB") or
-#' an Adaptive Quadratic Spheric Bandwidth (HACmethod="AQSB") should be used for the truncation
-#' of the Quadratic Spectral kernel in estimating the \emph{log t} regression model
-#' with heteroskedasticity and autocorrelation consistent standard errors.
-#' The default method is "FQSB".
 #' @param mergeMethod character string indicating the merging method to use. Methods
 #' available are \code{'PS'} for Phillips and Sul (2009) and \code{'vLT'} for
 #' von Lyncker and Thoennessen (2016).
@@ -83,10 +78,10 @@
 #'summary(clubs)
 #'
 #'# Merge clusters
-#'mclubs <- mergeClubs(clubs, HACmethod='AQSB', mergeMethod='PS', mergeDivergent=FALSE)
+#'mclubs <- mergeClubs(clubs, mergeMethod='PS', mergeDivergent=FALSE)
 #'summary(mclubs)
 #'
-#'mclubs <- mergeClubs(clubs, HACmethod='AQSB', mergeMethod='vLT', mergeDivergent=FALSE)
+#'mclubs <- mergeClubs(clubs, mergeMethod='vLT', mergeDivergent=FALSE)
 #'summary(mclubs)
 #'
 #' @export
@@ -94,17 +89,20 @@
 
 mergeClubs <- function(clubs,
                        time_trim,
-                       HACmethod = c('FQSB','AQSB'),
                        mergeMethod=c('PS','vLT'),
                        mergeDivergent=FALSE,
                        threshold = -1.65){
 
     ### Check inputs -----------------------------------------------------------
+    # HACmethod <- match.arg(HACmethod)
+    mergeMethod <- match.arg(mergeMethod)
+
     if(!inherits(clubs,'convergence.clubs')) stop('clubs must be an object of class convergence.clubs')
 
     X <- attr(clubs, 'data')
     dataCols <- attr(clubs, 'dataCols')
     refCol <- attr(clubs, 'refCol')
+    HACmethod <- attr(clubs, 'HACmethod')
 
     #length of time series
     t <- length(dataCols)
@@ -121,9 +119,6 @@ mergeClubs <- function(clubs,
 
 
     ### Initialise variables ---------------------------------------------------
-    HACmethod <- match.arg(HACmethod)
-    mergeMethod <- match.arg(mergeMethod)
-
     ll <- length(clubs) - 1 #the last element is 'divergent'
     if(ll<2) stop('There is only one club')
 
@@ -142,11 +137,11 @@ mergeClubs <- function(clubs,
     club_names <- names(clubs)
 
 
-    ### Set methods  -----------------------------------------------------------
-    #select functions to compute t-values
-    estimateMod <<- if(HACmethod=='FQSB'){
-        estimateMod_fqsb
-    }else estimateMod_aqsb
+    # ### Set methods  -----------------------------------------------------------
+    # #select functions to compute t-values
+    # estimateMod <<- if(HACmethod=='FQSB'){
+    #     estimateMod_fqsb
+    # }else estimateMod_aqsb
 
     ### Merging procedure ------------------------------------------------------
     i <- 1
@@ -160,7 +155,7 @@ mergeClubs <- function(clubs,
             addunits <- clubs[[k]]$id
             if(returnRegions) addregions <- clubs[[k]]$regions
             H <- computeH(X[c(units,addunits), dataCols])
-            mod <- estimateMod(H, time_trim)
+            mod <- estimateMod(H, time_trim, HACmethod = HACmethod)
             tvalue <- mod$tvalue
             #check if a couple of clubs can be merged
             if(tvalue > threshold){
@@ -198,7 +193,7 @@ mergeClubs <- function(clubs,
         H <- computeH(X[units, dataCols])
         pclub[[paste('club',n,sep='')]] <- list(clubs = cnm,
                                                 id = units,
-                                                model = estimateMod(H, time_trim)
+                                                model = estimateMod(H, time_trim, HACmethod = HACmethod)
         )
         if(returnRegions) pclub[[paste('club',n,sep='')]]$regions <- regions
         if(appendLast){

@@ -10,6 +10,7 @@
 #' value used for \code{clubs} is used.
 #' @param threshold a numeric value indicating the threshold to be used with the t-test.
 #'
+#'
 #' @return A list of Convergence Clubs, for each club a list is return with the
 #' following objects: \code{id}, a vector containing the row indices
 #' of the regions in the club; \code{model}, a list containing information
@@ -60,7 +61,7 @@
 #'summary(clubs)
 #'
 #'# Merge clusters and divergent regions
-#'mclubs <- mergeClubs(clubs, HACmethod='AQSB', mergeDivergent=TRUE)
+#'mclubs <- mergeClubs(clubs, mergeDivergent=TRUE)
 #'summary(mclubs)
 #'
 #' @export
@@ -69,7 +70,8 @@
 
 mergeDivergent <- function(clubs,
                            time_trim,
-                           threshold = -1.65){
+                           threshold = -1.65
+                           ){
 
     ### Check inputs -----------------------------------------------------------
     if(!inherits(clubs,'convergence.clubs')) stop('clubs must be an object of class convergence.clubs')
@@ -77,6 +79,7 @@ mergeDivergent <- function(clubs,
     X <- attr(clubs, 'data')
     dataCols <- attr(clubs, 'dataCols')
     refCol <- attr(clubs, 'refCol')
+    HACmethod <- attr(clubs, 'HACmethod')
 
     #length of time series
     t <- length(dataCols)
@@ -111,7 +114,7 @@ mergeDivergent <- function(clubs,
         for(i in 1:cn){
             for(j in 1:length(dunits)){
                 H <- computeH(X[c(clubs[[i]]$id,dunits[j]), dataCols])
-                tmatrix[i,j] <- estimateMod(H, time_trim)$tvalue
+                tmatrix[i,j] <- estimateMod(H, time_trim, HACmethod = HACmethod)$tvalue
             }
         }
         #if in the matrix max(t-value) > threshold
@@ -130,7 +133,7 @@ mergeDivergent <- function(clubs,
                 mregions <- c(cc,cd)
             }
             H <- computeH(X[munits, dataCols])
-            mod <- estimateMod(H, time_trim)
+            mod <- estimateMod(H, time_trim, HACmethod = HACmethod)
             #modify club list
             if(returnRegions) clubs[[club.ind]]$regions <- mregions
             clubs[[club.ind]]$id <- munits

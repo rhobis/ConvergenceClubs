@@ -4,8 +4,8 @@
 \alias{mergeClubs}
 \title{Merge convergence clubs}
 \usage{
-mergeClubs(clubs, time_trim, HACmethod = c("FQSB", "AQSB"),
-  mergeMethod = c("PS", "vLT"), mergeDivergent = FALSE, threshold = -1.65)
+mergeClubs(clubs, time_trim, mergeMethod = c("PS", "vLT"),
+  mergeDivergent = FALSE, threshold = -1.65)
 }
 \arguments{
 \item{clubs}{an object of class \code{convergence.clubs} (created by findClub function)}
@@ -13,12 +13,6 @@ mergeClubs(clubs, time_trim, HACmethod = c("FQSB", "AQSB"),
 \item{time_trim}{a numeric value between 0 and 1, representing the portion of
 time periods to trim when running log t regression model; if omitted, the same
 value used for \code{clubs} is used.}
-
-\item{HACmethod}{string indicating whether a Fixed Quadratic Spheric Bandwidth (HACmethod="FQSB") or
-an Adaptive Quadratic Spheric Bandwidth (HACmethod="AQSB") should be used for the truncation
-of the Quadratic Spectral kernel in estimating the \emph{log t} regression model
-with heteroskedasticity and autocorrelation consistent standard errors.
-The default method is "FQSB".}
 
 \item{mergeMethod}{character string indicating the merging method to use. Methods
 available are \code{'PS'} for Phillips and Sul (2009) and \code{'vLT'} for
@@ -81,10 +75,10 @@ clubs <- findClubs(countryGDP, dataCols=2:35, regions = 1, refCol=35, time_trim 
 summary(clubs)
 
 # Merge clusters
-mclubs <- mergeClubs(clubs, HACmethod='AQSB', mergeMethod='PS', mergeDivergent=FALSE)
+mclubs <- mergeClubs(clubs, mergeMethod='PS', mergeDivergent=FALSE)
 summary(mclubs)
 
-mclubs <- mergeClubs(clubs, HACmethod='AQSB', mergeMethod='vLT', mergeDivergent=FALSE)
+mclubs <- mergeClubs(clubs, mergeMethod='vLT', mergeDivergent=FALSE)
 summary(mclubs)
 
 }

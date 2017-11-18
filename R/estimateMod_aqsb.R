@@ -29,7 +29,6 @@
 #' Andrews, D. W., 1991. Heteroskedasticity and autocorrelation consistent covariance matrix estimation.
 #' Econometrica: Journal of the Econometric Society, 817-858.
 #'
-#' @export
 #'
 
 

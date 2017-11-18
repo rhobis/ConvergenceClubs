@@ -9,6 +9,11 @@
 #' @param time_trim a numeric value between 0 and 1, representing the portion of
 #' time periods to trim when running log t regression model.
 #' Phillips and Sul (2007, 2009) suggest to discard the first third of the period.
+#' @param HACmethod string indicating whether a Fixed Quadratic Spheric Bandwidth (HACmethod="FQSB") or
+#' an Adaptive Quadratic Spheric Bandwidth (HACmethod="AQSB") should be used for the truncation
+#' of the Quadratic Spectral kernel in estimating the \emph{log t} regression model
+#' with heteroskedasticity and autocorrelation consistent standard errors.
+#' The default method is "FQSB".
 #' @param cstar numeric scalar, indicating the threshold value of the sieve criterion \eqn{c^*}
 #' to include units in the detected core (primary) group (step 3 of Phillips and Sul (2007, 2009) clustering algorithm).
 #' The default value is 0.
@@ -34,9 +39,16 @@
 
 
 
-club <- function(X, dataCols, core, time_trim, cstar = 0){
+club <- function(X,
+                 dataCols,
+                 core,
+                 time_trim,
+                 HACmethod = c('FQSB','AQSB'),
+                 cstar = 0){
 
     ### Initialisation ---------------------------------------------------------
+    HACmethod <- match.arg(HACmethod)
+
     X$row <- 1:nrow(X)
     unitsNoCore <- X[-core,] #Data without units of the core group
     tvalue <- vector()
@@ -45,7 +57,7 @@ club <- function(X, dataCols, core, time_trim, cstar = 0){
     for(k in 1:nrow(unitsNoCore)){
         #compute H
         H <- computeH( X[ c(core,unitsNoCore$row[k]), dataCols ])
-        tvalue <- c(tvalue, estimateMod(H, time_trim)$tvalue)
+        tvalue <- c(tvalue, estimateMod(H, time_trim, HACmethod = HACmethod)$tvalue)
     }
     #Find group (core + regions) such that (core + i)  gives t > cstar
     clubCandidates_id <- unitsNoCore[which(tvalue > cstar), 'id']
@@ -56,7 +68,7 @@ club <- function(X, dataCols, core, time_trim, cstar = 0){
     clubRows <- c(core, clubCandidates_row)
 
     H <- computeH(X[clubRows, dataCols])
-    mod <- estimateMod(H, time_trim)
+    mod <- estimateMod(H, time_trim, HACmethod = HACmethod)
     # tvalue <- mod$tvalue
 
     #return club info

@@ -4,8 +4,8 @@
 \alias{coreG}
 \title{Find core (primary) group}
 \usage{
-coreG(X, refCol, dataCols, time_trim, threshold = -1.65, type = c("max",
-  "all"))
+coreG(X, refCol, dataCols, time_trim, threshold = -1.65,
+  HACmethod = c("FQSB", "AQSB"), type = c("max", "all"))
 }
 \arguments{
 \item{X}{matrix or dataframe containing data (preferably filtered data in order to remove business cycles)}
@@ -21,6 +21,12 @@ Phillips and Sul (2007, 2009) suggest to discard the first third of the period.}
 
 \item{threshold}{numeric value indicating the threshold to be used to perform
 the one-tail t test; default is -1.65.}
+
+\item{HACmethod}{string indicating whether a Fixed Quadratic Spheric Bandwidth (HACmethod="FQSB") or
+an Adaptive Quadratic Spheric Bandwidth (HACmethod="AQSB") should be used for the truncation
+of the Quadratic Spectral kernel in estimating the \emph{log t} regression model
+with heteroskedasticity and autocorrelation consistent standard errors.
+The default method is "FQSB".}
 
 \item{type}{one of "max" or "all";
 "max" includes only the region with maximum t-value. The default option is "max";

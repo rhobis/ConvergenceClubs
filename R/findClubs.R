@@ -154,10 +154,11 @@ findClubs<- function(X, #data matrix or data.frame
 
     ### Set methods  -----------------------------------------------------------
     #select functions to compute t-values
-    estimateMod <<- if(HACmethod=='FQSB'){
-        estimateMod_fqsb
-    }else estimateMod_aqsb
-
+    # estimateMod <<- if(HACmethod=='FQSB'){
+    #     estimateMod_fqsb
+    # }else estimateMod_aqsb
+    #
+    # estimateMod <- function(H, time_trim) estimateMod(H, time_trim, HACmethod=HACmethod)
 
     ### Other preliminary operations -------------------------------------------
 
@@ -180,7 +181,7 @@ findClubs<- function(X, #data matrix or data.frame
 
         #Test all regions
         H_all <- computeH(dati[,dataCols])
-        mod_all <- estimateMod(H_all, time_trim)
+        mod_all <- estimateMod(H_all, time_trim, HACmethod=HACmethod)
         t_all <- mod_all$tvalue
         # if tvalue > -1.65, they all form one club,
         #otherwise go one with clustering
@@ -200,7 +201,8 @@ findClubs<- function(X, #data matrix or data.frame
         }
 
         #find core group (returns the row indices of regions in core Group)
-        coreGroup <- coreG(X=dati, refCol, dataCols, time_trim, threshold, type="max")
+        coreGroup <- coreG(X=dati, refCol, dataCols, time_trim, threshold,
+                           HACmethod = HACmethod, type="max")
         #if no more core groups are found, add divergent to output and return
         if (identical(coreGroup, FALSE) ){
             # nl <- length(clubs)
@@ -209,7 +211,8 @@ findClubs<- function(X, #data matrix or data.frame
         }
 
         #add regions to core group
-        convClub <- club(X = dati, dataCols, core = coreGroup, time_trim, cstar = cstar)
+        convClub <- club(X = dati, dataCols, core = coreGroup, time_trim,
+                         HACmethod = HACmethod, cstar = cstar)
         # newcstar <- clubConv$model$cstar
         # xidclub <- which(X[,IDvar] %in% as.character(clubConv$units))
         clubs[[paste('club',l,sep = '')]] <- list( id = convClub$id,

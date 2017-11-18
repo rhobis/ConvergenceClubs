@@ -12,6 +12,11 @@
 #' Phillips and Sul (2007, 2009) suggest to discard the first third of the period.
 #' @param threshold numeric value indicating the threshold to be used to perform
 #' the one-tail t test; default is -1.65.
+#' @param HACmethod string indicating whether a Fixed Quadratic Spheric Bandwidth (HACmethod="FQSB") or
+#' an Adaptive Quadratic Spheric Bandwidth (HACmethod="AQSB") should be used for the truncation
+#' of the Quadratic Spectral kernel in estimating the \emph{log t} regression model
+#' with heteroskedasticity and autocorrelation consistent standard errors.
+#' The default method is "FQSB".
 #' @param type one of "max" or "all";
 #'             "max" includes only the region with maximum t-value. The default option is "max";
 #'             "all" includes all regions that pass the test t in the core formation (step 2).
@@ -45,12 +50,13 @@ coreG <- function(X,
                   dataCols,
                   time_trim,
                   threshold = -1.65,
+                  HACmethod = c('FQSB','AQSB'),
                   type=c("max","all")){
 
     ### Initialisation ---------------------------------------------------------
+    HACmethod <- match.arg(HACmethod)
     type <- match.arg(type)
     nr <- nrow(X) #number of regions
-
     ### Find first couple ------------------------------------------------------
     i <- 1
     while(i < nr){
@@ -58,7 +64,7 @@ coreG <- function(X,
         i <- i + 1
         # j <- j + 1
         H <- computeH( X[c(i-1,i), dataCols])
-        tvalue <- estimateMod(H, time_trim)$tvalue
+        tvalue <- estimateMod(H, time_trim, HACmethod = HACmethod)$tvalue
         #t-test (if t>-1.65 --> next step; otherwise repeat
         # for regions (i+1,i+2) )
         if(tvalue > threshold){
@@ -83,7 +89,7 @@ coreG <- function(X,
         k <- k + 1
         units <- c(units, k)
         H <- computeH(X[units, dataCols])
-        tvalue <- estimateMod(H, time_trim)$tvalue
+        tvalue <- estimateMod(H, time_trim, HACmethod = HACmethod)$tvalue
         if(tvalue > threshold){
             vt <- c(vt,tvalue)
             lgroup[[l]] <- units

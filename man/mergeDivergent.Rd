@@ -57,7 +57,7 @@ clubs <- findClubs(countryGDP, dataCols=2:35, regions = 1, refCol=35, time_trim 
 summary(clubs)
 
 # Merge clusters and divergent regions
-mclubs <- mergeClubs(clubs, HACmethod='AQSB', mergeDivergent=TRUE)
+mclubs <- mergeClubs(clubs, mergeDivergent=TRUE)
 summary(mclubs)
 
 }
