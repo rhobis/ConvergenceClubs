@@ -76,7 +76,6 @@ to the Phillips and Sul clustering procedure, the following steps are implemente
 }
 \examples{
 data("countryGDP")
-countryGDP[,2:35] <- log(countryGDP[,2:35])
 
 # Cluster Countries using GDP from year 2000 to year 2014
 clubs <- findClubs(countryGDP, dataCols=2:35, regions = 1, refCol=35, time_trim = 1/3,
