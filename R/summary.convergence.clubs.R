@@ -11,7 +11,8 @@ summary.convergence.clubs <- function(object, ...){
     summary_table <- as.data.frame(sapply(object, function(x) length(x$id)))
     colnames(summary_table) <- ('# of regions')
 
-    cat(sprintf('Number of convergence clubs: %d', length(object)-1), '\n',
+    anyDivergent <- 1 * ('divergent' %in% names(object))
+    cat(sprintf('Number of convergence clubs: %d', length(object)-anyDivergent), '\n',
         sprintf('Number of divergent units: %d', length(object$divergent$id)), '\n',
         '\n',
         sep='')
