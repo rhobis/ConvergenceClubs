@@ -224,10 +224,9 @@ findClubs<- function(X, #data matrix or data.frame
     ### Return -----------------------------------------------------------------
     #if returnRegions, then add region codes to output
     if(returnRegions){
-        for(i in 1:(length(clubs)-1) ){
-            clubs[[i]]$regions <- X[clubs[[i]]$id, regions]
+        for(club in names(clubs) ){
+            clubs[[club]]$regions <- X[clubs[[club]]$id, regions]
         }
-        if(!is.null(clubs$divergent$id)) clubs$divergent$regions <- X[clubs$divergent$id, regions]
         return(clubs)
     }else return(clubs)
 }
