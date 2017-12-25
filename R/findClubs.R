@@ -37,15 +37,15 @@
 #'              Sort units in descending order according to the last panel observation of the period;
 #'        \item (Core group formation):
 #'        Run the log t regression for the first k units \eqn{(2 < k < N)} maximizing k
-#'        under the condition \eqn{t-value > -1.65}. In other words, chose the core group size k* as follows:
+#'        under the condition that t-value is \eqn{> -1.65}. In other words, chose the core group size k* as follows:
 #'
-#'        \deqn{k^*= argmax_k t_k }{k* = argmax t(k)  }  subject to \deqn{ min\{t_k \} > -1.65}{min t(k) > 1.65}
+#'        \deqn{k^*= argmax_k t_k }{k* = argmax \, t(k)  }  subject to \deqn{ min\{t_k \} > -1.65}{min t(k) > 1.65}
 #'
 #'        If the condition \eqn{t_k >-1.65}{t(k) > -1.65} does not hold for \eqn{k = 2} (the first two units),
 #'        drop the first unit and repeat the same procedure. If \eqn{t_k >-1.65}{t(k) > -1.65} does not hold
 #'        for any units chosen, the whole panel diverges;
 #'        \item (Sieve the data for club membership): After the core group  is detected,
-#'        run the \emph{log-t}  regression for the core group adding (one by one)
+#'        run the \eqn{log t}  regression for the core group adding (one by one)
 #'        each unit that does not belong to the latter. If \eqn{t_k }{t(k)} is greater than a critical value \eqn{c^*}{c*}
 #'        add the new unit in the convergence club.
 #'        All these units (those included in the core group \eqn{k^*}{k*} plus those added) form the first convergence club;
@@ -56,7 +56,7 @@
 #'        Otherwise, step 1 to 3 should be repeated on the same group to determine
 #'        whether there are other subgroups that constitute convergence clubs.
 #'        If no further convergence clubs are found (hence, no k in step 2 satisfies
-#'        the condition \eqn{t_k >-1.65}{t(k) > -1.65} ), the remaining regions diverge.
+#'        the condition \eqn{t_k >-1.65}{t(k) > -1.65}), the remaining regions diverge.
 #'    }
 #' @references
 #' Phillips, P. C.; Sul, D., 2007. Transition modeling and econometric convergence tests. Econometrica 75 (6), 1771-1855.

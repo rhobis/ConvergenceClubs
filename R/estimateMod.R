@@ -16,9 +16,8 @@
 #' @return  A list containing information about the model used to run the t-test
 #' on the regions in the club: beta coefficient, standard deviation, t-statistics and p-value.
 #'
-#' @details
-#' The following linear model is estimated:
-#'     \deqn{\log\frac{H_1}{H_t} – 2\log(\log{t} = \alpha + \beta \log{t} + u_t}{
+#'@details The following linear model is estimated:
+#' \deqn{\log\frac{H_1}{H_t} – 2\log(\log{t}) = \alpha + \beta \log{t} + u_t}{
 #'            log[H(1)/H(t)] – 2log[log(t)] = \alpha + \beta log(t) + u(t)  }
 #'
 #' Heteroskedasticity and autocorrelation consistent (HAC) standard errors are used with
@@ -47,40 +46,40 @@ estimateMod <- function(H, time_trim, HACmethod = c('FQSB','AQSB')){
 
     HACmethod <- match.arg(HACmethod)
 
-    if(HACmethod=="FQSB"){
-        ### Initialise variables ---------------------------------------------------
+    if (HACmethod=='FQSB'){
+        ### Initialise variables -----------------------------------------------
         nT <- length(H)
-        rT <- (round(nT*time_trim) + 1):nT
+        rT <- seq( round(nT*time_trim) + 1, nT)
         logt <- log(rT)
-        rH <- log(H[1]/H[rT]) - 2*log(logt)
-        ### Estimation -------------------------------------------------------------
+        rH <- log( H[1]/H[rT] ) - 2*log( logt )
+        ### Estimation ---------------------------------------------------------
         xx		<- cbind(1, logt)						# construct design matrix
-        b		<- solve(t(xx) %*% xx) %*% t(xx) %*% rH	# OLS
+        b		<- solve( t(xx) %*% xx ) %*% t(xx) %*% rH	# OLS
         re		<- rH - xx %*% b						# construct residuals
 
         lrv		<- andrs2(re)              				#long-run variance of errors
-        var.b	<- diag(solve(t(xx) %*% xx))*c(lrv)
+        var.b	<- diag( solve(t(xx) %*% xx) )*c(lrv)
         se.b	<- sqrt(var.b)
         tstat.b	<- b[2]/se.b[2]
         result	<- list(beta=b,
                        st.dev = se.b[2],
                        tvalue = tstat.b,
-                       pvalue = pnorm(q=tstat.b)
+                       pvalue = pnorm( q=tstat.b )
         )
-        ### Output -----------------------------------------------------------------
+        ### Output -------------------------------------------------------------
         return(result)
         #
         #
     }else if(HACmethod=="AQSB"){
-        ### Initialise variables ---------------------------------------------------
+        ### Initialise variables -----------------------------------------------
         nT <- length(H)
-        rT <- (round(nT*time_trim) + 1):nT
+        rT <- seq( round(nT*time_trim) + 1, nT)
         logt <- log(rT)
-        rH <- log(H[1]/H[rT]) - 2*log(logt)
-        ### Estimation -------------------------------------------------------------
-        mod <- lm(rH ~ logt)
+        rH <- log( H[1]/H[rT] ) - 2*log( logt )
+        ### Estimation ---------------------------------------------------------
+        mod <- lm( rH~logt )
         mod <- lmtest::coeftest(mod,vcov=sandwich::vcovHAC(mod))
-        ### Output -----------------------------------------------------------------
+        ### Output -------------------------------------------------------------
         return(list(beta= mod[2,1],
                     st.dev = mod[2,2],
                     tvalue = mod[2,3],
@@ -107,7 +106,6 @@ estimateMod <- function(H, time_trim, HACmethod = c('FQSB','AQSB')){
 ### Function taken from ...
 andrs2		<- function(x){
     t		<- length(x[, 1])
-    n		<- length(x[1, ])
     x1		<- x[1:(t - 1), ]
     y1		<- x[2:t, ]
     b1		<- sum(x1*y1)/sum(x1^2)

@@ -11,7 +11,7 @@
 #' Phillips and Sul (2007, 2009) suggest to discard the first third of the period.
 #' @param HACmethod string indicating whether a Fixed Quadratic Spheric Bandwidth (HACmethod="FQSB") or
 #' an Adaptive Quadratic Spheric Bandwidth (HACmethod="AQSB") should be used for the truncation
-#' of the Quadratic Spectral kernel in estimating the \emph{log t} regression model
+#' of the Quadratic Spectral kernel in estimating the \eqn{log t} regression model
 #' with heteroskedasticity and autocorrelation consistent standard errors.
 #' The default method is "FQSB".
 #' @param cstar numeric scalar, indicating the threshold value of the sieve criterion \eqn{c^*}
@@ -24,11 +24,6 @@
 #' (input of function \code{club}); \code{model}, a list containing information
 #' about the model used to run the t-test on the regions in the club.
 #'
-### @details After the core group k* is detected, the function club runs the log t
-# regression model for the core (primary) group adding (one by one) each unit that does not belong to k*.
-# If {tk} is greater than a critical value c* the function adds the new unit to the convergence club.
-# All these units, those included in the core (primary) group k* plus those added, form a convergence club.
-#'
 #' @references
 #' Phillips, P. C.; Sul, D., 2007. Transition modeling and econometric convergence tests. Econometrica 75 (6), 1771-1855.
 #'
@@ -36,27 +31,24 @@
 #'
 
 
-
-
-
 club <- function(X,
                  dataCols,
                  core,
                  time_trim,
-                 HACmethod = c('FQSB','AQSB'),
+                 HACmethod = c('FQSB', 'AQSB'),
                  cstar = 0){
 
     ### Initialisation ---------------------------------------------------------
     HACmethod <- match.arg(HACmethod)
 
-    X$row <- 1:nrow(X)
-    unitsNoCore <- X[-core,] #Data without units of the core group
+    X$row <- seq_len(nrow(X))
+    unitsNoCore <- X[-core, ] #Data without units of the core group
     tvalue <- vector()
 
     ### t-test for core + one unit ---------------------------------------------
-    for(k in 1:nrow(unitsNoCore)){
+    for (k in seq_len(nrow(unitsNoCore)) ){
         #compute H
-        H <- computeH( X[ c(core,unitsNoCore$row[k]), dataCols ])
+        H <- computeH( X[ c(core, unitsNoCore$row[k]), dataCols ])
         tvalue <- c(tvalue, estimateMod(H, time_trim, HACmethod = HACmethod)$tvalue)
     }
     #Find group (core + regions) such that (core + i)  gives t > cstar
@@ -73,11 +65,9 @@ club <- function(X,
 
     #return club info
     return( list(id = clubId, #id of units in the club
-                 rows = clubRows, #row indices of club units in the current dataset 'dati'
+                 rows = clubRows, #row indices of club units in input
                  model = list(beta = mod$beta,
                               st.dev = mod$st.dev,
                               tvalue = mod$tvalue,
                               pvalue = mod$pvalue)))
 }
-
-

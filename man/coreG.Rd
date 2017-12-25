@@ -45,7 +45,8 @@ According to the second step of the Phillips and Sul clustering algorithm (2007,
          the \emph{log t} regression should be run for the first k units \eqn{2 < k < N}
          maximizing k under the condition that \eqn{t-value > -1.65}.
          In other words, the core group size \eqn{k^*}{k*} is chosen as follows:
-             \deqn{ k^* = argmax_k {t_k}}{k* = argmax{ t(k) }}  subject to \deqn{min{t_k} > -1.65}{min{ t(k)} > -1.65}
+             \deqn{ k^* = argmax_{k} t_k}{k* = argmax t(k) }  subject to
+             \deqn{\min{t_k} > -1.65}{min t(k) > -1.65}
          Such behavior is obtained with \code{type="max"}; if \code{type="all"},
          all units that satisfy \eqn{t_k > -1.65}{t(k) > -1.65} are added to core group.
 

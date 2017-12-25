@@ -111,7 +111,7 @@ mergeDivergent <- function(clubs,
         ##compute matrix of t-values
         #(one for each combination club + divergent region)
         for(i in 1:cn){
-            for(j in 1:length(dunits)){
+            for(j in seq_along(dunits) ){
                 H <- computeH(X[c(clubs[[i]]$id,dunits[j]), dataCols])
                 tmatrix[i,j] <- estimateMod(H, time_trim, HACmethod = HACmethod)$tvalue
             }

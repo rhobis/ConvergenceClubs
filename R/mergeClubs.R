@@ -4,7 +4,7 @@
 #' by either Phillips and Sul method or von Lyncker and Thoennessen procedure
 #'
 #'
-#' @param clubs an object of class \code{convergence.clubs} (created by findClub function)
+#' @param clubs an object of class \code{convergence.clubs} (created by findClubs function)
 #' @param time_trim a numeric value between 0 and 1, representing the portion of
 #' time periods to trim when running log t regression model; if omitted, the same
 #' value used for \code{clubs} is used.
@@ -28,7 +28,7 @@
 #' This algorithm suggests to merge for adjacent groups. In particular, it works as follows:
 #' \enumerate{
 #'     \item Take the first two groups detected in the basic clustering mechanism
-#'     and run the log-t test. If the t¬-statistic is larger than -1.65,
+#'     and run the log-t test. If the t-statistic is larger than -1.65,
 #'     these groups together form a new convergence club;
 #'     \item Repeat the test adding the next group and continue until the
 #'     basic condition (t-statistic > -1.65) holds;
@@ -58,7 +58,7 @@
 #'
 #' Phillips, P. C.; Sul, D., 2009. Economic transition and growth. Journal of Applied Econometrics 24 (7), 1153-1185.
 #'
-#' von Lyncker, K.; Thoennessen, R., 2016. Regional club convergence in the EU: evidence from a panel data analysis. Empirical Economics, doi:10.1007/s00181-016-1096-2, 1-29.
+#' von Lyncker, K.; Thoennessen, R., 2016. Regional club convergence in the EU: evidence from a panel data analysis. Empirical Economics.
 #'
 #'
 #' @seealso

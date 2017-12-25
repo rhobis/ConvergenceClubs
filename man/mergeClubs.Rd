@@ -8,7 +8,7 @@ mergeClubs(clubs, time_trim, mergeMethod = c("PS", "vLT"),
   mergeDivergent = FALSE, threshold = -1.65)
 }
 \arguments{
-\item{clubs}{an object of class \code{convergence.clubs} (created by findClub function)}
+\item{clubs}{an object of class \code{convergence.clubs} (created by findClubs function)}
 
 \item{time_trim}{a numeric value between 0 and 1, representing the portion of
 time periods to trim when running log t regression model; if omitted, the same
@@ -41,7 +41,7 @@ over determination due to the selection of the parameter \eqn{c*}.
 This algorithm suggests to merge for adjacent groups. In particular, it works as follows:
 \enumerate{
     \item Take the first two groups detected in the basic clustering mechanism
-    and run the log-t test. If the t¬-statistic is larger than -1.65,
+    and run the log-t test. If the t-statistic is larger than -1.65,
     these groups together form a new convergence club;
     \item Repeat the test adding the next group and continue until the
     basic condition (t-statistic > -1.65) holds;
@@ -86,7 +86,7 @@ Phillips, P. C.; Sul, D., 2007. Transition modeling and econometric convergence 
 
 Phillips, P. C.; Sul, D., 2009. Economic transition and growth. Journal of Applied Econometrics 24 (7), 1153-1185.
 
-von Lyncker, K.; Thoennessen, R., 2016. Regional club convergence in the EU: evidence from a panel data analysis. Empirical Economics, doi:10.1007/s00181-016-1096-2, 1-29.
+von Lyncker, K.; Thoennessen, R., 2016. Regional club convergence in the EU: evidence from a panel data analysis. Empirical Economics.
 }
 \seealso{
 \code{\link{findClubs}}, finds convergence clubs by means of Phillips and Sul clustering procedure.

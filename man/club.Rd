@@ -19,7 +19,7 @@ Phillips and Sul (2007, 2009) suggest to discard the first third of the period.}
 
 \item{HACmethod}{string indicating whether a Fixed Quadratic Spheric Bandwidth (HACmethod="FQSB") or
 an Adaptive Quadratic Spheric Bandwidth (HACmethod="AQSB") should be used for the truncation
-of the Quadratic Spectral kernel in estimating the \emph{log t} regression model
+of the Quadratic Spectral kernel in estimating the \eqn{log t} regression model
 with heteroskedasticity and autocorrelation consistent standard errors.
 The default method is "FQSB".}
 

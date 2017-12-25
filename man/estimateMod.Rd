@@ -28,7 +28,7 @@ Andrews estimator of long-run variance (fixed or adaptive bandwidth of the kerne
 }
 \details{
 The following linear model is estimated:
-    \deqn{\log\frac{H_1}{H_t} – 2\log(\log{t} = \alpha + \beta \log{t} + u_t}{
+\deqn{\log\frac{H_1}{H_t} – 2\log(\log{t}) = \alpha + \beta \log{t} + u_t}{
            log[H(1)/H(t)] – 2log[log(t)] = \alpha + \beta log(t) + u(t)  }
 
 Heteroskedasticity and autocorrelation consistent (HAC) standard errors are used with
