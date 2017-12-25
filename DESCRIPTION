@@ -1,10 +1,13 @@
 Package: ConvergenceClubs
 Title: Find Convergence Clubs
+Description: Functions to implement Phillips and Sul (2007, 2009) Convergence Club
+    clustering procedure.
 Version: 1.0.0
 Authors@R: as.person(c(
 	'Roberto Sichera <roberto.sichera@unipa.it> [aut, cre]', 
 	'Pietro Pizzuto <pietro.pizzuto02@unipa.it> [aut]' ))
-Description: Functions to implement the Convergence Club clustering procedure.
+URL: https://github.com/rhobis/ConvergenceClubs
+BugReports: https://github.com/rhobis/ConvergenceClubs/issues
 Depends:
     R (>= 3.0.1)
 License: GPL-3
