@@ -8,7 +8,9 @@
 
 summary.convergence.clubs <- function(object, ...){
     #table with number of regions per club
-    summary_table <- as.data.frame(sapply(object, function(x) length(x$id)))
+    summary_table <- as.data.frame(vapply(object,
+                                          FUN=function(x) length(x$id),
+                                          FUN.VALUE=1) )
     colnames(summary_table) <- ('# of regions')
 
     anyDivergent <- 1 * ('divergent' %in% names(object))
@@ -19,6 +21,3 @@ summary.convergence.clubs <- function(object, ...){
 
     print(summary_table)
 }
-
-
-
