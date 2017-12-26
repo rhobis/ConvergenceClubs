@@ -26,8 +26,8 @@ Phillips and Sul (2007, 2009) suggest to discard the first third of the period.}
 to include units in the detected core (primary) group (step 3 of Phillips and Sul (2007, 2009) clustering algorithm).
 The default value is 0.}
 
-\item{HACmethod}{string indicating whether a Fixed Quadratic Spheric Bandwidth (HACmethod="FQSB") or
-an Adaptive Quadratic Spheric Bandwidth (HACmethod="AQSB") should be used for the truncation
+\item{HACmethod}{string indicating whether a Fixed Quadratic Spectral Bandwidth (HACmethod="FQSB") or
+an Adaptive Quadratic Spectral Bandwidth (HACmethod="AQSB") should be used for the truncation
 of the Quadratic Spectral kernel in estimating the \emph{log t} regression model
 with heteroskedasticity and autocorrelation consistent standard errors.
 The default method is "FQSB".}

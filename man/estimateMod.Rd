@@ -13,9 +13,11 @@ estimateMod(H, time_trim, HACmethod = c("FQSB", "AQSB"))
 time periods to trim when running \emph{log t} regression model.
 Phillips and Sul (2007, 2009) suggest to discard the first third of the period.}
 
-\item{HACmethod}{string indicating the method to be used for the computation of
-Heteroskedasticity and autocorrelation consistent standard errors.
-Either "FQSB" (for fixed bandwidth) or "AQSB" (adaptive bandwidth); default is "FQSB".}
+\item{HACmethod}{string indicating whether a Fixed Quadratic Spectral Bandwidth (\code{HACmethod="FQSB"}) or
+an Adaptive Quadratic Spectral Bandwidth (\code{HACmethod="AQSB"}) should be used for the truncation
+of the Quadratic Spectral kernel in estimating the \emph{log t} regression model
+with heteroskedasticity and autocorrelation consistent standard errors.
+The default method is "FQSB".}
 }
 \value{
 A list containing information about the model used to run the t-test
