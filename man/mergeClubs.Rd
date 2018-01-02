@@ -33,7 +33,7 @@ only included if it is present in the \code{clubs} object given in input.
 }
 \description{
 Merges a list of clubs created with the function findClubs
-by either Phillips and Sul method or von Lyncker and Thoennessen procedure
+by either Phillips and Sul method or von Lyncker and Thoennessen procedure.
 }
 \details{
 Phillips and Sul (2009) suggest a "club merging algorithm" to avoid

@@ -1,7 +1,7 @@
 #' Merge convergence clubs
 #'
 #' Merges a list of clubs created with the function findClubs
-#' by either Phillips and Sul method or von Lyncker and Thoennessen procedure
+#' by either Phillips and Sul method or von Lyncker and Thoennessen procedure.
 #'
 #'
 #' @param clubs an object of class \code{convergence.clubs} (created by findClubs function)
@@ -68,20 +68,20 @@
 #'
 #'
 #'
-#'@examples
-#'data("countryGDP")
+#' @examples
+#' data("countryGDP")
 #'
-#'# Cluster Countries using GDP from year 2000 to year 2014
-#'clubs <- findClubs(countryGDP, dataCols=2:35, regions = 1, refCol=35, time_trim = 1/3,
+#' # Cluster Countries using GDP from year 2000 to year 2014
+#' clubs <- findClubs(countryGDP, dataCols=2:35, regions = 1, refCol=35, time_trim = 1/3,
 #'                    cstar = 0, HACmethod = "AQSB")
-#'summary(clubs)
+#' summary(clubs)
 #'
-#'# Merge clusters
-#'mclubs <- mergeClubs(clubs, mergeMethod='PS', mergeDivergent=FALSE)
-#'summary(mclubs)
+#' # Merge clusters
+#' mclubs <- mergeClubs(clubs, mergeMethod='PS', mergeDivergent=FALSE)
+#' summary(mclubs)
 #'
-#'mclubs <- mergeClubs(clubs, mergeMethod='vLT', mergeDivergent=FALSE)
-#'summary(mclubs)
+#' mclubs <- mergeClubs(clubs, mergeMethod='vLT', mergeDivergent=FALSE)
+#' summary(mclubs)
 #'
 #' @export
 

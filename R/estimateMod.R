@@ -38,8 +38,6 @@
 #' Econometrica: Journal of the Econometric Society, 817-858.
 #'
 #'
-#' @importFrom stats lm pnorm setNames coef model.matrix residuals
-#'
 #'
 #' @export
 #'

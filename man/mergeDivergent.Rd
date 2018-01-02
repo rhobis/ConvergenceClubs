@@ -50,7 +50,7 @@ they propose the following algorithm:
 \examples{
 data("countryGDP")
 
-# Cluster Countries using GDP from year 2000 to year 2014
+#Cluster Countries using GDP from year 2000 to year 2014
 clubs <- findClubs(countryGDP, dataCols=2:35, regions = 1, refCol=35, time_trim = 1/3,
                    cstar = 0, HACmethod = "AQSB")
 summary(clubs)
