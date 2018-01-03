@@ -1,9 +1,3 @@
-#' ConvergenceClubs: A package for finding convergence clubs.
-#'
-#' The ConvergenceClubs package provides functions for clustering regions that
-#' form convergence clubs according to the definition of Phillips and Sul (2007, 2009).
-#'
-#'
 #' @section Main functions:
 #' The package's main functions are \code{findClubs} and \code{mergeClubs}. The
 #' former finds clubs of convergence, given a dataset with regions in rows and
@@ -21,10 +15,6 @@
 #'
 #' von Lyncker, K.; Thoennessen, R., 2016. Regional club convergence in the EU: evidence from a panel data analysis. Empirical Economics.
 #'
-#'
-#'
-#' @docType package
-#' @name ConvergenceClubs
 #'
 #' @importFrom stats lm pnorm setNames coef model.matrix residuals
 #'

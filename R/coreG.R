@@ -12,8 +12,8 @@
 #' Phillips and Sul (2007, 2009) suggest to discard the first third of the period.
 #' @param threshold numeric value indicating the threshold to be used to perform
 #' the one-tail t test; default is -1.65.
-#' @param HACmethod string indicating whether a Fixed Quadratic Spheric Bandwidth (HACmethod="FQSB") or
-#' an Adaptive Quadratic Spheric Bandwidth (HACmethod="AQSB") should be used for the truncation
+#' @param HACmethod string indicating whether a Fixed Quadratic Spheric Bandwidth (\code{HACmethod="FQSB"}) or
+#' an Adaptive Quadratic Spheric Bandwidth (\code{HACmethod="AQSB"}) should be used for the truncation
 #' of the Quadratic Spectral kernel in estimating the \emph{log t} regression model
 #' with heteroskedasticity and autocorrelation consistent standard errors.
 #' The default method is "FQSB".
@@ -22,13 +22,13 @@
 #'             "all" includes all regions that pass the test t in the core formation (step 2).
 #'
 #' @return A numeric vector containing the row indices of the regions included
-#' in the core group; if a core group cannot be found, returns FALSE
+#' in the core group; if a core group cannot be found, returns \code{FALSE}.
 #'
 #' @details According to the second step of the Phillips and Sul clustering algorithm (2007, 2009),
 #'          the \emph{log t} regression should be run for the first k units \eqn{2 < k < N}
 #'          maximizing k under the condition that \eqn{t-value > -1.65}.
 #'          In other words, the core group size \eqn{k^*}{k*} is chosen as follows:
-#'              \deqn{ k^* = argmax_{k} t_k}{k* = argmax t(k) }  subject to
+#'              \deqn{ k^* = argmax_{k} \{t_k\} }{k* = argmax t(k) }  subject to
 #'              \deqn{\min{t_k} > -1.65}{min t(k) > -1.65}
 #
 #'          Such behavior is obtained with \code{type="max"}; if \code{type="all"},

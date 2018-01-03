@@ -1,4 +1,4 @@
-[![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/convergenceClubs)](http://cran.r-project.org/package=convergenceClubs)
+[![CRAN\_Status\_Badge](https://www.r-pkg.org/badges/version/convergenceClubs)](https://cran.r-project.org/package=convergenceClubs)
 
 # Description 
 This package contains R code to find Convergence Clubs of regions.

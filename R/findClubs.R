@@ -14,9 +14,9 @@
 #' @param cstar numeric scalar, indicating the threshold value of the sieve criterion \eqn{c^*}
 #' to include units in the detected core (primary) group (step 3 of Phillips and Sul (2007, 2009) clustering algorithm).
 #' The default value is 0.
-#' @param HACmethod string indicating whether a Fixed Quadratic Spectral Bandwidth (HACmethod="FQSB") or
-#' an Adaptive Quadratic Spectral Bandwidth (HACmethod="AQSB") should be used for the truncation
-#' of the Quadratic Spectral kernel in estimating the \emph{log t} regression model
+#' @param HACmethod string indicating whether a Fixed Quadratic Spectral Bandwidth (\code{HACmethod="FQSB"}) or
+#' an Adaptive Quadratic Spectral Bandwidth (\code{HACmethod="AQSB"}) should be used for the truncation
+#' of the Quadratic Spectral kernel in estimating the \emph{log-t} regression model
 #' with heteroskedasticity and autocorrelation consistent standard errors.
 #' The default method is "FQSB".
 #'
@@ -39,7 +39,7 @@
 #'        Run the log t regression for the first k units \eqn{(2 < k < N)} maximizing k
 #'        under the condition that t-value is \eqn{> -1.65}. In other words, chose the core group size k* as follows:
 #'
-#'        \deqn{k^*= argmax_k t_k }{k* = argmax \, t(k)  }  subject to \deqn{ min\{t_k \} > -1.65}{min t(k) > 1.65}
+#'        \deqn{k^*= argmax_k \{t_k\} }{k* = argmax \, t(k)  }  subject to \deqn{ min\{t_k \} > -1.65}{min t(k) > 1.65}
 #'
 #'        If the condition \eqn{t_k >-1.65}{t(k) > -1.65} does not hold for \eqn{k = 2} (the first two units),
 #'        drop the first unit and repeat the same procedure. If \eqn{t_k >-1.65}{t(k) > -1.65} does not hold

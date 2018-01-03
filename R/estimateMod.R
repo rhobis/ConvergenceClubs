@@ -1,6 +1,6 @@
 #' Log-t test for convergence
 #'
-#' @description  Estimates the \emph{log t} regression model proposed by Phillips and Sul (2007, 2009)
+#' @description  Estimates the \emph{log-t} regression model proposed by Phillips and Sul (2007, 2009)
 #' in order to investigate the presence of convergence by adopting the
 #' Andrews estimator of long-run variance (fixed or adaptive bandwidth of the kernel).
 #'
@@ -19,8 +19,8 @@
 #' on the regions in the club: beta coefficient, standard deviation, t-statistics and p-value.
 #'
 #' @details The following linear model is estimated:
-#' \deqn{\log\frac{H_1}{H_t} – 2\log(\log{t}) = \alpha + \beta \log{t} + u_t}{
-#'            log[H(1)/H(t)] – 2log[log(t)] = \alpha + \beta log(t) + u(t)  }
+#' \deqn{\log\frac{H_1}{H_t} - 2\log(\log{t}) = \alpha + \beta \log{t} + u_t}{
+#'            log[H(1)/H(t)] - 2log[log(t)] = \alpha + \beta log(t) + u(t)  }
 #'
 #' Heteroskedasticity and autocorrelation consistent (HAC) standard errors are used with
 #' Quadratic Spectral kernel (Andrews, 1991), If  \code{HACmethod}="FQSB",

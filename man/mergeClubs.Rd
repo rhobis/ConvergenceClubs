@@ -15,7 +15,7 @@ time periods to trim when running log t regression model; if omitted, the same
 value used for \code{clubs} is used.}
 
 \item{mergeMethod}{character string indicating the merging method to use. Methods
-available are \code{'PS'} for Phillips and Sul (2009) and \code{'vLT'} for
+available are \code{"PS"} for Phillips and Sul (2009) and \code{"vLT"} for
 von Lyncker and Thoennessen (2016).}
 
 \item{mergeDivergent}{logical, if TRUE, indicates that merging of divergent regions
@@ -37,7 +37,7 @@ by either Phillips and Sul method or von Lyncker and Thoennessen procedure.
 }
 \details{
 Phillips and Sul (2009) suggest a "club merging algorithm" to avoid
-over determination due to the selection of the parameter \eqn{c*}.
+over determination due to the selection of the parameter \eqn{c^*}{c*}.
 This algorithm suggests to merge for adjacent groups. In particular, it works as follows:
 \enumerate{
     \item Take the first two groups detected in the basic clustering mechanism
@@ -53,7 +53,8 @@ This algorithm suggests to merge for adjacent groups. In particular, it works as
         \enumerate{
             \item Take all the groups detected in the basic clustering mechanism (P)
             and run the t-test for adjacent groups, obtaining a (M × 1) vector
-            of convergence test statistics t (where M = P – 1 and m = 1,.., M);
+            of convergence test statistics t (where \eqn{M = P - 1} and
+            \eqn{m = 1, \dots, M}{m = 1, ..., M});
             \item Merge for adjacent groups starting from the first, under the
             conditions \eqn{t(m) > -1.65} and \eqn{t(m) > t(m+1)}.
             In particular, if both conditions hold, the two clubs determining

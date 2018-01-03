@@ -20,13 +20,13 @@ Computes H values (cross sectional variance) according to the clustering
 algorithm by Phillips and Sul (2007, 2009)
 }
 \details{
-The cross sectional variation $H_{it}$ is computed as the quadratic
+The cross sectional variation \eqn{H_{it}}{H(it)} is computed as the quadratic
          distance measure for the panel from the common limit and under the
          hypothesis of the model should converge to zero as \emph{t} tends towards infinity:
              \deqn{H_t = N^{-1} \sum_{i=1}^N (h_{it}-1)^2 \rightarrow 0 , \quad   t\rightarrow \infty}{
                   H(t) = 1/N \sum [h(it)-1]^2 --> 0  	as   t -> infinity  }
          where
-             \deqn{h_{it} = \frac{\log y_{it}}{( N^{-1} \sum_{i=1}^N log y_{it} )} }{
+             \deqn{h_{it} = \frac{\log y_{it}}{( N^{-1} \sum_{i=1}^N log \, y_{it} )} }{
                   h(it) = N log[y(it)] / \sum log[y(it)]    }
 }
 \references{

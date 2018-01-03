@@ -1,11 +1,11 @@
 Package: ConvergenceClubs
-Title: Find Convergence Clubs
-Description: Functions to implement Phillips and Sul (2007, 2009) Convergence Club
-    clustering procedure.
+Title: Finding Convergence Clubs
+Description: Functions for clustering regions that form convergence clubs, according to the definition of Phillips and Sul (2009) <doi:10.1002/jae.1080>.
 Version: 1.0.0
-Authors@R: as.person(c(
-	'Roberto Sichera <roberto.sichera@unipa.it> [aut, cre]', 
-	'Pietro Pizzuto <pietro.pizzuto02@unipa.it> [aut]' ))
+Authors@R: c(
+    person("Roberto", "Sichera",, "roberto.sichera@unipa.it", c("aut", "cre", "cph")), 
+    person("Pietro", "Pizzuto",, "pietro.pizzuto02@unipa.it", "aut")
+    )
 URL: https://github.com/rhobis/ConvergenceClubs
 BugReports: https://github.com/rhobis/ConvergenceClubs/issues
 Depends:
