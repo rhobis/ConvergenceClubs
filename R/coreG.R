@@ -4,8 +4,6 @@
 #' by Phillips and Sul (2007, 2009)
 #'
 #' @param X matrix or dataframe containing data (preferably filtered data in order to remove business cycles)
-#' @param refCol integer scalar indicating the index of the column of the time period
-#' to which the relative convergence must be referred
 #' @param dataCols integer vector with the column indices of the data
 #' @param time_trim a numeric value between 0 and 1, representing the portion of
 #' time periods to trim when running log t regression model.
@@ -47,7 +45,6 @@
 
 
 coreG <- function(X,
-                  refCol,
                   dataCols,
                   time_trim,
                   threshold = -1.65,

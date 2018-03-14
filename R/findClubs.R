@@ -203,7 +203,7 @@ findClubs<- function(X, #data matrix or data.frame
         }
 
         #find core group (returns the row indices of regions in core Group)
-        coreGroup <- coreG(X=dati, refCol, dataCols, time_trim, threshold,
+        coreGroup <- coreG(X=dati, dataCols, time_trim, threshold,
                            HACmethod = HACmethod, type="max")
         #if no more core groups are found, add divergent to output and return
         if (identical(coreGroup, FALSE) ){

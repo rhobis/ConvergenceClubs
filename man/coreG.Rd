@@ -4,14 +4,11 @@
 \alias{coreG}
 \title{Find core (primary) group}
 \usage{
-coreG(X, refCol, dataCols, time_trim, threshold = -1.65,
-  HACmethod = c("FQSB", "AQSB"), type = c("max", "all"))
+coreG(X, dataCols, time_trim, threshold = -1.65, HACmethod = c("FQSB",
+  "AQSB"), type = c("max", "all"))
 }
 \arguments{
 \item{X}{matrix or dataframe containing data (preferably filtered data in order to remove business cycles)}
-
-\item{refCol}{integer scalar indicating the index of the column of the time period
-to which the relative convergence must be referred}
 
 \item{dataCols}{integer vector with the column indices of the data}
 
