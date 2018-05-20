@@ -1,4 +1,4 @@
-#' \code{dim} method for S3 object \code{convergence.clubs}
+#'\code{dim} method for S3 object \code{convergence.clubs}
 #'
 #'
 #'@param x an object of class \code{convergence.clubs}.
@@ -6,7 +6,7 @@
 #'
 #'
 #'
-#'@value an integer vector with two values: the first one indicates the number of
+#'@return an integer vector with two values: the first one indicates the number of
 #'clubs, the second one the number of divergent units
 #'
 #'
