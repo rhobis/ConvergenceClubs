@@ -119,7 +119,7 @@ mergeClubs <- function(clubs,
 
 
     ### Initialise variables ---------------------------------------------------
-    ll <- length(clubs) - 1 #the last element is 'divergent'
+    ll <- dim(clubs)[1]
     if(ll<2) stop('There is only one club')
 
     #output
