@@ -118,6 +118,7 @@ findClubs<- function(X, #data matrix or data.frame
                        class = c("convergence.clubs", "list"),
                        data = X,
                        dataCols = dataCols,
+                       regions = regions,
                        refCol = refCol,
                        time_trim = time_trim,
                        cstar = cstar,
