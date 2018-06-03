@@ -2,7 +2,7 @@ ConvergenceClubs
 ======================================================
 
 [![CRAN\_Status\_Badge](https://www.r-pkg.org/badges/version/ConvergenceClubs)](https://cran.r-project.org/package=ConvergenceClubs)
-[![](https://cranlogs.r-pkg.org/badges/ConvergenceClubs)](https://cran.r-project.org/package=ConvergenceClubs)
+[![](https://cranlogs.r-pkg.org/badges/grand-total/ConvergenceClubs)](https://cran.r-project.org/package=ConvergenceClubs)
 
 Description 
 -----------------
