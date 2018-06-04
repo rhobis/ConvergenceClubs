@@ -52,13 +52,15 @@ computeH <- function(X, quantity="H", id){
     }else xx <- X[id, ]
 
     h <- apply(xx, 2, function(x) x/mean(x) )
-    H <- apply(h,  2, function(h) mean( (h-1)^2 ) )
 
     if( identical( quantity, 'h') ){
         return(h)
-    }else if( identical(quantity, 'H') ){
-        return(H)
-    }else return( list(h=h, H=H) )
+    }else{
+        H <- apply(h,  2, function(h) mean( (h-1)^2 ) )
+        if( identical(quantity, 'H') ){
+            return(H)
+        }else return( list(h=h, H=H) )
+    }
 }
 
 
