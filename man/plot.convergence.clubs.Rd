@@ -5,7 +5,8 @@
 \title{Plot method for S3 x \code{convergence.clubs}}
 \usage{
 \method{plot}{convergence.clubs}(x, y = NULL, nrows = NULL, ncols = NULL,
-  y_fixed = FALSE, ...)
+  y_fixed = FALSE, save = FALSE, filename, path, width = 7, height = 7,
+  device = c("pdf", "png", "jpeg"), res, ...)
 }
 \arguments{
 \item{x}{an x of class \code{convergence.clubs}.}
@@ -17,6 +18,23 @@
 \item{ncols}{number of columns of the graphical layout, if NULL, it is automatically defined}
 
 \item{y_fixed}{logical, should the scale of the y axis be the same for all plots?}
+
+\item{save}{logical, should the plot be saved as a file?}
+
+\item{filename}{optional, a string indicating the name of the file where the plot
+should be saved; must include the extension (e.g. "plot.pdf")}
+
+\item{path}{optional, a string representing the path of the directory where the plot should
+saved; the path should not contain the a final slash symbol ("/")}
+
+\item{width}{the width of the plot, in inches.}
+
+\item{height}{the height of the plot, in inches.}
+
+\item{device}{string indicating the format to be used to save the plot;
+one of "pdf", "png" or "jpeg".}
+
+\item{res}{the resolution of the image, in ppi; only used with \code{device="png"} and \code{device="jpeg"}}
 
 \item{...}{other parameters to pass to function \code{plot()}.}
 }
