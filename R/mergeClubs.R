@@ -123,25 +123,14 @@ mergeClubs <- function(clubs,
     if(ll<2) stop('There is only one club')
 
     #output
-    pclub <- structure(list(),
-                       class = c("convergence.clubs", "list"),
-                       data = X,
-                       dataCols = dataCols,
-                       refCol = refCol,
-                       time_trim = time_trim,
-                       cstar = attr(clubs, 'cstar'),
-                       HACmethod = HACmethod
-    )
+    attrib <- attributes(clubs)
+    attrib$names <- NULL
+    pclub <- list()
+    attributes(pclub) <- attrib
+
     n <- 0
     appendLast <- FALSE
     club_names <- names(clubs)
-
-
-    # ### Set methods  -----------------------------------------------------------
-    # #select functions to compute t-values
-    # estimateMod <<- if(HACmethod=='FQSB'){
-    #     estimateMod_fqsb
-    # }else estimateMod_aqsb
 
     ### Merging procedure ------------------------------------------------------
     i <- 1
