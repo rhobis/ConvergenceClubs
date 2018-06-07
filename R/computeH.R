@@ -56,7 +56,7 @@ computeH <- function(X, quantity="H", id){
     if( identical( quantity, 'h') ){
         return(h)
     }else{
-        H <- apply(h,  2, function(h) mean( (h-1)^2 ) )
+        H <- colMeans( (h-1)^2 )
         if( identical(quantity, 'H') ){
             return(H)
         }else return( list(h=h, H=H) )
