@@ -5,8 +5,8 @@
 \title{Plot method for S3 x \code{convergence.clubs}}
 \usage{
 \method{plot}{convergence.clubs}(x, y = NULL, nrows = NULL, ncols = NULL,
-  y_fixed = FALSE, save = FALSE, filename, path, width = 7, height = 7,
-  device = c("pdf", "png", "jpeg"), res, ...)
+  y_fixed = FALSE, avgTP = TRUE, clubs, save = FALSE, filename, path,
+  width = 7, height = 7, device = c("pdf", "png", "jpeg"), res, ...)
 }
 \arguments{
 \item{x}{an x of class \code{convergence.clubs}.}
@@ -18,6 +18,12 @@
 \item{ncols}{number of columns of the graphical layout, if NULL, it is automatically defined}
 
 \item{y_fixed}{logical, should the scale of the y axis be the same for all plots?}
+
+\item{avgTP}{logical, indicates if a plot of the average transition paths of
+the convergence clubs should be produced, default to \code{TRUE}}
+
+\item{clubs}{numeric scalar or vector, indicating for which clubs the transition
+path plot should be generated. Optional, if omitted, plots for all clubs are produced}
 
 \item{save}{logical, should the plot be saved as a file?}
 
@@ -45,6 +51,15 @@ Plot method for S3 x \code{convergence.clubs}
 \code{nrows} and \code{ncols} are optional parameters used to define the row and
 column number for the plot layout. Both or just one of them may be specified.
 If none of them is specified, the layout dimension is chosen automatically.
+
+Graphical parameters of the horizontal line plotted at y=1 may be modified by
+using the following regular plot parameters:
+\itemize{
+   \item \code{lty} defines the type of line, default is "solid"
+   \item \code{lwd} defines the width of the line, default is 2
+   \item \code{col} defines the color of the line, default is \code{"black"};
+       set it to \code{"white"} to remove the horizontal line.
+}
 }
 \examples{
 
@@ -55,9 +70,11 @@ clubs <- findClubs(countryGDP, dataCols=2:35, regions = 1, refCol=35, time_trim 
 
 plot(clubs)
 plot(clubs, y_fixed=TRUE)
-plot(clubs, 2,3)
+plot(clubs, nrows=2,ncols=3)
 plot(clubs, nrows=3)
 plot(clubs, ncols=3)
+plot(clubs, ncols=3, lty='dotdash', lwd=3, col="blue")
+plot(clubs, ncols=3, y_fixed=TRUE, lty='dotdash', lwd=3, col="blue")
 
 
 }

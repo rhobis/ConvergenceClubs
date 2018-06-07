@@ -5,6 +5,10 @@
 #'@param nrows number of rows of the graphical layout, if NULL, it is automatically defined
 #'@param ncols number of columns of the graphical layout, if NULL, it is automatically defined
 #'@param y_fixed logical, should the scale of the y axis be the same for all plots?
+#'@param clubs numeric scalar or vector, indicating for which clubs the transition
+#'path plot should be generated. Optional, if omitted, plots for all clubs are produced
+#'@param avgTP logical, indicates if a plot of the average transition paths of
+#'the convergence clubs should be produced, default to \code{TRUE}
 #'@param save logical, should the plot be saved as a file?
 #'@param filename optional, a string indicating the name of the file where the plot
 #'    should be saved; must include the extension (e.g. "plot.pdf")
@@ -23,7 +27,14 @@
 #'column number for the plot layout. Both or just one of them may be specified.
 #'If none of them is specified, the layout dimension is chosen automatically.
 #'
-#'
+#'Graphical parameters of the horizontal line plotted at y=1 may be modified by
+#'using the following regular plot parameters:
+#'\itemize{
+#'    \item \code{lty} defines the type of line, default is "solid"
+#'    \item \code{lwd} defines the width of the line, default is 2
+#'    \item \code{col} defines the color of the line, default is \code{"black"};
+#'        set it to \code{"white"} to remove the horizontal line.
+#'}
 #'
 #'@examples
 #'
@@ -34,15 +45,19 @@
 #'
 #' plot(clubs)
 #' plot(clubs, y_fixed=TRUE)
-#' plot(clubs, 2,3)
+#' plot(clubs, nrows=2,ncols=3)
 #' plot(clubs, nrows=3)
 #' plot(clubs, ncols=3)
+#' plot(clubs, ncols=3, lty='dotdash', lwd=3, col="blue")
+#' plot(clubs, ncols=3, y_fixed=TRUE, lty='dotdash', lwd=3, col="blue")
 #'
 #'
 #'@export
 #'
 #'@importFrom grDevices n2mfrow pdf png jpeg dev.off
 #'@importFrom graphics par matplot abline
+#'
+
 
 
 
@@ -51,6 +66,8 @@ plot.convergence.clubs <- function(x,
                                    nrows=NULL,
                                    ncols=NULL,
                                    y_fixed = FALSE,
+                                   avgTP = TRUE,
+                                   clubs,
                                    save = FALSE,
                                    filename,
                                    path,
@@ -66,6 +83,7 @@ plot.convergence.clubs <- function(x,
              !is.null(ncols) & !is.numeric(ncols) ) )
         stop("nrows and ncols must be either NULL or an integer scalar!")
     if( !is.logical(y_fixed) ) y_fixed <- FALSE
+    if( !is.logical(avgTP) ) avgTP <- TRUE
     if( !is.logical(save) ) save <- FALSE
     if( missing(path) ) path <- getwd()
     if( !file.exists(path) ) path <- dir.create(path, recursive=TRUE)
@@ -73,20 +91,31 @@ plot.convergence.clubs <- function(x,
     if( !all( width>0, height>0) ) stop("width and height must be positive scalars!")
     device <- match.arg(device)
 
+    num_clubs <- dim(x)[1]
+    if( missing(clubs) ){
+        clubs <- seq_len(num_clubs)
+    }else{
+        clubs <- suppressWarnings( as.numeric(clubs) )
+        clubs <- floor( clubs[!is.na(clubs)])
+    }
+    if( any(clubs<1) | any(clubs>num_clubs) )
+        stop("Invalid value for argument clubs! The total number of clubs is ",
+                num_clubs, ", please be sure to include values within 1 and ", num_clubs )
+
     divergent <- !is.null( x$divergent )
-    nclub <- dim(x)[1]
-    nplots <- nclub + 1  # one plot per club plus the club averages
+    nplots <- length(clubs) + (avgTP)  # one plot per club plus the club averages (if avgTP is TRUE)
 
     regions <- attributes(x)$regions
-
     if( identical( regions, NULL) ){
-
         data <- attributes(x)$data
-
     } else data <- attributes(x)$data[, -regions]
 
-    avT <- matrix(0, nclub, ncol(data))
-    h <- computeH(data, quantity = "h")
+
+    #graphical parameters
+    arguments <- list(...)
+    ltype <- ifelse( !is.null(arguments$lty), arguments$lty, "solid" )
+    lw    <- ifelse( !is.null(arguments$lwd), arguments$lwd, 2 )
+    lcol  <- ifelse( !is.null(arguments$col), arguments$col, "black" )
 
 
     ### Compute dimensions plot layout ---
@@ -113,13 +142,12 @@ plot.convergence.clubs <- function(x,
 
 
     ### Generate/save plots  ---
-    ### Save plot ---
     if( save ){
 
         if( identical(device, 'pdf') ){
             if( missing(filename) ) filename <- "Rplot%03d.pdf"
 
-            pdf(file = file.path(path, filename),
+            grDevices::pdf(file = file.path(path, filename),
                 width=width,
                 height=height
             )
@@ -127,7 +155,7 @@ plot.convergence.clubs <- function(x,
             if( missing(filename) ) filename <- "Rplot%03d.png"
             if( missing(res) ) res <- 300
 
-            png(filename = file.path(path, filename),
+            grDevices::png(filename = file.path(path, filename),
                 width=width,
                 height=height,
                 units='in',
@@ -137,7 +165,7 @@ plot.convergence.clubs <- function(x,
             if( missing(filename) ) filename <- "Rplot%03d.jpeg"
             if( missing(res) ) res <- 300
 
-            jpeg(filename = file.path(path, filename),
+            grDevices::jpeg(filename = file.path(path, filename),
                  width=width,
                  height=height,
                  units='in',
@@ -146,34 +174,30 @@ plot.convergence.clubs <- function(x,
         }
     }
 
+    if( avgTP ) avT <- matrix(0, num_clubs, ncol(data))
+    h <- computeH(data, quantity = "h")
 
     i <- 1
-    par( mfrow=pm )
-    while( i < prod(pm) & i < nplots ) {
-        avT[i,] <- colMeans(h[ x[[i]]$id, ])
-        matplot( t( h[ x[[i]]$id, ] ), type='l',
+    graphics::par( mfrow=pm )
+    while( i <= (prod(pm)-avgTP) & i <= (nplots-avgTP) ) {
+        if( avgTP) avT[i,] <- colMeans(h[ x[[ clubs[i] ]]$id, ])
+        graphics::matplot( t( h[ x[[ clubs[i] ]]$id, ] ), type='l',
                  ylim = if(y_fixed){ c(min(h)-0.1, max(h)+0.1) } else NULL ,
-                 ylab="Relative transition path", main = paste("Club", i))
-        abline(h=1, lwd=2, col="black")
+                 ylab="Relative transition path", main = paste("Club", clubs[i]))
+        graphics::abline(h=1, lty=ltype, lwd=lw, col=lcol)
         i <- i+1
     }
-    matplot( t( avT ), type='l',
-             ylim = if(y_fixed){ c(min(h)-0.1, max(h)+0.1) } else NULL ,
-             ylab="Relative transition path", main = "All Clubs" )
-    abline(h=1, lwd=2, col="black")
-    par( mfrow=c(1,1) )
+    if( avgTP ){
+        graphics::matplot( t( avT ), type='l',
+                 ylim = if(y_fixed){ c(min(h)-0.1, max(h)+0.1) } else NULL ,
+                 ylab="Relative transition path", main = "All Clubs" )
+        graphics::abline(h=1, lty = ltype, lwd=lw, col=lcol)
+    }
+    graphics::par( mfrow=c(1,1) )
 
-
-    if( save ) dev.off()
-
+    if( save ) grDevices::dev.off()
 
 }
-
-
-
-
-
-
 
 
 
