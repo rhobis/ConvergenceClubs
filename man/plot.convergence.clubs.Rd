@@ -5,8 +5,9 @@
 \title{Plot method for S3 x \code{convergence.clubs}}
 \usage{
 \method{plot}{convergence.clubs}(x, y = NULL, nrows = NULL, ncols = NULL,
-  y_fixed = FALSE, avgTP = TRUE, clubs, save = FALSE, filename, path,
-  width = 7, height = 7, device = c("pdf", "png", "jpeg"), res, ...)
+  avgTP = TRUE, clubs, y_fixed = FALSE, legend = FALSE, save = FALSE,
+  filename, path, width = 7, height = 7, device = c("pdf", "png", "jpeg"),
+  res, ...)
 }
 \arguments{
 \item{x}{an x of class \code{convergence.clubs}.}
@@ -17,13 +18,15 @@
 
 \item{ncols}{number of columns of the graphical layout, if NULL, it is automatically defined}
 
-\item{y_fixed}{logical, should the scale of the y axis be the same for all plots?}
-
 \item{avgTP}{logical, indicates if a plot of the average transition paths of
 the convergence clubs should be produced, default to \code{TRUE}}
 
 \item{clubs}{numeric scalar or vector, indicating for which clubs the transition
 path plot should be generated. Optional, if omitted, plots for all clubs are produced}
+
+\item{y_fixed}{logical, should the scale of the y axis be the same for all plots?}
+
+\item{legend}{logical, should a legend be displayed?}
 
 \item{save}{logical, should the plot be saved as a file?}
 
@@ -60,6 +63,15 @@ using the following regular plot parameters:
    \item \code{col} defines the color of the line, default is \code{"black"};
        set it to \code{"white"} to remove the horizontal line.
 }
+
+If \code{legend=TRUE} and a column with regions' names is available in the
+\code{x} object, those names are truncated to fit the plot's legend. The graphical
+parameter \code{cex} may be used to modify the size of the legend's labels, default is 0.8
+
+
+
+Note that, if using RStudio, one may incur in an error if the plot window is too small.
+Enlarging the plot window usually solves the problem.
 }
 \examples{
 
@@ -73,6 +85,7 @@ plot(clubs, y_fixed=TRUE)
 plot(clubs, nrows=2,ncols=3)
 plot(clubs, nrows=3)
 plot(clubs, ncols=3)
+plot(clubs, ncols=3, avgTP=FALSE, clubs=c(2,4,5s) )
 plot(clubs, ncols=3, lty='dotdash', lwd=3, col="blue")
 plot(clubs, ncols=3, y_fixed=TRUE, lty='dotdash', lwd=3, col="blue")
 

@@ -37,6 +37,16 @@
 #'        set it to \code{"white"} to remove the horizontal line.
 #'}
 #'
+#'If \code{legend=TRUE} and a column with regions' names is available in the
+#'\code{x} object, those names are truncated to fit the plot's legend. The graphical
+#'parameter \code{cex} may be used to modify the size of the legend's labels, default is 0.8
+#'
+#'
+#'
+#' Note that, if using RStudio, one may incur in an error if the plot window is too small.
+#' Enlarging the plot window usually solves the problem.
+#'
+#'
 #'@examples
 #'
 #' data("countryGDP")
@@ -122,6 +132,7 @@ plot.convergence.clubs <- function(x,
     ltype <- ifelse( !is.null(arguments$lty), arguments$lty, "solid" )
     lw    <- ifelse( !is.null(arguments$lwd), arguments$lwd, 2 )
     lcol  <- ifelse( !is.null(arguments$col), arguments$col, "black" )
+    legend_cex <- ifelse( !is.null(arguments$cex), arguments$cex, 0.8 )
     legend_lab <- ifelse( identical(regions, NULL), "id", "regions")
 
     ### Compute dimensions plot layout ---
@@ -183,14 +194,18 @@ plot.convergence.clubs <- function(x,
     if( avgTP ) avT <- matrix(0, num_clubs, ncol(data))
     h <- computeH(data, quantity = "h")
 
+    def.par <- par(no.readonly = TRUE)
     graphics::par( mfrow=pm )
 
     if( legend ){
         default_mar <- graphics::par()$mar
+
         mar_plt <- default_mar; mar_plt[4] <- 0.2  #No margin on the right side of the plot
         mar_lgn <- default_mar; mar_lgn[2] <- 0.2  #No margin on the left side of the legend
 
-        graphics::layout(matrix(c(1,2),nrow=1), width=c(4,1))
+        # graphics::layout(matrix(c(1,2),nrow=1), width=c(4,1))
+        graphics::layout( matrix(seq_len(2*prod(pm)), nrow=pm[1], byrow=TRUE),
+                          width= rep(c(4,1), prod(pm)) )
 
         graphics::par( mar = mar_plt)
     }
@@ -205,13 +220,14 @@ plot.convergence.clubs <- function(x,
         if( legend ){
             par( mar=mar_lgn )
 
-            lgn_labs <- x[[ clubs[i] ]][[ legend_lab ]]
+            lgn_labs <- substr( x[[ clubs[i] ]][[ legend_lab ]], 1, 7)
             plot(c(0,1),type="n", axes=F, xlab="", ylab="")
             graphics::legend("top",
                    legend=lgn_labs,
                    col=seq_along(lgn_labs),
                    lty=seq_along(lgn_labs),
-                   cex=0.8
+                   cex=legend_cex,
+                   bty='n'
             )
             graphics::par( mar = mar_plt)
         }
@@ -231,14 +247,34 @@ plot.convergence.clubs <- function(x,
                              legend=clubs_labs,
                              col=seq_along(clubs_labs),
                              lty=seq_along(clubs_labs),
-                             cex=0.8
+                             cex=legend_cex,
+                             bty='n'
             )
             graphics::par( mar=default_mar)
         }
     }
-    graphics::par( mfrow=c(1,1) )
+    par(def.par)
 
     if( save ) grDevices::dev.off()
 
 }
-
+#
+#
+# par(xpd = T, mar = par()$mar + c(0,0,0,7))
+# plot(pca$scores[, 1],
+#      pca$scores[, 2],
+#      main = "PCA",
+#      xlab = "First component",
+#      ylab = "Second component",
+#      col = c("deeppink", "blue")[crabs[, 2]],
+#      pch = c(1, 2)[crabs[, 1]])
+# legend(0.03, 0.025,
+#        c("Male", "Female"),
+#        col = c("blue", "deeppink"),
+#        cex = 0.8,
+#        lwd = 1, lty = 1)
+# legend(0.03, 0.015,
+#        c("Blue species", "Orange species"),
+#        cex = 0.8,
+#        pch = c(1,2))
+# par(mar=c(5, 4, 4, 2) + 0.1)
