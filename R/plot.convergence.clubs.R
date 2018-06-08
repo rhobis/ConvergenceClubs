@@ -1,4 +1,7 @@
-#'Plot method for S3 x \code{convergence.clubs}
+#'Plot method for S3 class \code{convergence.clubs}
+#'
+#'Plot the transition paths of regions in the convergence clubs and the
+#'average transition paths of those clubs.
 #'
 #'@param x an x of class \code{convergence.clubs}.
 #'@param y unused, added for compatibility with function \code{plot}
@@ -10,6 +13,8 @@
 #'path plot should be generated. Optional, if omitted, plots for all clubs are produced
 #'@param avgTP logical, indicates if a plot of the average transition paths of
 #'the convergence clubs should be produced, default to \code{TRUE}
+#'@param avgTP_clubs numeric scalar or vector, indicating for which clubs the average transition
+#'path should be displayed. Optional, if omitted, average transition paths for all clubs are plotted
 #'@param save logical, should the plot be saved as a file?
 #'@param filename optional, a string indicating the name of the file where the plot
 #'    should be saved; must include the extension (e.g. "plot.pdf")
@@ -43,7 +48,7 @@
 #'
 #'
 #'
-#' Note that, if using RStudio, one may incur in an error if the plot window is too small.
+#' Note that, when using RStudio, one may incur in an error if the plot window is too small.
 #' Enlarging the plot window usually solves the problem.
 #'
 #'
@@ -56,18 +61,25 @@
 #'
 #' plot(clubs)
 #' plot(clubs, y_fixed=TRUE)
+#'
 #' plot(clubs, nrows=2,ncols=3)
 #' plot(clubs, nrows=3)
 #' plot(clubs, ncols=3)
-#' plot(clubs, ncols=3, avgTP=FALSE, clubs=c(2,4,5s) )
+#'
 #' plot(clubs, ncols=3, lty='dotdash', lwd=3, col="blue")
 #' plot(clubs, ncols=3, y_fixed=TRUE, lty='dotdash', lwd=3, col="blue")
+#'
+#' plot(clubs, clubs=c(2,4,5))
+#' plot(clubs, nrows=1, ncols=3, clubs=c(2,4,5), avgTP = FALSE)
+#' plot(clubs, nrows=1, ncols=3, clubs=c(2,4,5), avgTP = FALSE, legend=TRUE)
+#' plot(clubs, clubs=c(2,4,5), avgTP_clubs = c(1,3))
+#' plot(clubs, clubs=c(2,4,5), avgTP_clubs = c(1,3), legend=TRUE)
 #'
 #'
 #'@export
 #'
 #'@importFrom grDevices n2mfrow pdf png jpeg dev.off
-#'@importFrom graphics par matplot abline layout legend
+#'@importFrom graphics par plot matplot abline layout legend
 #'
 
 
@@ -77,8 +89,9 @@ plot.convergence.clubs <- function(x,
                                    y = NULL,
                                    nrows=NULL,
                                    ncols=NULL,
-                                   avgTP = TRUE,
                                    clubs,
+                                   avgTP=TRUE,
+                                   avgTP_clubs,
                                    y_fixed = FALSE,
                                    legend = FALSE,
                                    save = FALSE,
@@ -108,11 +121,21 @@ plot.convergence.clubs <- function(x,
     device <- match.arg(device)
 
     num_clubs <- dim(x)[1]
-    if( missing(clubs) ){
+    if( missing(clubs)  ){
+        clubs <- seq_len(num_clubs)
+    }else if(length(clubs)==0){
         clubs <- seq_len(num_clubs)
     }else{
         clubs <- suppressWarnings( as.numeric(clubs) )
         clubs <- floor( clubs[!is.na(clubs)])
+    }
+    if( missing(avgTP_clubs) ){
+        avgTP_clubs <- seq_len(num_clubs)
+    }else if( length(avgTP_clubs)==0 ){
+        avgTP_clubs <- seq_len(num_clubs)
+    }else{
+        avgTP_clubs <- suppressWarnings( as.numeric(avgTP_clubs) )
+        avgTP_clubs <- floor( avgTP_clubs[!is.na(avgTP_clubs)])
     }
     if( any(clubs<1) | any(clubs>num_clubs) )
         stop("Invalid value for argument clubs! The total number of clubs is ",
@@ -191,9 +214,6 @@ plot.convergence.clubs <- function(x,
         }
     }
 
-    if( avgTP ) avT <- matrix(0, num_clubs, ncol(data))
-    h <- computeH(data, quantity = "h")
-
     def.par <- par(no.readonly = TRUE)
     graphics::par( mfrow=pm )
 
@@ -203,16 +223,16 @@ plot.convergence.clubs <- function(x,
         mar_plt <- default_mar; mar_plt[4] <- 0.2  #No margin on the right side of the plot
         mar_lgn <- default_mar; mar_lgn[2] <- 0.2  #No margin on the left side of the legend
 
-        # graphics::layout(matrix(c(1,2),nrow=1), width=c(4,1))
         graphics::layout( matrix(seq_len(2*prod(pm)), nrow=pm[1], byrow=TRUE),
                           width= rep(c(4,1), prod(pm)) )
 
         graphics::par( mar = mar_plt)
     }
 
+    ### transition paths ---
+    h <- computeH(data, quantity = "h")
     i <- 1
     while( i <= (prod(pm)-avgTP) & i <= (nplots-avgTP) ) {
-        if( avgTP) avT[i,] <- colMeans(h[ x[[ clubs[i] ]]$id, ])
         graphics::matplot( t( h[ x[[ clubs[i] ]]$id, ] ), type='l',
                            ylim = if(y_fixed){ c(min(h)-0.1, max(h)+0.1) } else NULL ,
                            ylab="Relative transition path", main = paste("Club", clubs[i]))
@@ -223,11 +243,11 @@ plot.convergence.clubs <- function(x,
             lgn_labs <- substr( x[[ clubs[i] ]][[ legend_lab ]], 1, 7)
             plot(c(0,1),type="n", axes=F, xlab="", ylab="")
             graphics::legend("top",
-                   legend=lgn_labs,
-                   col=seq_along(lgn_labs),
-                   lty=seq_along(lgn_labs),
-                   cex=legend_cex,
-                   bty='n'
+                             legend=lgn_labs,
+                             col=seq_along(lgn_labs),
+                             lty=seq_along(lgn_labs),
+                             cex=legend_cex,
+                             bty='n'
             )
             graphics::par( mar = mar_plt)
         }
@@ -235,7 +255,12 @@ plot.convergence.clubs <- function(x,
         i <- i+1
     }
     if( avgTP ){
-        graphics::matplot( t( avT ), type='l',
+        atpm <- matrix(0, length(avgTP_clubs), ncol(data))
+        for(i in seq_along(avgTP_clubs) ){
+            atpm[i,] <- colMeans(h[ x[[ avgTP_clubs[i] ]]$id, ])
+        }
+
+        graphics::matplot( t( atpm ), type='l',
                            ylim = if(y_fixed){ c(min(h)-0.1, max(h)+0.1) } else NULL ,
                            ylab="Relative transition path", main = "All Clubs" )
         graphics::abline(h=1, lty = ltype, lwd=lw, col=lcol)
@@ -258,23 +283,3 @@ plot.convergence.clubs <- function(x,
     if( save ) grDevices::dev.off()
 
 }
-#
-#
-# par(xpd = T, mar = par()$mar + c(0,0,0,7))
-# plot(pca$scores[, 1],
-#      pca$scores[, 2],
-#      main = "PCA",
-#      xlab = "First component",
-#      ylab = "Second component",
-#      col = c("deeppink", "blue")[crabs[, 2]],
-#      pch = c(1, 2)[crabs[, 1]])
-# legend(0.03, 0.025,
-#        c("Male", "Female"),
-#        col = c("blue", "deeppink"),
-#        cex = 0.8,
-#        lwd = 1, lty = 1)
-# legend(0.03, 0.015,
-#        c("Blue species", "Orange species"),
-#        cex = 0.8,
-#        pch = c(1,2))
-# par(mar=c(5, 4, 4, 2) + 0.1)

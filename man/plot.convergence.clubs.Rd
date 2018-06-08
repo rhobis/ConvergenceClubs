@@ -2,12 +2,12 @@
 % Please edit documentation in R/plot.convergence.clubs.R
 \name{plot.convergence.clubs}
 \alias{plot.convergence.clubs}
-\title{Plot method for S3 x \code{convergence.clubs}}
+\title{Plot method for S3 class \code{convergence.clubs}}
 \usage{
 \method{plot}{convergence.clubs}(x, y = NULL, nrows = NULL, ncols = NULL,
-  avgTP = TRUE, clubs, y_fixed = FALSE, legend = FALSE, save = FALSE,
-  filename, path, width = 7, height = 7, device = c("pdf", "png", "jpeg"),
-  res, ...)
+  clubs, avgTP = TRUE, avgTP_clubs, y_fixed = FALSE, legend = FALSE,
+  save = FALSE, filename, path, width = 7, height = 7, device = c("pdf",
+  "png", "jpeg"), res, ...)
 }
 \arguments{
 \item{x}{an x of class \code{convergence.clubs}.}
@@ -18,11 +18,14 @@
 
 \item{ncols}{number of columns of the graphical layout, if NULL, it is automatically defined}
 
+\item{clubs}{numeric scalar or vector, indicating for which clubs the transition
+path plot should be generated. Optional, if omitted, plots for all clubs are produced}
+
 \item{avgTP}{logical, indicates if a plot of the average transition paths of
 the convergence clubs should be produced, default to \code{TRUE}}
 
-\item{clubs}{numeric scalar or vector, indicating for which clubs the transition
-path plot should be generated. Optional, if omitted, plots for all clubs are produced}
+\item{avgTP_clubs}{numeric scalar or vector, indicating for which clubs the average transition
+path should be displayed. Optional, if omitted, average transition paths for all clubs are plotted}
 
 \item{y_fixed}{logical, should the scale of the y axis be the same for all plots?}
 
@@ -48,7 +51,8 @@ one of "pdf", "png" or "jpeg".}
 \item{...}{other parameters to pass to function \code{plot()}.}
 }
 \description{
-Plot method for S3 x \code{convergence.clubs}
+Plot the transition paths of regions in the convergence clubs and the
+average transition paths of those clubs.
 }
 \details{
 \code{nrows} and \code{ncols} are optional parameters used to define the row and
@@ -70,7 +74,7 @@ parameter \code{cex} may be used to modify the size of the legend's labels, defa
 
 
 
-Note that, if using RStudio, one may incur in an error if the plot window is too small.
+Note that, when using RStudio, one may incur in an error if the plot window is too small.
 Enlarging the plot window usually solves the problem.
 }
 \examples{
@@ -82,12 +86,19 @@ clubs <- findClubs(countryGDP, dataCols=2:35, regions = 1, refCol=35, time_trim 
 
 plot(clubs)
 plot(clubs, y_fixed=TRUE)
+
 plot(clubs, nrows=2,ncols=3)
 plot(clubs, nrows=3)
 plot(clubs, ncols=3)
-plot(clubs, ncols=3, avgTP=FALSE, clubs=c(2,4,5s) )
+
 plot(clubs, ncols=3, lty='dotdash', lwd=3, col="blue")
 plot(clubs, ncols=3, y_fixed=TRUE, lty='dotdash', lwd=3, col="blue")
+
+plot(clubs, clubs=c(2,4,5))
+plot(clubs, nrows=1, ncols=3, clubs=c(2,4,5), avgTP = FALSE)
+plot(clubs, nrows=1, ncols=3, clubs=c(2,4,5), avgTP = FALSE, legend=TRUE)
+plot(clubs, clubs=c(2,4,5), avgTP_clubs = c(1,3))
+plot(clubs, clubs=c(2,4,5), avgTP_clubs = c(1,3), legend=TRUE)
 
 
 }
