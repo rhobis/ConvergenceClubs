@@ -269,7 +269,7 @@ plot.convergence.clubs <- function(x,
                            ylab="Relative transition path", main = "All Clubs" )
         graphics::abline(h=1, lty = ltype, lwd=lw, col=lcol)
         if( legend ){
-            clubs_labs <- paste0('clubs', clubs)
+            clubs_labs <- paste0('clubs', avgTP_clubs)
             graphics::par( mar=mar_lgn )
             plot(c(0,1),type="n", axes=F, xlab="", ylab="")
             graphics::legend("top",
