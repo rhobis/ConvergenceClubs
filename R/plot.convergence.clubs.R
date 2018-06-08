@@ -123,6 +123,8 @@ plot.convergence.clubs <- function(x,
     num_clubs <- dim(x)[1]
     if( missing(clubs)  ){
         clubs <- seq_len(num_clubs)
+    }else if( !is.vector(clubs) ){
+        stop("argument clubs should be vector!")
     }else if(length(clubs)==0){
         clubs <- seq_len(num_clubs)
     }else{
@@ -131,6 +133,8 @@ plot.convergence.clubs <- function(x,
     }
     if( missing(avgTP_clubs) ){
         avgTP_clubs <- seq_len(num_clubs)
+    }else if( !is.vector(avgTP_clubs) ){
+        stop("argument avgTP_clubs should be vector!")
     }else if( length(avgTP_clubs)==0 ){
         avgTP_clubs <- seq_len(num_clubs)
     }else{
