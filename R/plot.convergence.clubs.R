@@ -5,6 +5,7 @@
 #'@param nrows number of rows of the graphical layout, if NULL, it is automatically defined
 #'@param ncols number of columns of the graphical layout, if NULL, it is automatically defined
 #'@param y_fixed logical, should the scale of the y axis be the same for all plots?
+#'@param legend logical, should a legend be displayed?
 #'@param clubs numeric scalar or vector, indicating for which clubs the transition
 #'path plot should be generated. Optional, if omitted, plots for all clubs are produced
 #'@param avgTP logical, indicates if a plot of the average transition paths of
@@ -48,6 +49,7 @@
 #' plot(clubs, nrows=2,ncols=3)
 #' plot(clubs, nrows=3)
 #' plot(clubs, ncols=3)
+#' plot(clubs, ncols=3, avgTP=FALSE, clubs=c(2,4,5s) )
 #' plot(clubs, ncols=3, lty='dotdash', lwd=3, col="blue")
 #' plot(clubs, ncols=3, y_fixed=TRUE, lty='dotdash', lwd=3, col="blue")
 #'
@@ -55,7 +57,7 @@
 #'@export
 #'
 #'@importFrom grDevices n2mfrow pdf png jpeg dev.off
-#'@importFrom graphics par matplot abline
+#'@importFrom graphics par matplot abline layout legend
 #'
 
 
@@ -65,9 +67,10 @@ plot.convergence.clubs <- function(x,
                                    y = NULL,
                                    nrows=NULL,
                                    ncols=NULL,
-                                   y_fixed = FALSE,
                                    avgTP = TRUE,
                                    clubs,
+                                   y_fixed = FALSE,
+                                   legend = FALSE,
                                    save = FALSE,
                                    filename,
                                    path,
@@ -82,9 +85,12 @@ plot.convergence.clubs <- function(x,
     if( any( !is.null(nrows) & !is.numeric(nrows),
              !is.null(ncols) & !is.numeric(ncols) ) )
         stop("nrows and ncols must be either NULL or an integer scalar!")
+
     if( !is.logical(y_fixed) ) y_fixed <- FALSE
-    if( !is.logical(avgTP) ) avgTP <- TRUE
+    if( !is.logical(legend) ) legend <- FALSE
     if( !is.logical(save) ) save <- FALSE
+    if( !is.logical(avgTP) ) avgTP <- TRUE
+
     if( missing(path) ) path <- getwd()
     if( !file.exists(path) ) path <- dir.create(path, recursive=TRUE)
     if( any( !is.numeric(width), !is.numeric(height) ) ) stop("width and height must be numeric scalars!")
@@ -100,7 +106,7 @@ plot.convergence.clubs <- function(x,
     }
     if( any(clubs<1) | any(clubs>num_clubs) )
         stop("Invalid value for argument clubs! The total number of clubs is ",
-                num_clubs, ", please be sure to include values within 1 and ", num_clubs )
+             num_clubs, ", please be sure to include values within 1 and ", num_clubs )
 
     divergent <- !is.null( x$divergent )
     nplots <- length(clubs) + (avgTP)  # one plot per club plus the club averages (if avgTP is TRUE)
@@ -116,7 +122,7 @@ plot.convergence.clubs <- function(x,
     ltype <- ifelse( !is.null(arguments$lty), arguments$lty, "solid" )
     lw    <- ifelse( !is.null(arguments$lwd), arguments$lwd, 2 )
     lcol  <- ifelse( !is.null(arguments$col), arguments$col, "black" )
-
+    legend_lab <- ifelse( identical(regions, NULL), "id", "regions")
 
     ### Compute dimensions plot layout ---
     if( !is.null(nrows) & !is.null(ncols) ){
@@ -148,28 +154,28 @@ plot.convergence.clubs <- function(x,
             if( missing(filename) ) filename <- "Rplot%03d.pdf"
 
             grDevices::pdf(file = file.path(path, filename),
-                width=width,
-                height=height
+                           width=width,
+                           height=height
             )
         }else if( identical(device, 'png') ){
             if( missing(filename) ) filename <- "Rplot%03d.png"
             if( missing(res) ) res <- 300
 
             grDevices::png(filename = file.path(path, filename),
-                width=width,
-                height=height,
-                units='in',
-                res=res
+                           width=width,
+                           height=height,
+                           units='in',
+                           res=res
             )
         }else{
             if( missing(filename) ) filename <- "Rplot%03d.jpeg"
             if( missing(res) ) res <- 300
 
             grDevices::jpeg(filename = file.path(path, filename),
-                 width=width,
-                 height=height,
-                 units='in',
-                 res=res
+                            width=width,
+                            height=height,
+                            units='in',
+                            res=res
             )
         }
     }
@@ -177,28 +183,62 @@ plot.convergence.clubs <- function(x,
     if( avgTP ) avT <- matrix(0, num_clubs, ncol(data))
     h <- computeH(data, quantity = "h")
 
-    i <- 1
     graphics::par( mfrow=pm )
+
+    if( legend ){
+        default_mar <- graphics::par()$mar
+        mar_plt <- default_mar; mar_plt[4] <- 0.2  #No margin on the right side of the plot
+        mar_lgn <- default_mar; mar_lgn[2] <- 0.2  #No margin on the left side of the legend
+
+        graphics::layout(matrix(c(1,2),nrow=1), width=c(4,1))
+
+        graphics::par( mar = mar_plt)
+    }
+
+    i <- 1
     while( i <= (prod(pm)-avgTP) & i <= (nplots-avgTP) ) {
         if( avgTP) avT[i,] <- colMeans(h[ x[[ clubs[i] ]]$id, ])
         graphics::matplot( t( h[ x[[ clubs[i] ]]$id, ] ), type='l',
-                 ylim = if(y_fixed){ c(min(h)-0.1, max(h)+0.1) } else NULL ,
-                 ylab="Relative transition path", main = paste("Club", clubs[i]))
+                           ylim = if(y_fixed){ c(min(h)-0.1, max(h)+0.1) } else NULL ,
+                           ylab="Relative transition path", main = paste("Club", clubs[i]))
         graphics::abline(h=1, lty=ltype, lwd=lw, col=lcol)
+        if( legend ){
+            par( mar=mar_lgn )
+
+            lgn_labs <- x[[ clubs[i] ]][[ legend_lab ]]
+            plot(c(0,1),type="n", axes=F, xlab="", ylab="")
+            graphics::legend("top",
+                   legend=lgn_labs,
+                   col=seq_along(lgn_labs),
+                   lty=seq_along(lgn_labs),
+                   cex=0.8
+            )
+            graphics::par( mar = mar_plt)
+        }
+
         i <- i+1
     }
     if( avgTP ){
         graphics::matplot( t( avT ), type='l',
-                 ylim = if(y_fixed){ c(min(h)-0.1, max(h)+0.1) } else NULL ,
-                 ylab="Relative transition path", main = "All Clubs" )
+                           ylim = if(y_fixed){ c(min(h)-0.1, max(h)+0.1) } else NULL ,
+                           ylab="Relative transition path", main = "All Clubs" )
         graphics::abline(h=1, lty = ltype, lwd=lw, col=lcol)
+        if( legend ){
+            clubs_labs <- paste0('clubs', clubs)
+            graphics::par( mar=mar_lgn )
+            plot(c(0,1),type="n", axes=F, xlab="", ylab="")
+            graphics::legend("top",
+                             legend=clubs_labs,
+                             col=seq_along(clubs_labs),
+                             lty=seq_along(clubs_labs),
+                             cex=0.8
+            )
+            graphics::par( mar=default_mar)
+        }
     }
     graphics::par( mfrow=c(1,1) )
 
     if( save ) grDevices::dev.off()
 
 }
-
-
-
 
