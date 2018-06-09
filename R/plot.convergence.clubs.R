@@ -15,6 +15,7 @@
 #'the convergence clubs should be produced, default to \code{TRUE}
 #'@param avgTP_clubs numeric scalar or vector, indicating for which clubs the average transition
 #'path should be displayed. Optional, if omitted, average transition paths for all clubs are plotted
+#'numeric scalar or vector, indicating for which clubs the average
 #'@param save logical, should the plot be saved as a file?
 #'@param filename optional, a string indicating the name of the file where the plot
 #'    should be saved; must include the extension (e.g. "plot.pdf")
@@ -123,6 +124,8 @@ plot.convergence.clubs <- function(x,
     num_clubs <- dim(x)[1]
     if( missing(clubs)  ){
         clubs <- seq_len(num_clubs)
+    }else if( is.null(clubs) ){
+        clubs <- seq_len(num_clubs)
     }else if( !is.vector(clubs) ){
         stop("argument clubs should be vector!")
     }else if(length(clubs)==0){
@@ -133,7 +136,9 @@ plot.convergence.clubs <- function(x,
     }
     if( missing(avgTP_clubs) ){
         avgTP_clubs <- seq_len(num_clubs)
-    }else if( !is.vector(avgTP_clubs) ){
+    }else if( is.null(avgTP_clubs) ){
+        avgTP_clubs <- seq_len(num_clubs)
+    }else if( !is.vector(avgTP_clubs)| is.null(clubs) ){
         stop("argument avgTP_clubs should be vector!")
     }else if( length(avgTP_clubs)==0 ){
         avgTP_clubs <- seq_len(num_clubs)
