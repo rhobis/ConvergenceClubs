@@ -76,6 +76,8 @@
 #' plot(clubs, clubs=c(2,4,5), avgTP_clubs = c(1,3))
 #' plot(clubs, clubs=c(2,4,5), avgTP_clubs = c(1,3), legend=TRUE)
 #'
+#' plot(clubs, clubs=NULL, avgTP = TRUE, legend=TRUE)
+#'
 #'
 #'@export
 #'
@@ -124,12 +126,8 @@ plot.convergence.clubs <- function(x,
     num_clubs <- dim(x)[1]
     if( missing(clubs)  ){
         clubs <- seq_len(num_clubs)
-    }else if( is.null(clubs) ){
-        clubs <- seq_len(num_clubs)
-    }else if( !is.vector(clubs) ){
+    }else if( !is.null(clubs) & !is.vector(clubs) ){
         stop("argument clubs should be vector!")
-    }else if(length(clubs)==0){
-        clubs <- seq_len(num_clubs)
     }else{
         clubs <- suppressWarnings( as.numeric(clubs) )
         clubs <- floor( clubs[!is.na(clubs)])
@@ -138,10 +136,8 @@ plot.convergence.clubs <- function(x,
         avgTP_clubs <- seq_len(num_clubs)
     }else if( is.null(avgTP_clubs) ){
         avgTP_clubs <- seq_len(num_clubs)
-    }else if( !is.vector(avgTP_clubs)| is.null(clubs) ){
+    }else if( !is.vector(avgTP_clubs) & !is.null(avgTP_clubs) ){
         stop("argument avgTP_clubs should be vector!")
-    }else if( length(avgTP_clubs)==0 ){
-        avgTP_clubs <- seq_len(num_clubs)
     }else{
         avgTP_clubs <- suppressWarnings( as.numeric(avgTP_clubs) )
         avgTP_clubs <- floor( avgTP_clubs[!is.na(avgTP_clubs)])
@@ -274,7 +270,7 @@ plot.convergence.clubs <- function(x,
                            ylab="Relative transition path", main = "All Clubs" )
         graphics::abline(h=1, lty = ltype, lwd=lw, col=lcol)
         if( legend ){
-            clubs_labs <- paste0('clubs', avgTP_clubs)
+            clubs_labs <- paste0('club', avgTP_clubs)
             graphics::par( mar=mar_lgn )
             plot(c(0,1),type="n", axes=F, xlab="", ylab="")
             graphics::legend("top",

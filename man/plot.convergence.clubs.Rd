@@ -25,7 +25,8 @@ path plot should be generated. Optional, if omitted, plots for all clubs are pro
 the convergence clubs should be produced, default to \code{TRUE}}
 
 \item{avgTP_clubs}{numeric scalar or vector, indicating for which clubs the average transition
-path should be displayed. Optional, if omitted, average transition paths for all clubs are plotted}
+path should be displayed. Optional, if omitted, average transition paths for all clubs are plotted
+numeric scalar or vector, indicating for which clubs the average}
 
 \item{y_fixed}{logical, should the scale of the y axis be the same for all plots?}
 
@@ -99,6 +100,8 @@ plot(clubs, nrows=1, ncols=3, clubs=c(2,4,5), avgTP = FALSE)
 plot(clubs, nrows=1, ncols=3, clubs=c(2,4,5), avgTP = FALSE, legend=TRUE)
 plot(clubs, clubs=c(2,4,5), avgTP_clubs = c(1,3))
 plot(clubs, clubs=c(2,4,5), avgTP_clubs = c(1,3), legend=TRUE)
+
+plot(clubs, clubs=NULL, avgTP = TRUE, legend=TRUE)
 
 
 }
