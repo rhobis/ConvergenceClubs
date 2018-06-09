@@ -18,6 +18,14 @@ The main functions are:
     applies the clustering procedure to the convergence clubs contained in the argument,
     according to either Phillips and Sul (2009) or  von Lyncker and Thoennessen (2016) procedure.
 
+For class `convergence.clubs`, the following methods are available:
+
+- `summary()`: shows the number of regions for each club of convergence and the number of divergent         regions;
+- `print()`: prints the `convergence.clubs` object, a list with information about
+    convergence clubs (region ids, beta coefficient, p-value, ...) and divergent units;
+- `dim()`: return a vector of two elements, representing the number of clubs and the number of 
+    divergent units;
+- `plot()`: plots transition path.
 
 Installation
 ------------
@@ -54,6 +62,15 @@ summary(mclubs)
 # Merge clusters using von Lyncker and Thoennessen (2016) method
 mclubs <- mergeClubs(clubs, mergeMethod='vLT', mergeDivergent=FALSE)
 summary(mclubs)
+
+
+# Plot Transition Paths for all regions in each club and average Transition Path
+# for all clubs
+plot(mclubs)
+
+# Plot Only average Transition Paths
+plot(mclubs, clubs=NULL)
+plot(mclubs, clubs=NULL, legend=TRUE)
 
 ```
 
