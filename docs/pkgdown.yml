@@ -1,0 +1,8 @@
+pandoc: 2.2.1
+pkgdown: 1.1.0.9000
+pkgdown_sha: f317e4942d4cbadb377caed2ae0484b08d0f8d03
+articles: []
+urls:
+  reference: http://rhobis.rbind.io/ConvergenceClubs/reference
+  article: http://rhobis.rbind.io/ConvergenceClubs/articles
+

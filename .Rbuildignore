@@ -7,3 +7,4 @@
 ^\.DS_Store$
 ^data-raw/\.Rhistory$
 ^\.Rproj\.user/$
+^_pkgdown\.yml$
