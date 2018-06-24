@@ -15,12 +15,13 @@
 #' should be tried.
 #' @param threshold a numeric value indicating the threshold to be used with the t-test.
 #'
-#' @return A list of Convergence Clubs, for each club a list is return with the
+#' @return Ad object of class \code{convergence.clubs}, containing a list of
+#' Convergence Clubs, for each club a list is return with the
 #' following objects: \code{id}, a vector containing the row indices
 #' of the regions in the club; \code{model}, a list containing information
 #' about the model used to run the t-test on the regions in the club;
 #' \code{regions}, a vector containing the names of the regions of the club (optional,
-#' only included if it is present in the \code{clubs} object given in input.
+#' only included if parameter \code{regions} is given)
 #'
 #'
 #' @details Phillips and Sul (2009) suggest a "club merging algorithm" to avoid
@@ -119,9 +120,11 @@ mergeClubs <- function(clubs,
 
 
     ### Initialise variables ---------------------------------------------------
-    ll <- dim(clubs)[1]
-    if(ll<2) stop('There is only one club')
-
+    ll <- dim(clubs)[1] #number of clubs
+    if(ll<2){
+        message('The number of clubs is <2, there is nothing to merge.')
+        return(clubs)
+    }
     #output
     attrib <- attributes(clubs)
     attrib$names <- NULL
