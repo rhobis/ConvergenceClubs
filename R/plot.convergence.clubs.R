@@ -160,7 +160,7 @@ plot.convergence.clubs <- function(x,
     arguments <- list(...)
     ltype <- ifelse( !is.null(arguments$lty), arguments$lty, "solid" )
     lw    <- ifelse( !is.null(arguments$lwd), arguments$lwd, 2 )
-    lcol  <- ifelse( !is.null(arguments$col), arguments$col, "black" )
+    lcol  <- ifelse( !is.null(arguments$col), arguments$col, "darkgrey" )
     legend_cex <- ifelse( !is.null(arguments$cex), arguments$cex, 0.8 )
     legend_lab <- ifelse( identical(regions, NULL), "id", "regions")
 
