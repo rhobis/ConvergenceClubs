@@ -39,17 +39,34 @@ summary.convergence.clubs <- function(object, ...){
 print_table <- function(x, merged){
     # x <- cbind(data.frame(club=seq_len(nrow(x))),x)
     cn <- colnames(x)
-    if(merged) width_col <- nchar(x[,2], type='width')
+    if(merged){
+        old_clubs <- sapply(x[,2],
+                            function(s){
+                                a <- unlist( strsplit(s, '[+]') )
+                                a <- gsub('[a-z ]', '', a)
+                                b <- nchar( paste(a, collapse=''), type='width')
+                                if( b>10 ) a <- c( a[1:5], '...' )
+                                return( paste0( 'clubs: ', paste(a, collapse=', ') ) )
+                            })
+        x[,2] <- old_clubs
+        width_col <- pmin(40, nchar(x[,2], type='width'))
+    }
+
+
     mrcn <- max( nchar( rownames(x), type='width') )
 
-    cat( paste(rep(' ', mrcn+2), collapse='' ), " ",
+    cat( paste(rep(' ', mrcn+2), collapse='' ),
          paste(cn, collapse=" | ")); cat('\n')
-    cat( paste(rep('-', mrcn+2), collapse='' ), " ",
+    cat( paste(rep('-', mrcn+2), collapse='' ),
          paste(rep('-', nchar(cn[1], type='width')+1), collapse='' ),
          if(merged) paste(rep('-', max(width_col)+3), collapse='') ); cat('\n')
 
     for(r in seq_len(nrow(x))){
-        cat(rownames(x)[r], "  | ", paste( x[r,], collapse= '\t       | ') ); cat('\n')
+        cat(rownames(x)[r],
+            paste(rep(" ", mrcn - nchar(rownames(x)[r], type='width')), collapse=""),
+            "|",
+            paste( x[r,], collapse= '\t       | ') ); cat('\n')
     }
 
 }
+
