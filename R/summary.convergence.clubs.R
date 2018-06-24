@@ -19,7 +19,7 @@ summary.convergence.clubs <- function(object, ...){
 
         mc <- sapply(object, FUN = function(x) paste(x$clubs, collapse = ' + ') )
         mc <- as.character( mc )
-        summary_table["old clubs"] <- mc
+        summary_table["merged clubs"] <- mc
 
     }
 
@@ -40,7 +40,7 @@ print_table <- function(x, merged){
     # x <- cbind(data.frame(club=seq_len(nrow(x))),x)
     cn <- colnames(x)
     if(merged){
-        old_clubs <- sapply(x[,2],
+        merged_clubs <- sapply(x[,2],
                             function(s){
                                 a <- unlist( strsplit(s, '[+]') )
                                 a <- gsub('[a-z ]', '', a)
@@ -48,25 +48,31 @@ print_table <- function(x, merged){
                                 if( b>10 ) a <- c( a[1:5], '...' )
                                 return( paste0( 'clubs: ', paste(a, collapse=', ') ) )
                             })
-        x[,2] <- old_clubs
+        x[,2] <- merged_clubs
         width_col <- pmin(40, nchar(x[,2], type='width'))
     }
 
 
     mrcn <- max( nchar( rownames(x), type='width') )
-
+    # csp <- n
     cat( paste(rep(' ', mrcn+2), collapse='' ),
-         paste(cn, collapse=" | ")); cat('\n')
+         paste0(' ', cn[1], ' '),
+         if(merged) paste0('| ', cn[2], ' ') ); cat('\n')
     cat( paste(rep('-', mrcn+2), collapse='' ),
-         paste(rep('-', nchar(cn[1], type='width')+1), collapse='' ),
+         paste(rep('-', nchar(cn[1], type='width')+3), collapse='' ),
          if(merged) paste(rep('-', max(width_col)+3), collapse='') ); cat('\n')
 
     for(r in seq_len(nrow(x))){
+        lc <- nchar(cn, type='width')
+        nc <- nchar(x[r,], type='width')
+        cs <- c(paste(rep(' ', max(0, lc[1] - nc[1])), collapse=''),
+                if(merged) paste(rep(' ', max(0,lc[2]-nc[2])), collapse=''))
+        res<- paste(x[r,], cs, collapse=' | ')
         cat(rownames(x)[r],
             paste(rep(" ", mrcn - nchar(rownames(x)[r], type='width')), collapse=""),
             "|",
-            paste( x[r,], collapse= '\t       | ') ); cat('\n')
+            paste(res, collapse= '') ); cat('\n')
     }
 
-}
 
+}
