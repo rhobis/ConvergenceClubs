@@ -8,7 +8,7 @@ Description
 -----------------
 
 ConvergenceClubs provides functions for clustering regions that form convergence clubs, 
-according to the definition of Phillips and Sul (2009) <doi:10.1002/jae.1080>.
+according to the definition by Phillips and Sul (2009).
 
 The main functions are:
 
