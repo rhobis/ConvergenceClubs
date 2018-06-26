@@ -1,9 +1,10 @@
 ConvergenceClubs
 ======================================================
 
+[![Travis-CI Build Status](https://travis-ci.org/rhobis/ConvergenceClubs.svg?branch=master)](https://travis-ci.org/rhobis/ConvergenceClubs)
 [![CRAN\_Status\_Badge](https://www.r-pkg.org/badges/version/ConvergenceClubs)](https://cran.r-project.org/package=ConvergenceClubs)
 [![](https://cranlogs.r-pkg.org/badges/grand-total/ConvergenceClubs)](https://cran.r-project.org/package=ConvergenceClubs)
-[![Travis-CI Build Status](https://travis-ci.org/rhobis/ConvergenceClubs.svg?branch=master)](https://travis-ci.org/rhobis/ConvergenceClubs)
+
 
 Description 
 -----------------
