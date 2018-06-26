@@ -8,3 +8,4 @@
 ^data-raw/\.Rhistory$
 ^\.Rproj\.user/$
 ^_pkgdown\.yml$
+^\.travis\.yml$
