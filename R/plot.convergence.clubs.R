@@ -56,9 +56,9 @@
 #'
 #'@examples
 #'
-#' data("countryGDP")
+#' data("filteredGDP")
 #'
-#' clubs <- findClubs(countryGDP, dataCols=2:35, regions = 1, refCol=35, time_trim = 1/3,
+#' clubs <- findClubs(filteredGDP, dataCols=2:35, regions = 1, refCol=35, time_trim = 1/3,
 #'                    cstar = 0, HACmethod = "FQSB")
 #'
 #' #plot transition paths for all clubs

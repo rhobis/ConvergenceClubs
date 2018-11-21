@@ -4,10 +4,10 @@
 \alias{plot.convergence.clubs}
 \title{Plot method for S3 class \code{convergence.clubs}}
 \usage{
-\method{plot}{convergence.clubs}(x, y = NULL, nrows = NULL, ncols = NULL,
-  clubs, avgTP = TRUE, avgTP_clubs, y_fixed = FALSE, legend = FALSE,
-  save = FALSE, filename, path, width = 7, height = 7, device = c("pdf",
-  "png", "jpeg"), res, ...)
+\method{plot}{convergence.clubs}(x, y = NULL, nrows = NULL,
+  ncols = NULL, clubs, avgTP = TRUE, avgTP_clubs, y_fixed = FALSE,
+  legend = FALSE, save = FALSE, filename, path, width = 7,
+  height = 7, device = c("pdf", "png", "jpeg"), res, ...)
 }
 \arguments{
 \item{x}{an x of class \code{convergence.clubs}.}
@@ -81,9 +81,9 @@ Enlarging the plot window usually solves the problem.
 }
 \examples{
 
-data("countryGDP")
+data("filteredGDP")
 
-clubs <- findClubs(countryGDP, dataCols=2:35, regions = 1, refCol=35, time_trim = 1/3,
+clubs <- findClubs(filteredGDP, dataCols=2:35, regions = 1, refCol=35, time_trim = 1/3,
                    cstar = 0, HACmethod = "FQSB")
 
 #plot transition paths for all clubs

@@ -4,7 +4,8 @@
 \alias{club}
 \title{Find a club}
 \usage{
-club(X, dataCols, core, time_trim, HACmethod = c("FQSB", "AQSB"), cstar = 0)
+club(X, dataCols, core, time_trim, HACmethod = c("FQSB", "AQSB"),
+  cstar = 0)
 }
 \arguments{
 \item{X}{matrix or dataframe containing data (preferably filtered data in order to remove business cycles)}

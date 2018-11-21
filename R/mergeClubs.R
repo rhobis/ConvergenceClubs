@@ -71,10 +71,10 @@
 #'
 #'
 #' @examples
-#' data("countryGDP")
+#' data("filteredGDP")
 #'
 #' # Cluster Countries using GDP from year 1970 to year 2003
-#' clubs <- findClubs(countryGDP, dataCols=2:35, regions = 1, refCol=35,
+#' clubs <- findClubs(filteredGDP, dataCols=2:35, regions = 1, refCol=35,
 #'                    time_trim = 1/3, cstar = 0, HACmethod = "FQSB")
 #' summary(clubs)
 #'

@@ -35,11 +35,11 @@ The cross sectional variation \eqn{H_{it}}{H(it)} is computed as the quadratic
                   h(it) = N log[y(it)] / \sum log[y(it)]    }
 }
 \examples{
-data("countryGDP")
+data("filteredGDP")
 
-h <- computeH(countryGDP[,-1], quantity="h")
-H <- computeH(countryGDP[,-1], quantity="H")
-b <- computeH(countryGDP[,-1], quantity="both")
+h <- computeH(filteredGDP[,-1], quantity="h")
+H <- computeH(filteredGDP[,-1], quantity="H")
+b <- computeH(filteredGDP[,-1], quantity="both")
 
 
 }

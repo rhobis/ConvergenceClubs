@@ -4,8 +4,8 @@
 \alias{findClubs}
 \title{Finds convergence clubs}
 \usage{
-findClubs(X, dataCols, regions = NULL, refCol, time_trim = 1/3, cstar = 0,
-  HACmethod = c("FQSB", "AQSB"))
+findClubs(X, dataCols, regions = NULL, refCol, time_trim = 1/3,
+  cstar = 0, HACmethod = c("FQSB", "AQSB"))
 }
 \arguments{
 \item{X}{dataframe containing data (preferably filtered data in order to remove business cycles)}
@@ -75,15 +75,15 @@ to the Phillips and Sul clustering procedure, the following steps are implemente
    }
 }
 \examples{
-data("countryGDP")
+data("filteredGDP")
 
 \dontrun{
 # Cluster Countries using GDP from year 2000 to year 2014
-clubs <- findClubs(countryGDP,  dataCols=2:35, regions = 1, refCol=35,
+clubs <- findClubs(filteredGDP,  dataCols=2:35, regions = 1, refCol=35,
                    time_trim = 1/3, cstar = 0, HACmethod = "AQSB")
 }
 
-clubs <- findClubs(countryGDP, dataCols=2:35, regions = 1, refCol=35,
+clubs <- findClubs(filteredGDP, dataCols=2:35, regions = 1, refCol=35,
                    time_trim = 1/3, cstar = 0, HACmethod = "FQSB")
 summary(clubs)
 

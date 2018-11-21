@@ -1,49 +1,27 @@
-# library(mFilter) #for function hpfilter
-#
-# dat <- read.csv2("data-raw/countryGDP.csv", dec='.', header=T, stringsAsFactors = FALSE)
-#
-# m <- as.matrix(dat[,-1])
-# class(m)
-#
-# #filter data
-# mf <- apply(m, 2, function(country)  hpfilter(country, freq=400, type="lambda")$trend)
-#
-# #create data.frame
-# countryGDP <- data.frame(colnames(m), t(mf))
-# colnames(countryGDP) <- c('ID', paste('Y', dat[,1], sep=''))
-# rownames(countryGDP) <- NULL
-#
-# # write.table(countryGDP, 'data-raw/countryGDP.txt')
-# devtools::use_data(countryGDP,overwrite=TRUE)
-#
-
+library(mFilter) #for function hpfilter
 
 dat <- read.csv2("data-raw/countryGDP.csv", dec='.', header=T, stringsAsFactors = FALSE)
 head(dat)
 
-m <- log(as.matrix(dat[,-1]))
-m1  <- m
+GDP <- data.frame(colnames(dat)[-1], t(dat[,-1]), row.names=NULL, stringsAsFactors=FALSE)
+colnames(GDP) <- c('Countries', paste0('Y', dat$YEAR) )
+
+filteredGDP <- apply(GDP[,-1], 1,
+                     function(x){
+                         mFilter::hpfilter(log(x), freq=400, type="lambda")$trend
+                     })
+filteredGDP <- data.frame(Countries = GDP[,1], t(filteredGDP), row.names=NULL, stringsAsFactors=FALSE )
+colnames(filteredGDP) <- colnames(GDP)
 
 
-# Filtering approach according to Phillips and Sul (2009)
-HPMat2 <- function(  # check
-    data,
-    lambda
-){
-    eye        <- diag(length(data))
-    gy        <- solve(eye + lambda*crossprod(diff(eye, lag = 1, differences = 2)), data)
-    cy        <- data - gy
-    result    <- data.frame(gy, cy)
-    return(result)
-}
 
 
-m1 <- apply(m, 2, function(x) HPMat2(x, 400)$gy)
+write.table(GDP, 'data-raw/GDP.txt')
+write.table(filteredGDP, 'data-raw/filteredGDP.txt')
 
-#create data.frame
-countryGDP <- data.frame(colnames(m), t(m1))
-colnames(countryGDP) <- c('ID', paste('Y', dat[,1], sep=''))
-rownames(countryGDP) <- NULL
+devtools::use_data(GDP,overwrite=TRUE)
+devtools::use_data(filteredGDP,overwrite=TRUE)
 
-# write.table(countryGDP, 'data-raw/countryGDP.txt')
-devtools::use_data(countryGDP,overwrite=TRUE)
+
+
+
