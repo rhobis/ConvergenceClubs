@@ -185,14 +185,7 @@ findClubs<- function(X, #data matrix or data.frame
             clubs[[paste('club',l,sep = '')]] <- list(
                 # regions = as.character(dati[,IDvar]),
                 id =  dati$id,
-                model = list(
-                    # threshold = threshold,
-                    beta   = mod_all['beta'],
-                    st.dev = mod_all['std.err'],
-                    tvalue = t_all,
-                    pvalue = mod_all['pvalue']
-                )
-            )
+                model = mod_all )
             break
         }
 

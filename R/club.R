@@ -66,8 +66,5 @@ club <- function(X,
     #return club info
     return( list(id = clubId, #id of units in the club
                  rows = clubRows, #row indices of club units in input
-                 model = list(beta   = mod['beta'],
-                              st.dev = mod['std.err'],
-                              tvalue = mod['tvalue'],
-                              pvalue = mod['pvalue'])))
+                 model = mod) )
 }

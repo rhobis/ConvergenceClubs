@@ -190,7 +190,7 @@ mergeClubs <- function(clubs,
         if(returnRegions) pclub[[paste('club',n,sep='')]]$regions <- regions
         if(appendLast){
             pclub[[paste('club',n+1,sep='')]] <- list(clubs = club_names[ll],
-                                                      id = clubs[[ll]]$id,
+                                                      id    = clubs[[ll]]$id,
                                                       model = clubs[[ll]]$model
             )
             if(returnRegions) pclub[[paste('club',n+1,sep='')]]$regions <- clubs[[ll]]$regions
