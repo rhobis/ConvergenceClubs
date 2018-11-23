@@ -63,19 +63,19 @@ estimateMod <- function(H, time_trim, HACmethod = c('FQSB','AQSB')){
         b <- coef(mod)[2]
         tv <- b/se
         ### Output -------------------------------------------------------------
-        return(c(beta   = unname(b),
-                 st.dev = unname(se),
-                 tvalue = unname(tv),
-                 pvalue = unname(pnorm(q=tv)) )
+        return(c(beta    = unname(b),
+                 std.err = unname(se),
+                 tvalue  = unname(tv),
+                 pvalue  = unname(pnorm(q=tv)) )
         )
     }else if(HACmethod=="AQSB"){
         ### Estimation ---------------------------------------------------------
         mod <- lm( rH~logt )
         out <- lmtest::coeftest(mod,vcov=sandwich::vcovHAC(mod))
         ### Output -------------------------------------------------------------
-        return(c(beta   = unname(out[2,1]),
-                 std.err     = unname(out[2,2]),
-                 tvalue = unname(out[2,3]),
-                 pvalue = unname(out[2,4]) ))
+        return(c(beta    = unname(out[2,1]),
+                 std.err = unname(out[2,2]),
+                 tvalue  = unname(out[2,3]),
+                 pvalue  = unname(out[2,4]) ))
     }else stop("An error occurred, check the value of HACmethod!")
 }
