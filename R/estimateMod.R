@@ -15,7 +15,7 @@
 #' The default method is "FQSB".
 #'
 #'
-#' @return  A list containing information about the model used to run the t-test
+#' @return  A named vector containing information about the model used to run the t-test
 #' on the regions in the club: beta coefficient, standard deviation, t-statistics and p-value.
 #'
 #' @details The following linear model is estimated:
@@ -63,19 +63,19 @@ estimateMod <- function(H, time_trim, HACmethod = c('FQSB','AQSB')){
         b <- coef(mod)[2]
         tv <- b/se
         ### Output -------------------------------------------------------------
-        return(list(beta= b,
-                    st.dev = se,
-                    tvalue = tv,
-                    pvalue = pnorm(q=tv) )
+        return(c(beta   = unname(b),
+                 st.dev = unname(se),
+                 tvalue = unname(tv),
+                 pvalue = unname(pnorm(q=tv)) )
         )
     }else if(HACmethod=="AQSB"){
         ### Estimation ---------------------------------------------------------
         mod <- lm( rH~logt )
         out <- lmtest::coeftest(mod,vcov=sandwich::vcovHAC(mod))
         ### Output -------------------------------------------------------------
-        return(list(beta= out[2,1],
-                    st.dev = out[2,2],
-                    tvalue = out[2,3],
-                    pvalue = out[2,4]))
+        return(c(beta   = unname(out[2,1]),
+                 std.err     = unname(out[2,2]),
+                 tvalue = unname(out[2,3]),
+                 pvalue = unname(out[2,4]) ))
     }else stop("An error occurred, check the value of HACmethod!")
 }

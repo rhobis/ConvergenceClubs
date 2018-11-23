@@ -20,7 +20,7 @@ with heteroskedasticity and autocorrelation consistent standard errors.
 The default method is "FQSB".}
 }
 \value{
-A list containing information about the model used to run the t-test
+A named vector containing information about the model used to run the t-test
 on the regions in the club: beta coefficient, standard deviation, t-statistics and p-value.
 }
 \description{

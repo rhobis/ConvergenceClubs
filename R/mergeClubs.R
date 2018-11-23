@@ -148,14 +148,14 @@ mergeClubs <- function(clubs,
             if(returnRegions) addregions <- clubs[[k]]$regions
             H <- computeH(X[c(units,addunits), dataCols])
             mod <- estimateMod(H, time_trim, HACmethod = HACmethod)
-            tvalue <- mod$tvalue
+            tvalue <- mod['tvalue']
             #check if a couple of clubs can be merged
             if(tvalue > threshold){
                 if(mergeMethod=='vLT' & k <= ll-1){#method by von Lyncker and Rasmus Thoennessen (2016)
                     nextcouple <- c(clubs[[k]]$id,clubs[[k+1]]$id)
                     H <- computeH(X[nextcouple, dataCols])
                     mod2 <- estimateMod(H,time_trim)
-                    tvalue2 <- mod2$tvalue
+                    tvalue2 <- mod2['tvalue']
                     if(tvalue > tvalue2){#if true, merge
                         units <- c(units,addunits)
                         if(returnRegions) regions <- c(regions,addregions)

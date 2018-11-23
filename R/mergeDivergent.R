@@ -113,7 +113,7 @@ mergeDivergent <- function(clubs,
         for(i in 1:cn){
             for(j in seq_along(dunits) ){
                 H <- computeH(X[c(clubs[[i]]$id,dunits[j]), dataCols])
-                tmatrix[i,j] <- estimateMod(H, time_trim, HACmethod = HACmethod)$tvalue
+                tmatrix[i,j] <- estimateMod(H, time_trim, HACmethod = HACmethod)['tvalue']
             }
         }
         #if in the matrix max(t-value) > threshold

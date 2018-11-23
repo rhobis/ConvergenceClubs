@@ -20,7 +20,7 @@
 
 \item{clubs}{numeric scalar or vector, indicating for which clubs the transition
 path plot should be generated. Optional, if omitted, plots for all clubs are produced.
-If \code{NULL}, transition path are not plotted for any club.}
+If \code{clubs=NULL}, transition path are not plotted for any club.}
 
 \item{avgTP}{logical, indicates if a plot of the average transition paths of
 the convergence clubs should be produced, default to \code{TRUE}}

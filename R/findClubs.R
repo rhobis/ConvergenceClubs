@@ -155,13 +155,6 @@ findClubs<- function(X, #data matrix or data.frame
     if(!is.numeric(cstar) | length(cstar) > 1) stop('cstar must be a numeric scalar')
 
 
-    ### Set methods  -----------------------------------------------------------
-    #select functions to compute t-values
-    # estimateMod <<- if(HACmethod=='FQSB'){
-    #     estimateMod_fqsb
-    # }else estimateMod_aqsb
-    #
-    # estimateMod <- function(H, time_trim) estimateMod(H, time_trim, HACmethod=HACmethod)
 
     ### Other preliminary operations -------------------------------------------
 
@@ -185,7 +178,7 @@ findClubs<- function(X, #data matrix or data.frame
         #Test all regions
         H_all <- computeH(dati[,dataCols])
         mod_all <- estimateMod(H_all, time_trim, HACmethod=HACmethod)
-        t_all <- mod_all$tvalue
+        t_all <- mod_all['tvalue']
         # if tvalue > -1.65, they all form one club,
         #otherwise go one with clustering
         if (t_all > threshold) {
@@ -194,10 +187,10 @@ findClubs<- function(X, #data matrix or data.frame
                 id =  dati$id,
                 model = list(
                     # threshold = threshold,
-                    beta = mod_all$beta,
-                    st.dev = mod_all$st.dev,
+                    beta   = mod_all['beta'],
+                    st.dev = mod_all['std.err'],
                     tvalue = t_all,
-                    pvalue = mod_all$pvalue
+                    pvalue = mod_all['pvalue']
                 )
             )
             break

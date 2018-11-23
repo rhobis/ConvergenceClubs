@@ -61,7 +61,7 @@ coreG <- function(X,
         #select a couple of regions (i, i+1)
         i <- i + 1
         H <- computeH( X[ c(i-1, i), dataCols ])
-        tvalue <- estimateMod(H, time_trim, HACmethod = HACmethod)$tvalue
+        tvalue <- estimateMod(H, time_trim, HACmethod = HACmethod)['tvalue']
         #t-test (if t>-1.65 --> next step; otherwise repeat for regions (i+1,i+2) )
         if (tvalue > threshold){
             if (i == nr){
@@ -85,7 +85,7 @@ coreG <- function(X,
         k <- k + 1
         units <- c(units, k)
         H <- computeH(X[units, dataCols])
-        tvalue <- estimateMod(H, time_trim, HACmethod = HACmethod)$tvalue
+        tvalue <- estimateMod(H, time_trim, HACmethod = HACmethod)['tvalue']
         if (tvalue > threshold){
             vt <- c(vt, tvalue)
             lgroup[[l]] <- units

@@ -49,7 +49,7 @@ club <- function(X,
     for (k in seq_len(nrow(unitsNoCore)) ){
         #compute H
         H <- computeH( X[ c(core, unitsNoCore$row[k]), dataCols ])
-        tvalue <- c(tvalue, estimateMod(H, time_trim, HACmethod = HACmethod)$tvalue)
+        tvalue <- c(tvalue, estimateMod(H, time_trim, HACmethod = HACmethod)['tvalue'])
     }
     #Find group (core + regions) such that (core + i)  gives t > cstar
     clubCandidates_id <- unitsNoCore[which(tvalue > cstar), 'id']
@@ -66,8 +66,8 @@ club <- function(X,
     #return club info
     return( list(id = clubId, #id of units in the club
                  rows = clubRows, #row indices of club units in input
-                 model = list(beta = mod$beta,
-                              st.dev = mod$st.dev,
-                              tvalue = mod$tvalue,
-                              pvalue = mod$pvalue)))
+                 model = list(beta   = mod['beta'],
+                              st.dev = mod['std.err'],
+                              tvalue = mod['tvalue'],
+                              pvalue = mod['pvalue'])))
 }

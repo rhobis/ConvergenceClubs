@@ -11,7 +11,7 @@
 #'@param legend logical, should a legend be displayed?
 #'@param clubs numeric scalar or vector, indicating for which clubs the transition
 #'path plot should be generated. Optional, if omitted, plots for all clubs are produced.
-#'If \code{NULL}, transition path are not plotted for any club.
+#'If \code{clubs=NULL}, transition path are not plotted for any club.
 #'@param avgTP logical, indicates if a plot of the average transition paths of
 #'the convergence clubs should be produced, default to \code{TRUE}
 #'@param avgTP_clubs numeric scalar or vector, indicating for which clubs the average transition
@@ -268,7 +268,7 @@ plot.convergence.clubs <- function(x,
 
         graphics::matplot( t( atpm ), type='l',
                            ylim = if(y_fixed){ c(min(h)-0.1, max(h)+0.1) } else NULL ,
-                           ylab="Relative transition path", main = "All Clubs" )
+                           ylab="Relative transition path", main = "Average transition paths - All clubs" )
         graphics::abline(h=1, lty = ltype, lwd=lw, col=lcol)
         if( legend ){
             clubs_labs <- paste0('club', avgTP_clubs)
