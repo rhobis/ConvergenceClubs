@@ -7,21 +7,38 @@
 
 
 summary.convergence.clubs <- function(object, ...){
-    #table with number of regions per club
-    summary_table <- as.data.frame(vapply(object,
-                                          FUN=function(x) length(x$id),
-                                          FUN.VALUE=1) )
-    colnames(summary_table) <- ('# of regions')
 
-    #if the clubs have been merged, add a column showing which ones are merged
+    # if there are merged clubs, create string vector that indicates which
+    # clubs where merged
     merged <- !is.null(object$club1$club)
     if( merged ){
 
         mc <- sapply(object, FUN = function(x) paste(x$clubs, collapse = ' + ') )
         mc <- as.character( mc )
-        summary_table["merged clubs"] <- mc
-
     }
+
+    #table with number of regions per club
+    summary_table <-
+        data.frame(
+            vapply(object,
+                   FUN=function(x) length(x$id),
+                   FUN.VALUE=1),
+            beta = round(vapply(object,
+                                FUN=function(x) x$model['beta'],
+                                FUN.VALUE=1), 3),
+            std.err = round(vapply(object,
+                                   FUN=function(x) x$model['std.err'],
+                                   FUN.VALUE=1), 3),
+            tvalue = round(vapply(object,
+                                  FUN=function(x) x$model['tvalue'],
+                                  FUN.VALUE=1), 3),
+            stringsAsFactors = FALSE
+        )
+    if(merged) summary_table <- data.frame(mc, summary_table, stringsAsFactors = FALSE)
+    colnames(summary_table) <- c(if(merged) 'merged clubs', '# of regions', 'beta', 'std.err', 'tvalue')
+
+    #if the clubs have been merged, add a column showing which ones are merged
+
 
 
     # print summaries
@@ -36,43 +53,47 @@ summary.convergence.clubs <- function(object, ...){
 }
 
 
+
+
 print_table <- function(x, merged){
-    # x <- cbind(data.frame(club=seq_len(nrow(x))),x)
-    cn <- colnames(x)
+    # merged <- !is.null(x$club1$club)
     if(merged){
-        merged_clubs <- sapply(x[,2],
-                            function(s){
-                                a <- unlist( strsplit(s, '[+]') )
-                                a <- gsub('[a-z ]', '', a)
-                                b <- nchar( paste(a, collapse=''), type='width')
-                                if( b>10 ) a <- c( a[1:5], '...' )
-                                return( paste0( 'clubs: ', paste(a, collapse=', ') ) )
-                            })
-        x[,2] <- merged_clubs
-        width_col <- pmin(40, nchar(x[,2], type='width'))
+        x[, 'merged clubs'] <- sapply(x[,'merged clubs'],
+                                      function(s){
+                                          a <- unlist( strsplit(s, '[+]') )
+                                          a <- gsub('[a-z ]', '', a)
+                                          b <- nchar( paste(a, collapse=''), type='width')
+                                          if( b>10 ) a <- c( a[1:5], '...' )
+                                          return( paste0( 'clubs: ', paste(a, collapse=', ') ) )
+                                      })
+        # x[,'merged clubs'] <- merged_clubs
+        width_col <- pmin(40, nchar(x[,'merged clubs'], type='width'))
     }
 
+    x1 <- data.frame(rownames(x), x, row.names = NULL, stringsAsFactors = FALSE)
+    colnames(x1) <- c('', colnames(x))
 
-    mrcn <- max( nchar( rownames(x), type='width') )
-    # csp <- n
-    cat( paste(rep(' ', mrcn+2), collapse='' ),
-         paste0(' ', cn[1], ' '),
-         if(merged) paste0('| ', cn[2], ' ') ); cat('\n')
-    cat( paste(rep('-', mrcn+2), collapse='' ),
-         paste(rep('-', nchar(cn[1], type='width')+3), collapse='' ),
-         if(merged) paste(rep('-', max(width_col)+3), collapse='') ); cat('\n')
+    #extra padding to the left if value is positive (to align with negative values)
+    is_num <- sapply(x1, is.numeric)
+    x1[,is_num] <- sapply(x1[is_num], function(x) paste0(ifelse(x<0, ' ', '  '), x)  )
 
-    for(r in seq_len(nrow(x))){
-        lc <- nchar(cn, type='width')
-        nc <- nchar(x[r,], type='width')
-        cs <- c(paste(rep(' ', max(0, lc[1] - nc[1])), collapse=''),
-                if(merged) paste(rep(' ', max(0,lc[2]-nc[2])), collapse=''))
-        res<- paste(x[r,], cs, collapse=' | ')
-        cat(rownames(x)[r],
-            paste(rep(" ", mrcn - nchar(rownames(x)[r], type='width')), collapse=""),
-            "|",
-            paste(res, collapse= '') ); cat('\n')
+    length_header <- nchar(colnames(x1), type='width')
+    length_data   <- sapply(seq_len(ncol(x1)), function(i) nchar(x1[,i], type='width'))
+    max_length    <- sapply(seq_len(ncol(x1)), function(i) max(length_header[i], length_data[,i]) )
+    max_lenght_rn <- max(nchar(x1[,1], type='width'))
+
+    padding_header <-  sapply(max_length-length_header, function(x) paste0(rep(' ', x+2), collapse=''))
+    hline_header   <-  sapply(max_length, function(x) paste0(rep('-', x+3), collapse=''))
+
+
+    ## Print summary
+    cat(paste0(' ', colnames(x1), padding_header, collapse='|'), sep=''); cat('\n')
+    cat(paste0('', hline_header, collapse=' '), sep=' '); cat('\n')
+    for(r in seq_len(nrow(x1))){
+        padding <- sapply(max_length-length_data[r,], function(x) paste0(rep(' ', x+2), collapse='') )
+        cat(paste0(' ', x1[r,], padding, collapse='|'), sep=''); cat('\n')
     }
-
 
 }
+
+
