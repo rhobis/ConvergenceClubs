@@ -43,7 +43,7 @@
 #'
 
 
-estimateMod <- function(H, time_trim, HACmethod = c('FQSB','AQSB')){
+estimateMod <- function(H, time_trim=1/3, HACmethod = c('FQSB','AQSB')){
 
     HACmethod <- match.arg(HACmethod)
 
