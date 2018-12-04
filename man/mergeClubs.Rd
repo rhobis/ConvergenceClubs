@@ -18,7 +18,7 @@ value used for \code{clubs} is used.}
 available are \code{"PS"} for Phillips and Sul (2009) and \code{"vLT"} for
 von Lyncker and Thoennessen (2016).}
 
-\item{mergeDivergent}{logical, if TRUE, indicates that merging of divergent regions
+\item{mergeDivergent}{logical, if TRUE, indicates that merging of divergent units
 should be tried.}
 
 \item{threshold}{a numeric value indicating the threshold to be used with the t-test.}
@@ -27,10 +27,10 @@ should be tried.}
 Ad object of class \code{convergence.clubs}, containing a list of
 Convergence Clubs, for each club a list is return with the
 following objects: \code{id}, a vector containing the row indices
-of the regions in the club; \code{model}, a list containing information
-about the model used to run the t-test on the regions in the club;
-\code{regions}, a vector containing the names of the regions of the club (optional,
-only included if parameter \code{regions} is given)
+of the units in the club; \code{model}, a list containing information
+about the model used to run the t-test on the units in the club;
+\code{unit_names}, a vector containing the names of the units of the club (optional,
+only included if parameter \code{unit_names} is given)
 }
 \description{
 Merges a list of clubs created with the function findClubs
@@ -71,7 +71,7 @@ This algorithm suggests to merge for adjacent groups. In particular, it works as
 data("filteredGDP")
 
 # Cluster Countries using GDP from year 1970 to year 2003
-clubs <- findClubs(filteredGDP, dataCols=2:35, regions = 1, refCol=35,
+clubs <- findClubs(filteredGDP, dataCols=2:35, unit_names = 1, refCol=35,
                    time_trim = 1/3, cstar = 0, HACmethod = "FQSB")
 summary(clubs)
 

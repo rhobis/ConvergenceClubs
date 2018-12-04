@@ -1,13 +1,13 @@
 Package: ConvergenceClubs
 Title: Finding Convergence Clubs
 Description: Functions for clustering regions that form convergence clubs, according to the definition of Phillips and Sul (2009) <doi:10.1002/jae.1080>.
-Version: 1.4.1
-Date: 2018-06-25
+Version: 1.4.2
+Date: 2018-12-04
 Authors@R: c(
     person("Roberto", "Sichera",, "roberto.sichera@unipa.it", c("aut", "cre", "cph")), 
     person("Pietro", "Pizzuto",, "pietro.pizzuto02@unipa.it", "aut")
     )
-URL: https://github.com/rhobis/ConvergenceClubs
+URL: https://cran.r-project.org/web/packages/ConvergenceClubs/index.html
 BugReports: https://github.com/rhobis/ConvergenceClubs/issues
 Depends:
     R (>= 3.0.1)

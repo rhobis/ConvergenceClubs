@@ -1,6 +1,6 @@
 #' @section Main functions:
 #' The package's main functions are \code{findClubs} and \code{mergeClubs}. The
-#' former finds clubs of convergence, given a dataset with regions in rows and
+#' former finds clubs of convergence, given a dataset with units in rows and
 #' years in columns, returning an object of class \code{convergence.clubs}. The
 #' latter takes as argument an object of class \code{convergence.clubs} and
 #' applies the clustering procedure to the convergence clubs contained in the argument,

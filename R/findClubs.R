@@ -4,8 +4,8 @@
 #'
 #' @param X dataframe containing data (preferably filtered data in order to remove business cycles)
 #' @param dataCols integer vector with the column indices of the data
-#' @param regions integer scalar indicating, if present, the index of a column
-#' with codes of the regions
+#' @param unit_names integer scalar indicating, if present, the index of a column
+#' with codes of the units
 #' @param refCol integer scalar indicating the index of the column to use for ordering
 #' data
 #' @param time_trim a numeric value between 0 and 1, representing the portion of
@@ -24,10 +24,10 @@
 #' @return Ad object of class \code{convergence.clubs}, containing a list of
 #' Convergence Clubs, for each club a list is return with the
 #' following objects: \code{id}, a vector containing the row indices
-#' of the regions in the club; \code{model}, a list containing information
-#' about the model used to run the t-test on the regions in the club;
-#' \code{regions}, a vector containing the names of the regions of the club (optional,
-#' only included if parameter \code{regions} is given)
+#' of the units in the club; \code{model}, a list containing information
+#' about the model used to run the t-test on the units in the club;
+#' \code{unit_names}, a vector containing the names of the units of the club (optional,
+#' only included if parameter \code{unit_names} is given)
 #'
 #'
 #' @details In order to investigate the presence of convergence clubs according
@@ -56,7 +56,7 @@
 #'        Otherwise, step 1 to 3 should be repeated on the same group to determine
 #'        whether there are other subgroups that constitute convergence clubs.
 #'        If no further convergence clubs are found (hence, no k in step 2 satisfies
-#'        the condition \eqn{t_k >-1.65}{t(k) > -1.65}), the remaining regions diverge.
+#'        the condition \eqn{t_k >-1.65}{t(k) > -1.65}), the remaining units diverge.
 #'    }
 #' @references
 #' Phillips, P. C.; Sul, D., 2007. Transition modeling and econometric convergence tests. Econometrica 75 (6), 1771-1855.
@@ -77,11 +77,11 @@
 #'
 #' \dontrun{
 #' # Cluster Countries using GDP from year 2000 to year 2014
-#' clubs <- findClubs(filteredGDP,  dataCols=2:35, regions = 1, refCol=35,
+#' clubs <- findClubs(filteredGDP,  dataCols=2:35, unit_names = 1, refCol=35,
 #'                    time_trim = 1/3, cstar = 0, HACmethod = "AQSB")
 #' }
 #'
-#' clubs <- findClubs(filteredGDP, dataCols=2:35, regions = 1, refCol=35,
+#' clubs <- findClubs(filteredGDP, dataCols=2:35, unit_names = 1, refCol=35,
 #'                    time_trim = 1/3, cstar = 0, HACmethod = "FQSB")
 #' summary(clubs)
 #'
@@ -93,7 +93,7 @@
 
 findClubs<- function(X, #data matrix or data.frame
                      dataCols, #vector with column indices of data,
-                     regions = NULL, #column index of regions, if present
+                     unit_names = NULL, #column index of units, if present
                      refCol, #column index of year to be used as reference (lastT)
                      time_trim = 1/3, #portion of years to remove from computations (a value between >0 and <1)
                      cstar = 0, #c* value for the second step,
@@ -102,11 +102,11 @@ findClubs<- function(X, #data matrix or data.frame
 
     ### Initialise variables ---------------------------------------------------
     HACmethod <- match.arg(HACmethod)
-    returnRegions <- switch(class(regions),
+    returnNames <- switch(class(unit_names),
                             NULL = FALSE,
                             numeric = TRUE,
                             integer = TRUE,
-                            stop('Not a valid value for regions; it should be an integer'))
+                            stop("Not a valid value for argument 'unit_names'; it should be an integer"))
 
     N <- nrow(X)
     t <- length(dataCols)
@@ -118,7 +118,7 @@ findClubs<- function(X, #data matrix or data.frame
                        class = c("convergence.clubs", "list"),
                        data = X,
                        dataCols = dataCols,
-                       regions = regions,
+                       unit_names = unit_names,
                        refCol = refCol,
                        time_trim = time_trim,
                        cstar = cstar,
@@ -126,13 +126,13 @@ findClubs<- function(X, #data matrix or data.frame
                        )
     ### Check inputs -----------------------------------------------------------
 
-    #regions
-    if(length(regions) > 1) stop('regions must be an integer-valued scalar')
-    if( returnRegions){ if(regions %% 1 != 0)  stop('regions must be an integer-valued scalar')}
+    #unit_names
+    if(length(unit_names) > 1) stop("Argument 'unit_names' must be an integer-valued scalar")
+    if( returnNames){ if(unit_names %% 1 != 0)  stop(" Argument 'unit_names' must be an integer-valued scalar")}
 
     #X
     if(!is.data.frame(X)) stop('X must be an object of class data.frame')
-    X[,regions] <- as.character(X[,regions])
+    X[,unit_names] <- as.character(X[,unit_names])
 
     #dataCols
     if(!all(apply(X[,dataCols],2,is.numeric)) ) stop('Some of the data columns are non-numeric')
@@ -169,13 +169,13 @@ findClubs<- function(X, #data matrix or data.frame
     while(TRUE){
         if (nrow(dati) == 1){
             clubs$divergent$id <- dati$id
-            break #break while loop if out of regions
+            break #break while loop if out of units
         }else if(nrow(dati) == 0){
-            clubs$divergent$message <- "there are no divergent regions"
+            clubs$divergent$message <- "there are no divergent units"
             break
         }
 
-        #Test all regions
+        #Test all units
         H_all <- computeH(dati[,dataCols])
         mod_all <- estimateMod(H_all, time_trim, HACmethod=HACmethod)
         t_all <- mod_all['tvalue']
@@ -183,13 +183,13 @@ findClubs<- function(X, #data matrix or data.frame
         #otherwise go one with clustering
         if (t_all > threshold) {
             clubs[[paste('club',l,sep = '')]] <- list(
-                # regions = as.character(dati[,IDvar]),
+                # units = as.character(dati[,IDvar]),
                 id =  dati$id,
                 model = mod_all )
             break
         }
 
-        #find core group (returns the row indices of regions in core Group)
+        #find core group (returns the row indices of units in core Group)
         coreGroup <- coreG(X=dati, dataCols, time_trim, threshold,
                            HACmethod = HACmethod, type="max")
         #if no more core groups are found, add divergent to output and return
@@ -199,7 +199,7 @@ findClubs<- function(X, #data matrix or data.frame
             break
         }
 
-        #add regions to core group
+        #add units to core group
         convClub <- club(X = dati, dataCols, core = coreGroup, time_trim,
                          HACmethod = HACmethod, cstar = cstar)
         # newcstar <- clubConv$model$cstar
@@ -212,10 +212,10 @@ findClubs<- function(X, #data matrix or data.frame
     }#end of while, end of clustering
 
     ### Return -----------------------------------------------------------------
-    #if returnRegions, then add region codes to output
-    if(returnRegions){
+    #if returnNames, then add region codes to output
+    if(returnNames){
         for(club in names(clubs) ){
-            clubs[[club]]$regions <- X[clubs[[club]]$id, regions]
+            clubs[[club]]$unit_names <- X[clubs[[club]]$id, unit_names]
         }
         return(clubs)
     }else return(clubs)

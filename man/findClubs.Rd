@@ -4,7 +4,7 @@
 \alias{findClubs}
 \title{Finds convergence clubs}
 \usage{
-findClubs(X, dataCols, regions = NULL, refCol, time_trim = 1/3,
+findClubs(X, dataCols, unit_names = NULL, refCol, time_trim = 1/3,
   cstar = 0, HACmethod = c("FQSB", "AQSB"))
 }
 \arguments{
@@ -12,8 +12,8 @@ findClubs(X, dataCols, regions = NULL, refCol, time_trim = 1/3,
 
 \item{dataCols}{integer vector with the column indices of the data}
 
-\item{regions}{integer scalar indicating, if present, the index of a column
-with codes of the regions}
+\item{unit_names}{integer scalar indicating, if present, the index of a column
+with codes of the units}
 
 \item{refCol}{integer scalar indicating the index of the column to use for ordering
 data}
@@ -36,10 +36,10 @@ The default method is "FQSB".}
 Ad object of class \code{convergence.clubs}, containing a list of
 Convergence Clubs, for each club a list is return with the
 following objects: \code{id}, a vector containing the row indices
-of the regions in the club; \code{model}, a list containing information
-about the model used to run the t-test on the regions in the club;
-\code{regions}, a vector containing the names of the regions of the club (optional,
-only included if parameter \code{regions} is given)
+of the units in the club; \code{model}, a list containing information
+about the model used to run the t-test on the units in the club;
+\code{unit_names}, a vector containing the names of the units of the club (optional,
+only included if parameter \code{unit_names} is given)
 }
 \description{
 Find convergence clubs by means of Phillips and Sul clustering procedure.
@@ -71,7 +71,7 @@ to the Phillips and Sul clustering procedure, the following steps are implemente
        Otherwise, step 1 to 3 should be repeated on the same group to determine
        whether there are other subgroups that constitute convergence clubs.
        If no further convergence clubs are found (hence, no k in step 2 satisfies
-       the condition \eqn{t_k >-1.65}{t(k) > -1.65}), the remaining regions diverge.
+       the condition \eqn{t_k >-1.65}{t(k) > -1.65}), the remaining units diverge.
    }
 }
 \examples{
@@ -79,11 +79,11 @@ data("filteredGDP")
 
 \dontrun{
 # Cluster Countries using GDP from year 2000 to year 2014
-clubs <- findClubs(filteredGDP,  dataCols=2:35, regions = 1, refCol=35,
+clubs <- findClubs(filteredGDP,  dataCols=2:35, unit_names = 1, refCol=35,
                    time_trim = 1/3, cstar = 0, HACmethod = "AQSB")
 }
 
-clubs <- findClubs(filteredGDP, dataCols=2:35, regions = 1, refCol=35,
+clubs <- findClubs(filteredGDP, dataCols=2:35, unit_names = 1, refCol=35,
                    time_trim = 1/3, cstar = 0, HACmethod = "FQSB")
 summary(clubs)
 

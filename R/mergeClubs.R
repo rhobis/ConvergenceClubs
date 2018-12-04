@@ -11,17 +11,17 @@
 #' @param mergeMethod character string indicating the merging method to use. Methods
 #' available are \code{"PS"} for Phillips and Sul (2009) and \code{"vLT"} for
 #' von Lyncker and Thoennessen (2016).
-#' @param mergeDivergent logical, if TRUE, indicates that merging of divergent regions
+#' @param mergeDivergent logical, if TRUE, indicates that merging of divergent units
 #' should be tried.
 #' @param threshold a numeric value indicating the threshold to be used with the t-test.
 #'
 #' @return Ad object of class \code{convergence.clubs}, containing a list of
 #' Convergence Clubs, for each club a list is return with the
 #' following objects: \code{id}, a vector containing the row indices
-#' of the regions in the club; \code{model}, a list containing information
-#' about the model used to run the t-test on the regions in the club;
-#' \code{regions}, a vector containing the names of the regions of the club (optional,
-#' only included if parameter \code{regions} is given)
+#' of the units in the club; \code{model}, a list containing information
+#' about the model used to run the t-test on the units in the club;
+#' \code{unit_names}, a vector containing the names of the units of the club (optional,
+#' only included if parameter \code{unit_names} is given)
 #'
 #'
 #' @details Phillips and Sul (2009) suggest a "club merging algorithm" to avoid
@@ -74,7 +74,7 @@
 #' data("filteredGDP")
 #'
 #' # Cluster Countries using GDP from year 1970 to year 2003
-#' clubs <- findClubs(filteredGDP, dataCols=2:35, regions = 1, refCol=35,
+#' clubs <- findClubs(filteredGDP, dataCols=2:35, unit_names = 1, refCol=35,
 #'                    time_trim = 1/3, cstar = 0, HACmethod = "FQSB")
 #' summary(clubs)
 #'
@@ -141,11 +141,11 @@ mergeClubs <- function(clubs,
         units <- clubs[[i]]$id
         cnm <- club_names[i]  #club name
         mod <- list()
-        returnRegions <- !is.null(clubs[[i]]$regions)
-        if(returnRegions) regions <- clubs[[i]]$regions
+        returnNames <- !is.null(attr(clubs, 'unit_names'))
+        if(returnNames) unit_names <- clubs[[i]]$unit_names
         for(k in (i+1):ll){
             addunits <- clubs[[k]]$id
-            if(returnRegions) addregions <- clubs[[k]]$regions
+            if(returnNames) addnames <- clubs[[k]]$unit_names
             H <- computeH(X[c(units,addunits), dataCols])
             mod <- estimateMod(H, time_trim, HACmethod = HACmethod)
             tvalue <- mod['tvalue']
@@ -158,7 +158,7 @@ mergeClubs <- function(clubs,
                     tvalue2 <- mod2['tvalue']
                     if(tvalue > tvalue2){#if true, merge
                         units <- c(units,addunits)
-                        if(returnRegions) regions <- c(regions,addregions)
+                        if(returnNames) unit_names <- c(unit_names,addnames)
                         cnm <- c(cnm, club_names[k])
                     }else break
                 }else{#method by Phillips and Sul (2009)
@@ -166,7 +166,7 @@ mergeClubs <- function(clubs,
                     #until now, then keep scanning the club list
                     # and repeat thetest adding another club
                     units <- c(units,addunits)
-                    if(returnRegions) regions <- c(regions,addregions)
+                    if(returnNames) unit_names <- c(unit_names,addnames)
                     cnm <- c(cnm, club_names[k])
                 }
             }else{
@@ -187,13 +187,13 @@ mergeClubs <- function(clubs,
                                                 id = units,
                                                 model = estimateMod(H, time_trim, HACmethod = HACmethod)
         )
-        if(returnRegions) pclub[[paste('club',n,sep='')]]$regions <- regions
+        if(returnNames) pclub[[paste('club',n,sep='')]]$unit_names <- unit_names
         if(appendLast){
             pclub[[paste('club',n+1,sep='')]] <- list(clubs = club_names[ll],
                                                       id    = clubs[[ll]]$id,
                                                       model = clubs[[ll]]$model
             )
-            if(returnRegions) pclub[[paste('club',n+1,sep='')]]$regions <- clubs[[ll]]$regions
+            if(returnNames) pclub[[paste('club',n+1,sep='')]]$unit_names <- clubs[[ll]]$unit_names
         }
     }
     pclub$divergent <- clubs$divergent

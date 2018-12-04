@@ -21,7 +21,7 @@ The default method is "FQSB".}
 }
 \value{
 A named vector containing information about the model used to run the t-test
-on the regions in the club: beta coefficient, standard deviation, t-statistics and p-value.
+on the units in the club: beta coefficient, standard deviation, t-statistics and p-value.
 }
 \description{
 Estimates the \emph{log-t} regression model proposed by Phillips and Sul (2007, 2009)

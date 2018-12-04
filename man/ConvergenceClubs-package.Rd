@@ -11,7 +11,7 @@ Functions for clustering regions that form convergence clubs, according to the d
 \section{Main functions}{
 
 The package's main functions are \code{findClubs} and \code{mergeClubs}. The
-former finds clubs of convergence, given a dataset with regions in rows and
+former finds clubs of convergence, given a dataset with units in rows and
 years in columns, returning an object of class \code{convergence.clubs}. The
 latter takes as argument an object of class \code{convergence.clubs} and
 applies the clustering procedure to the convergence clubs contained in the argument,
@@ -28,7 +28,7 @@ von Lyncker, K.; Thoennessen, R., 2016. Regional club convergence in the EU: evi
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://github.com/rhobis/ConvergenceClubs}
+  \item \url{https://cran.r-project.org/web/packages/ConvergenceClubs/index.html}
   \item Report bugs at \url{https://github.com/rhobis/ConvergenceClubs/issues}
 }
 

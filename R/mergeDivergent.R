@@ -13,29 +13,29 @@
 #'
 #' @return A list of Convergence Clubs, for each club a list is return with the
 #' following objects: \code{id}, a vector containing the row indices
-#' of the regions in the club; \code{model}, a list containing information
-#' about the model used to run the t-test on the regions in the club;
-#' \code{regions}, a vector containing the names of the regions of the club (optional,
+#' of the units in the club; \code{model}, a list containing information
+#' about the model used to run the t-test on the units in the club;
+#' \code{unit_names}, a vector containing the names of the units of the club (optional,
 #' only included if it is present in the \code{clubs} object given in input).
 #'
 #'
 #' @details von Lyncker and Thoennessen (2016) claim that units identified as divergent
 #' by the basic clustering procedure by Phillips and Sul might not necessarily still
 #' diverge in the case of new convergence clubs detected with the club merging algorithm.
-#' To test if divergent regions may be included in one of the new convergence clubs,
+#' To test if divergent units may be included in one of the new convergence clubs,
 #' they propose the following algorithm:
 #' \enumerate{
-#'     \item Run a log t-test for all diverging regions, and if \eqn{t_k > -1.65}{t(k) > -1.65}
-#'     all these regions form a convergence club (This step is implicitly included
+#'     \item Run a log t-test for all diverging units, and if \eqn{t_k > -1.65}{t(k) > -1.65}
+#'     all these units form a convergence club (This step is implicitly included
 #'     in Phillips and Sul basic algorithm);
-#'     \item Run a log t-test for each diverging regions and each club, creating a
+#'     \item Run a log t-test for each diverging units and each club, creating a
 #'     matrix of t-values with dimensions \eqn{d \times p}{d x p}, where each row d represents
 #'     a divergent region and each column p a convergence club;
 #'     \item Take the highest \eqn{t > e^*}{t-value > e*}
 #'     and add the respective region to the respective club and restart from the step 1.
 #'     the authors suggest to use \eqn{e^* = t = -1.65 }{e* = t = -1.65};
 #'     \item The algorithm stops when no t-value > e* is found in step 3,
-#'     and as a consequence all remaining regions are considered divergent.
+#'     and as a consequence all remaining units are considered divergent.
 #'}
 #'
 #' @references
@@ -55,11 +55,11 @@
 #' data("filteredGDP")
 #'
 #' #Cluster Countries using GDP from year 1970 to year 2003
-#' clubs <- findClubs(filteredGDP, dataCols=2:35, regions = 1, refCol=35,
+#' clubs <- findClubs(filteredGDP, dataCols=2:35, unit_names = 1, refCol=35,
 #'                    time_trim = 1/3, cstar = 0, HACmethod = "FQSB")
 #' summary(clubs)
 #'
-#' # Merge clusters and divergent regions
+#' # Merge clusters and divergent units
 #' mclubs <- mergeClubs(clubs, mergeDivergent=TRUE)
 #' summary(mclubs)
 #'
@@ -70,7 +70,7 @@
 mergeDivergent <- function(clubs,
                            time_trim,
                            threshold = -1.65
-                           ){
+){
 
     ### Check inputs -----------------------------------------------------------
     if(!inherits(clubs,'convergence.clubs')) stop('clubs must be an object of class convergence.clubs')
@@ -101,7 +101,7 @@ mergeDivergent <- function(clubs,
 
     dunits <- clubs$divergent$id #id of divergent units
 
-    returnRegions <- !is.null(clubs$divergent$regions)
+    returnNames <- !is.null(clubs$divergent$unit_names)
     #counter for messages that indicate merging a divergent unit
     messcount <- rep(1,length=cn)
     while(length(dunits)>0){
@@ -125,36 +125,37 @@ mergeDivergent <- function(clubs,
             diver.ind <- max.ind[2]
             #merged unit indices
             munits <- c(clubs[[club.ind]]$id, dunits[diver.ind])
-            # #merged regions
-            if(returnRegions){
-                cc <- as.character(clubs[[club.ind]]$regions)
-                cd <- as.character(clubs$divergent$regions[diver.ind])
-                mregions <- c(cc,cd)
+            # merged units
+            if(returnNames){
+                cc <- as.character(clubs[[club.ind]]$unit_names)
+                cd <- as.character(clubs$divergent$unit_names[diver.ind])
+                mnames <- c(cc,cd)
             }
             H <- computeH(X[munits, dataCols])
             mod <- estimateMod(H, time_trim, HACmethod = HACmethod)
             #modify club list
-            if(returnRegions) clubs[[club.ind]]$regions <- mregions
+            if(returnNames) clubs[[club.ind]]$unit_names <- mnames
             clubs[[club.ind]]$id <- munits
             clubs[[club.ind]]$model <- mod
-            if(returnRegions){
-                clubs[[club.ind]]$message[[messcount[club.ind]]] <- paste(sprintf("merged with divergent region %s",clubs$divergent$regions[diver.ind]),
-                                                                          sprintf("which index is %d",dunits[diver.ind]),
-                                                                          sep='')
+            if(returnNames){
+                clubs[[club.ind]]$message[[messcount[club.ind]]] <-
+                    paste(sprintf("merged with divergent region %s",clubs$divergent$unit_names[diver.ind]),
+                          sprintf("which index is %d",dunits[diver.ind]), sep='')
             }else{
-                clubs[[club.ind]]$message[[messcount[club.ind]]] <- paste(sprintf("merged with divergent region with id %d", dunits[diver.ind]),
-                                                                          sep='')
+                clubs[[club.ind]]$message[[messcount[club.ind]]] <-
+                    paste(sprintf("merged with divergent region with id %d", dunits[diver.ind]),
+                          sep='')
             }
             messcount[club.ind] <- messcount[club.ind] + 1
             #remove unit merged with club from divergent units
             dunits <- clubs$divergent$id[-diver.ind]
             # # modify list of divergent units
-            if(returnRegions) clubs$divergent$regions <- clubs$divergent$regions[-diver.ind]
+            if(returnNames) clubs$divergent$unit_names <- clubs$divergent$unit_names[-diver.ind]
             clubs$divergent$id <- dunits
         }else{#if max(t-value) <= threshold, stop algorithm
             return(clubs)
         }
     }
-    #out of divergent regions, return output
+    #out of divergent units, return output
     return(clubs)
 }

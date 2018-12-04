@@ -30,10 +30,10 @@ The default value is 0.}
 }
 \value{
 A list of three objects: \code{id}, a vector containing the row indices
-of club regions in the original dataframe (input of function \code{findClubs});
+of club units in the original dataframe (input of function \code{findClubs});
 \code{rows}, a vector of row indices of club units in the current dataset
 (input of function \code{club}); \code{model}, a list containing information
-about the model used to run the t-test on the regions in the club.
+about the model used to run the t-test on the units in the club.
 }
 \description{
 Add units to core group according to step 3 of the clustering algorithm by

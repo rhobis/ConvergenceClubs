@@ -17,9 +17,9 @@
 #' The default method is "FQSB".
 #' @param type one of "max" or "all";
 #'             "max" includes only the region with maximum t-value. The default option is "max";
-#'             "all" includes all regions that pass the test t in the core formation (step 2).
+#'             "all" includes all units that pass the test t in the core formation (step 2).
 #'
-#' @return A numeric vector containing the row indices of the regions included
+#' @return A numeric vector containing the row indices of the units included
 #' in the core group; if a core group cannot be found, returns \code{FALSE}.
 #'
 #' @details According to the second step of the Phillips and Sul clustering algorithm (2007, 2009),
@@ -54,15 +54,15 @@ coreG <- function(X,
     ### Initialisation ---------------------------------------------------------
     HACmethod <- match.arg(HACmethod)
     type <- match.arg(type)
-    nr <- nrow(X) #number of regions
+    nr <- nrow(X) #number of units
     ### Find first couple ------------------------------------------------------
     i <- 1
     while (i < nr){
-        #select a couple of regions (i, i+1)
+        #select a couple of units (i, i+1)
         i <- i + 1
         H <- computeH( X[ c(i-1, i), dataCols ])
         tvalue <- estimateMod(H, time_trim, HACmethod = HACmethod)['tvalue']
-        #t-test (if t>-1.65 --> next step; otherwise repeat for regions (i+1,i+2) )
+        #t-test (if t>-1.65 --> next step; otherwise repeat for units (i+1,i+2) )
         if (tvalue > threshold){
             if (i == nr){
                 return( c(i-1, i) )
@@ -81,7 +81,7 @@ coreG <- function(X,
     vt[1] <- tvalue
     l <- 2
     while (k < nr){
-        # Groups obtained adding regions sequentially until t > -1.65
+        # Groups obtained adding units sequentially until t > -1.65
         k <- k + 1
         units <- c(units, k)
         H <- computeH(X[units, dataCols])

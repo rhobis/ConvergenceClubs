@@ -17,7 +17,7 @@ summary.convergence.clubs <- function(object, ...){
         mc <- as.character( mc )
     }
 
-    #table with number of regions per club
+    #table with number of units per club
     summary_table <-
         data.frame(
             vapply(object,
@@ -35,7 +35,7 @@ summary.convergence.clubs <- function(object, ...){
             stringsAsFactors = FALSE
         )
     if(merged) summary_table <- data.frame(mc, summary_table, stringsAsFactors = FALSE)
-    colnames(summary_table) <- c(if(merged) 'merged clubs', '# of regions', 'beta', 'std.err', 'tvalue')
+    colnames(summary_table) <- c(if(merged) 'merged clubs', '# of units', 'beta', 'std.err', 'tvalue')
 
     #if the clubs have been merged, add a column showing which ones are merged
 

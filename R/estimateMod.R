@@ -16,7 +16,7 @@
 #'
 #'
 #' @return  A named vector containing information about the model used to run the t-test
-#' on the regions in the club: beta coefficient, standard deviation, t-statistics and p-value.
+#' on the units in the club: beta coefficient, standard deviation, t-statistics and p-value.
 #'
 #' @details The following linear model is estimated:
 #' \deqn{\log\frac{H_1}{H_t} - 2\log(\log{t}) = \alpha + \beta \log{t} + u_t}{

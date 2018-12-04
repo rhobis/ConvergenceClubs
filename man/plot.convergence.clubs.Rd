@@ -53,7 +53,7 @@ one of "pdf", "png" or "jpeg".}
 \item{...}{other parameters to pass to function \code{plot()}.}
 }
 \description{
-Plot the transition paths of regions in the convergence clubs and the
+Plot the transition paths of units in the convergence clubs and the
 average transition paths of those clubs.
 }
 \details{
@@ -70,7 +70,7 @@ using the following regular plot parameters:
        set it to \code{"white"} to remove the horizontal line.
 }
 
-If \code{legend=TRUE} and a column with regions' names is available in the
+If \code{legend=TRUE} and a column with units' names is available in the
 \code{x} object, those names are truncated to fit the plot's legend. The graphical
 parameter \code{cex} may be used to modify the size of the legend's labels, default is 0.8
 
@@ -83,7 +83,7 @@ Enlarging the plot window usually solves the problem.
 
 data("filteredGDP")
 
-clubs <- findClubs(filteredGDP, dataCols=2:35, regions = 1, refCol=35, time_trim = 1/3,
+clubs <- findClubs(filteredGDP, dataCols=2:35, unit_names = 1, refCol=35, time_trim = 1/3,
                    cstar = 0, HACmethod = "FQSB")
 
 #plot transition paths for all clubs

@@ -19,9 +19,9 @@ value used for \code{clubs} is used.}
 \value{
 A list of Convergence Clubs, for each club a list is return with the
 following objects: \code{id}, a vector containing the row indices
-of the regions in the club; \code{model}, a list containing information
-about the model used to run the t-test on the regions in the club;
-\code{regions}, a vector containing the names of the regions of the club (optional,
+of the units in the club; \code{model}, a list containing information
+about the model used to run the t-test on the units in the club;
+\code{unit_names}, a vector containing the names of the units of the club (optional,
 only included if it is present in the \code{clubs} object given in input).
 }
 \description{
@@ -31,31 +31,31 @@ Merges divergent units according the algorithm proposed by von Lyncker and Thoen
 von Lyncker and Thoennessen (2016) claim that units identified as divergent
 by the basic clustering procedure by Phillips and Sul might not necessarily still
 diverge in the case of new convergence clubs detected with the club merging algorithm.
-To test if divergent regions may be included in one of the new convergence clubs,
+To test if divergent units may be included in one of the new convergence clubs,
 they propose the following algorithm:
 \enumerate{
-    \item Run a log t-test for all diverging regions, and if \eqn{t_k > -1.65}{t(k) > -1.65}
-    all these regions form a convergence club (This step is implicitly included
+    \item Run a log t-test for all diverging units, and if \eqn{t_k > -1.65}{t(k) > -1.65}
+    all these units form a convergence club (This step is implicitly included
     in Phillips and Sul basic algorithm);
-    \item Run a log t-test for each diverging regions and each club, creating a
+    \item Run a log t-test for each diverging units and each club, creating a
     matrix of t-values with dimensions \eqn{d \times p}{d x p}, where each row d represents
     a divergent region and each column p a convergence club;
     \item Take the highest \eqn{t > e^*}{t-value > e*}
     and add the respective region to the respective club and restart from the step 1.
     the authors suggest to use \eqn{e^* = t = -1.65 }{e* = t = -1.65};
     \item The algorithm stops when no t-value > e* is found in step 3,
-    and as a consequence all remaining regions are considered divergent.
+    and as a consequence all remaining units are considered divergent.
 }
 }
 \examples{
 data("filteredGDP")
 
 #Cluster Countries using GDP from year 1970 to year 2003
-clubs <- findClubs(filteredGDP, dataCols=2:35, regions = 1, refCol=35,
+clubs <- findClubs(filteredGDP, dataCols=2:35, unit_names = 1, refCol=35,
                    time_trim = 1/3, cstar = 0, HACmethod = "FQSB")
 summary(clubs)
 
-# Merge clusters and divergent regions
+# Merge clusters and divergent units
 mclubs <- mergeClubs(clubs, mergeDivergent=TRUE)
 summary(mclubs)
 

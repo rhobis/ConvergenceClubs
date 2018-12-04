@@ -27,10 +27,10 @@ The default method is "FQSB".}
 
 \item{type}{one of "max" or "all";
 "max" includes only the region with maximum t-value. The default option is "max";
-"all" includes all regions that pass the test t in the core formation (step 2).}
+"all" includes all units that pass the test t in the core formation (step 2).}
 }
 \value{
-A numeric vector containing the row indices of the regions included
+A numeric vector containing the row indices of the units included
 in the core group; if a core group cannot be found, returns \code{FALSE}.
 }
 \description{

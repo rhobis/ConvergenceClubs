@@ -7,12 +7,9 @@
 
 
 print.convergence.clubs <- function(x, ...){
-    # nm <- names(x)
-    # attributes(x) <- NULL
-    # print(setNames(x, nm))
 
-    what <-  ifelse( is.null(x[[1]][['regions']]), 'id', 'regions' )
-    width <- getOption('width') - 10
+    what <-  ifelse( !is.null(attr(x, 'unit_names')), 'unit_names', 'id' )
+    width <- round( 0.9*getOption('width'))
 
     for(item in names(x)){
         beta   <- round(x[[item]][['model']]['beta'],4)

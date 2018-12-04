@@ -14,8 +14,8 @@ computeH(X, quantity = "H", id)
 only the matrix of transition path h is return; \code{"both"}, a list containing
 both h and H is returned.s}
 
-\item{id}{optional; row index of regions for which H values are to be computed;
-if missing, all regions are used}
+\item{id}{optional; row index of units for which H values are to be computed;
+if missing, all units are used}
 }
 \value{
 A numeric vector, a matrix or a list, depending on the value of \code{quantity}
