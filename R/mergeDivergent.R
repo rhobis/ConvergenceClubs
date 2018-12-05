@@ -8,7 +8,9 @@
 #' @param time_trim a numeric value between 0 and 1, representing the portion of
 #' time periods to trim when running log t regression model; if omitted, the same
 #' value used for \code{clubs} is used.
-#' @param threshold a numeric value indicating the threshold to be used with the t-test.
+#' @param estar a numeric value indicating the threshold \eqn{e^*}{e*} to test
+#' if divergent units may be included in one of the new convergence clubs.
+#' To be used only if \code{mergeDivergent=TRUE}st.
 #'
 #'
 #' @return A list of Convergence Clubs, for each club a list is return with the
@@ -43,7 +45,9 @@
 #'
 #' Phillips, P. C.; Sul, D., 2009. Economic transition and growth. Journal of Applied Econometrics 24 (7), 1153-1185.
 #'
-#' von Lyncker, K.; Thoennessen, R., 2016. Regional club convergence in the EU: evidence from a panel data analysis. Empirical Economics, doi:10.1007/s00181-016-1096-2, 1-29.
+#' von Lyncker, K.; Thoennessen, R., 2017. Regional club convergence in the EU: evidence from a panel data analysis.
+#' Empirical Economics 52 (2),  525-553
+#'
 #'
 #' @seealso
 #' \code{\link{mergeClubs}}, Merges a list of clubs created by \code{findClubs};
@@ -69,7 +73,7 @@
 
 mergeDivergent <- function(clubs,
                            time_trim,
-                           threshold = -1.65
+                           estar = -1.65
 ){
 
     ### Check inputs -----------------------------------------------------------
@@ -116,8 +120,8 @@ mergeDivergent <- function(clubs,
                 tmatrix[i,j] <- estimateMod(H, time_trim, HACmethod = HACmethod)['tvalue']
             }
         }
-        #if in the matrix max(t-value) > threshold
-        if(max(tmatrix)>threshold){
+        #if in the matrix max(t-value) > estar
+        if(max(tmatrix)>estar){
             #merge the club and divergent region
             #corresponding to max(t-value) and start over
             max.ind <- which(tmatrix==max(tmatrix), arr.ind=TRUE)
@@ -152,7 +156,7 @@ mergeDivergent <- function(clubs,
             # # modify list of divergent units
             if(returnNames) clubs$divergent$unit_names <- clubs$divergent$unit_names[-diver.ind]
             clubs$divergent$id <- dunits
-        }else{#if max(t-value) <= threshold, stop algorithm
+        }else{#if max(t-value) <= estar, stop algorithm
             return(clubs)
         }
     }

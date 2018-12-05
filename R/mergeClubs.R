@@ -14,6 +14,11 @@
 #' @param mergeDivergent logical, if TRUE, indicates that merging of divergent units
 #' should be tried.
 #' @param threshold a numeric value indicating the threshold to be used with the t-test.
+#' @param estar a numeric value indicating the threshold \eqn{e^*}{e*} to test
+#' if divergent units may be included in one of the new convergence clubs.
+#' To be used only if \code{mergeDivergent=TRUE}
+#'
+#'
 #'
 #' @return Ad object of class \code{convergence.clubs}, containing a list of
 #' Convergence Clubs, for each club a list is return with the
@@ -60,7 +65,8 @@
 #'
 #' Phillips, P. C.; Sul, D., 2009. Economic transition and growth. Journal of Applied Econometrics 24 (7), 1153-1185.
 #'
-#' von Lyncker, K.; Thoennessen, R., 2016. Regional club convergence in the EU: evidence from a panel data analysis. Empirical Economics.
+#' von Lyncker, K.; Thoennessen, R., 2017. Regional club convergence in the EU: evidence from a panel data analysis.
+#' Empirical Economics 52 (2),  525-553
 #'
 #'
 #' @seealso
@@ -91,8 +97,9 @@
 mergeClubs <- function(clubs,
                        time_trim,
                        mergeMethod=c('PS','vLT'),
+                       threshold = -1.65,
                        mergeDivergent=FALSE,
-                       threshold = -1.65){
+                       estar = -1.65){
 
     ### Check inputs -----------------------------------------------------------
     # HACmethod <- match.arg(HACmethod)
@@ -198,6 +205,6 @@ mergeClubs <- function(clubs,
     }
     pclub$divergent <- clubs$divergent
     if(mergeDivergent){
-        return(mergeDivergent(pclub, time_trim, threshold))
+        return(mergeDivergent(pclub, time_trim, estar))
     }else return(pclub)
 }
