@@ -16,7 +16,7 @@ value used for \code{clubs} is used.}
 
 \item{estar}{a numeric value indicating the threshold \eqn{e^*}{e*} to test
 if divergent units may be included in one of the new convergence clubs.
-To be used only if \code{mergeDivergent=TRUE}st.}
+To be used only if \code{mergeDivergent=TRUE}.}
 }
 \value{
 A list of Convergence Clubs, for each club a list is return with the
@@ -27,10 +27,10 @@ about the model used to run the t-test on the units in the club;
 only included if it is present in the \code{clubs} object given in input).
 }
 \description{
-Merges divergent units according the algorithm proposed by von Lyncker and Thoennessen (2016)
+Merges divergent units according the algorithm proposed by von Lyncker and Thoennessen (2017)
 }
 \details{
-von Lyncker and Thoennessen (2016) claim that units identified as divergent
+von Lyncker and Thoennessen (2017) claim that units identified as divergent
 by the basic clustering procedure by Phillips and Sul might not necessarily still
 diverge in the case of new convergence clubs detected with the club merging algorithm.
 To test if divergent units may be included in one of the new convergence clubs,
@@ -72,6 +72,4 @@ Empirical Economics 52 (2),  525-553
 }
 \seealso{
 \code{\link{mergeClubs}}, Merges a list of clubs created by \code{findClubs};
-
-\code{\link{mergeDivergent}}, merges divergent units according to the algorithm proposed by von Lyncker and Thoennessen (2016).
 }

@@ -1,6 +1,6 @@
 #' Merge divergent units
 #'
-#' Merges divergent units according the algorithm proposed by von Lyncker and Thoennessen (2016)
+#' Merges divergent units according the algorithm proposed by von Lyncker and Thoennessen (2017)
 #'
 #'
 #' @param clubs an object of class \code{convergence.clubs} (created by \code{findClub}
@@ -10,7 +10,7 @@
 #' value used for \code{clubs} is used.
 #' @param estar a numeric value indicating the threshold \eqn{e^*}{e*} to test
 #' if divergent units may be included in one of the new convergence clubs.
-#' To be used only if \code{mergeDivergent=TRUE}st.
+#' To be used only if \code{mergeDivergent=TRUE}.
 #'
 #'
 #' @return A list of Convergence Clubs, for each club a list is return with the
@@ -21,7 +21,7 @@
 #' only included if it is present in the \code{clubs} object given in input).
 #'
 #'
-#' @details von Lyncker and Thoennessen (2016) claim that units identified as divergent
+#' @details von Lyncker and Thoennessen (2017) claim that units identified as divergent
 #' by the basic clustering procedure by Phillips and Sul might not necessarily still
 #' diverge in the case of new convergence clubs detected with the club merging algorithm.
 #' To test if divergent units may be included in one of the new convergence clubs,
@@ -52,7 +52,6 @@
 #' @seealso
 #' \code{\link{mergeClubs}}, Merges a list of clubs created by \code{findClubs};
 #'
-#' \code{\link{mergeDivergent}}, merges divergent units according to the algorithm proposed by von Lyncker and Thoennessen (2016).
 #'
 #'
 #' @examples

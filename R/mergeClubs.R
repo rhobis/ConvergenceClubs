@@ -10,7 +10,7 @@
 #' value used for \code{clubs} is used.
 #' @param mergeMethod character string indicating the merging method to use. Methods
 #' available are \code{"PS"} for Phillips and Sul (2009) and \code{"vLT"} for
-#' von Lyncker and Thoennessen (2016).
+#' von Lyncker and Thoennessen (2017).
 #' @param mergeDivergent logical, if TRUE, indicates that merging of divergent units
 #' should be tried.
 #' @param threshold a numeric value indicating the threshold to be used with the t-test.
@@ -41,8 +41,9 @@
 #'     \item If convergence hypothesis is rejected, conclude that all previous groups
 #'     converge, except the last one. Hence, start again the test merging algorithm
 #'     beginning from the group for which the hypothesis of convergence did not hold.
-#'     On the other hand, von Lyncker and Thoennessen (2016), propose a modified version
-#'      of the club merging algorithm that works as follows:
+#' }
+#' On the other hand, von Lyncker and Thoennessen (2017), propose a modified version
+#' of the club merging algorithm that works as follows:
 #'         \enumerate{
 #'             \item Take all the groups detected in the basic clustering mechanism (P)
 #'             and run the t-test for adjacent groups, obtaining a (M × 1) vector
@@ -57,7 +58,7 @@
 #'             the only condition required for merging is \eqn{t(m=M) > -1.65}.
 #'         }
 #'
-#' }
+#'
 #'
 #'
 #' @references
@@ -72,7 +73,7 @@
 #' @seealso
 #' \code{\link{findClubs}}, finds convergence clubs by means of Phillips and Sul clustering procedure.
 #'
-#' \code{\link{mergeDivergent}}, merges divergent units according to the algorithm proposed by von Lyncker and Thoennessen (2016).
+#' \code{\link{mergeDivergent}}, merges divergent units according to the algorithm proposed by von Lyncker and Thoennessen (2017).
 #'
 #'
 #'

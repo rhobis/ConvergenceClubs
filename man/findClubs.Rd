@@ -73,12 +73,16 @@ to the Phillips and Sul clustering procedure, the following steps are implemente
        If no further convergence clubs are found (hence, no k in step 2 satisfies
        the condition \eqn{t_k >-1.65}{t(k) > -1.65}), the remaining units diverge.
    }
+
+Note that Phillips and Sul (2007) suggest to make sure \eqn{t_k>-1.65} for the first club.
+Otherwise, repeat the procedure by increasing the value of the \eqn{c^*} parameter
+until the condition \eqn{t_k>-1.65} is satisfied for the first club.
 }
 \examples{
 data("filteredGDP")
 
 \dontrun{
-# Cluster Countries using GDP from year 2000 to year 2014
+# Cluster Countries using GDP from year 1970 to year 2003
 clubs <- findClubs(filteredGDP,  dataCols=2:35, unit_names = 1, refCol=35,
                    time_trim = 1/3, cstar = 0, HACmethod = "AQSB")
 }

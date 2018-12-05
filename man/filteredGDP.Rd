@@ -3,19 +3,19 @@
 \docType{data}
 \name{filteredGDP}
 \alias{filteredGDP}
-\title{GDP of 152 Countries from 1970 to 2003}
+\title{Filtered per-capita GDP of 152 Countries from 1970 to 2003}
 \format{A data frame with 152 rows and 35 variables.}
 \usage{
 data(filteredGDP)
 }
 \description{
-A dataset containing the GDP of 152 Countries over 34 years (Phillips and Sul, 2009).
-Data were filtered in order  to remove business cycles.
+A dataset containing the per-capita GDP of 152 Countries over 34 years (Phillips and Sul, 2009).
+Data were filtered in order to remove business cycles.
 }
 \details{
 \describe{
   \item{ID}{Country names (character);}
-  \item{Y1970, ..., Y2003}{GDP from year 1970 to 2003 (filtered in order
+  \item{Y1970, ..., Y2003}{per-capita GDP from year 1970 to 2003 (filtered in order
    to remove business cycles).}
 }
 }
