@@ -16,7 +16,7 @@ value used for \code{clubs} is used.}
 
 \item{mergeMethod}{character string indicating the merging method to use. Methods
 available are \code{"PS"} for Phillips and Sul (2009) and \code{"vLT"} for
-von Lyncker and Thoennessen (2016).}
+von Lyncker and Thoennessen (2017).}
 
 \item{threshold}{a numeric value indicating the threshold to be used with the t-test.}
 
@@ -53,8 +53,9 @@ This algorithm suggests to merge for adjacent groups. In particular, it works as
     \item If convergence hypothesis is rejected, conclude that all previous groups
     converge, except the last one. Hence, start again the test merging algorithm
     beginning from the group for which the hypothesis of convergence did not hold.
-    On the other hand, von Lyncker and Thoennessen (2016), propose a modified version
-     of the club merging algorithm that works as follows:
+}
+On the other hand, von Lyncker and Thoennessen (2017), propose a modified version
+of the club merging algorithm that works as follows:
         \enumerate{
             \item Take all the groups detected in the basic clustering mechanism (P)
             and run the t-test for adjacent groups, obtaining a (M × 1) vector
@@ -68,8 +69,6 @@ This algorithm suggests to merge for adjacent groups. In particular, it works as
             \item For the last element of vector M (the value of the last two clubs)
             the only condition required for merging is \eqn{t(m=M) > -1.65}.
         }
-
-}
 }
 \examples{
 data("filteredGDP")
@@ -98,5 +97,5 @@ Empirical Economics 52 (2),  525-553
 \seealso{
 \code{\link{findClubs}}, finds convergence clubs by means of Phillips and Sul clustering procedure.
 
-\code{\link{mergeDivergent}}, merges divergent units according to the algorithm proposed by von Lyncker and Thoennessen (2016).
+\code{\link{mergeDivergent}}, merges divergent units according to the algorithm proposed by von Lyncker and Thoennessen (2017).
 }

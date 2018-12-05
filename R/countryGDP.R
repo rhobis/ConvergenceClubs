@@ -1,11 +1,11 @@
-#' GDP of 152 Countries from 1970 to 2003
+#' Per-capita GDP of 152 Countries from 1970 to 2003
 #'
-#' A dataset containing the GDP of 152 Countries over 34 years (Phillips and Sul, 2009).
+#' A dataset containing the per-capita GDP of 152 Countries over 34 years (Phillips and Sul, 2009).
 #'
 #'
 #' \describe{
 #'   \item{ID}{Country names (character);}
-#'   \item{Y1970, ..., Y2003}{GDP from year 1970 to 2003.}
+#'   \item{Y1970, ..., Y2003}{per-capita GDP from year 1970 to 2003.}
 #' }
 #'
 #'
@@ -25,15 +25,15 @@ NULL
 
 
 
-#' GDP of 152 Countries from 1970 to 2003
+#' Filtered per-capita GDP of 152 Countries from 1970 to 2003
 #'
-#' A dataset containing the GDP of 152 Countries over 34 years (Phillips and Sul, 2009).
-#' Data were filtered in order  to remove business cycles.
+#' A dataset containing the per-capita GDP of 152 Countries over 34 years (Phillips and Sul, 2009).
+#' Data were filtered in order to remove business cycles.
 #'
 #'
 #' \describe{
 #'   \item{ID}{Country names (character);}
-#'   \item{Y1970, ..., Y2003}{GDP from year 1970 to 2003 (filtered in order
+#'   \item{Y1970, ..., Y2003}{per-capita GDP from year 1970 to 2003 (filtered in order
 #'    to remove business cycles).}
 #' }
 #'

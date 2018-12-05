@@ -58,6 +58,12 @@
 #'        If no further convergence clubs are found (hence, no k in step 2 satisfies
 #'        the condition \eqn{t_k >-1.65}{t(k) > -1.65}), the remaining units diverge.
 #'    }
+#'
+#' Note that Phillips and Sul (2007) suggest to make sure \eqn{t_k>-1.65} for the first club.
+#' Otherwise, repeat the procedure by increasing the value of the \eqn{c^*} parameter
+#' until the condition \eqn{t_k>-1.65} is satisfied for the first club.
+#'
+#'
 #' @references
 #' Phillips, P. C.; Sul, D., 2007. Transition modeling and econometric convergence tests. Econometrica 75 (6), 1771-1855.
 #'

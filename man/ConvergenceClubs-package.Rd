@@ -23,7 +23,8 @@ Phillips, P. C.; Sul, D., 2007. Transition modeling and econometric convergence 
 
 Phillips, P. C.; Sul, D., 2009. Economic transition and growth. Journal of Applied Econometrics 24 (7), 1153-1185.
 
-von Lyncker, K.; Thoennessen, R., 2016. Regional club convergence in the EU: evidence from a panel data analysis. Empirical Economics.
+von Lyncker, K.; Thoennessen, R., 2017. Regional club convergence in the EU: evidence from a panel data analysis.
+Empirical Economics 52 (2),  525-553
 }
 \seealso{
 Useful links:
