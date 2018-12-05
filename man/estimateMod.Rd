@@ -4,7 +4,7 @@
 \alias{estimateMod}
 \title{Log-t test for convergence}
 \usage{
-estimateMod(H, time_trim, HACmethod = c("FQSB", "AQSB"))
+estimateMod(H, time_trim = 1/3, HACmethod = c("FQSB", "AQSB"))
 }
 \arguments{
 \item{H}{vector of H values}

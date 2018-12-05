@@ -12,10 +12,10 @@ computeH(X, quantity = "H", id)
 \item{quantity}{string indicating the quantity that should be returned. The options are
 \code{"H"}, the default, only the vector of cross-sectional variance is returned; \code{"h"},
 only the matrix of transition path h is return; \code{"both"}, a list containing
-both h and H is returned.s}
+both h and H is returned.}
 
-\item{id}{optional; row index of units for which H values are to be computed;
-if missing, all units are used}
+\item{id}{optional; row index of regions for which H values are to be computed;
+if missing, all regions are used}
 }
 \value{
 A numeric vector, a matrix or a list, depending on the value of \code{quantity}

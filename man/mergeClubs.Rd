@@ -5,7 +5,7 @@
 \title{Merge convergence clubs}
 \usage{
 mergeClubs(clubs, time_trim, mergeMethod = c("PS", "vLT"),
-  mergeDivergent = FALSE, threshold = -1.65)
+  threshold = -1.65, mergeDivergent = FALSE, estar = -1.65)
 }
 \arguments{
 \item{clubs}{an object of class \code{convergence.clubs} (created by findClubs function)}
@@ -18,10 +18,14 @@ value used for \code{clubs} is used.}
 available are \code{"PS"} for Phillips and Sul (2009) and \code{"vLT"} for
 von Lyncker and Thoennessen (2016).}
 
+\item{threshold}{a numeric value indicating the threshold to be used with the t-test.}
+
 \item{mergeDivergent}{logical, if TRUE, indicates that merging of divergent units
 should be tried.}
 
-\item{threshold}{a numeric value indicating the threshold to be used with the t-test.}
+\item{estar}{a numeric value indicating the threshold \eqn{e^*}{e*} to test
+if divergent units may be included in one of the new convergence clubs.
+To be used only if \code{mergeDivergent=TRUE}}
 }
 \value{
 Ad object of class \code{convergence.clubs}, containing a list of
@@ -88,7 +92,8 @@ Phillips, P. C.; Sul, D., 2007. Transition modeling and econometric convergence 
 
 Phillips, P. C.; Sul, D., 2009. Economic transition and growth. Journal of Applied Econometrics 24 (7), 1153-1185.
 
-von Lyncker, K.; Thoennessen, R., 2016. Regional club convergence in the EU: evidence from a panel data analysis. Empirical Economics.
+von Lyncker, K.; Thoennessen, R., 2017. Regional club convergence in the EU: evidence from a panel data analysis.
+Empirical Economics 52 (2),  525-553
 }
 \seealso{
 \code{\link{findClubs}}, finds convergence clubs by means of Phillips and Sul clustering procedure.
