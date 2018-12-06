@@ -19,6 +19,7 @@ summary.convergence.clubs <- function(object, ...){
         mc <- as.character( mc )
     }
 
+    x <- object; x[['divergent']] <- NULL
     #table with number of units per club
     summary_table <-
         data.frame(
