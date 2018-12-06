@@ -29,7 +29,7 @@ Empirical Economics 52 (2),  525-553
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://cran.r-project.org/web/packages/ConvergenceClubs/index.html}
+  \item \url{https://CRAN.R-project.org/package=ConvergenceClubs}
   \item Report bugs at \url{https://github.com/rhobis/ConvergenceClubs/issues}
 }
 
