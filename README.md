@@ -18,16 +18,16 @@ The main functions are:
     years in columns, returning an object of class `convergence.clubs`. 
 - `mergeClubs()`: takes as argument an object of class `convergence.clubs` and
     applies the clustering procedure to the convergence clubs contained in the argument,
-    according to either Phillips and Sul (2009) or  von Lyncker and Thoennessen (2016) procedure.
+    according to either Phillips and Sul (2009) or  von Lyncker and Thoennessen (2017) procedure.
 
 For class `convergence.clubs`, the following methods are available:
 
-- `summary()`: shows the number of regions for each club of convergence and the number of divergent         regions;
-- `print()`: prints the `convergence.clubs` object, a list with information about
-    convergence clubs (region ids, beta coefficient, p-value, ...) and divergent units;
-- `dim()`: return a vector of two elements, representing the number of clubs and the number of 
+- `summary()` : shows the number of regions for each club of convergence and the number of divergent         regions;
+- `print()` : prints main information about the clubs and divergent units in the
+            `convergence.clubs` object (unit IDs, beta coefficient, p-value, ...);
+- `dim()` : return a vector of two elements, representing the number of clubs and the number of 
     divergent units;
-- `plot()`: plots transition path.
+- `plot()` : plots transition path.
 
 Installation
 ------------
@@ -50,18 +50,17 @@ Usage
 ``` r
 library(ConvergenceClubs)
 
-data("countryGDP")
+data("filteredGDP")
 
-# Cluster Countries using GDP from year 2000 to year 2014, with 2014 as reference year
-clubs <- findClubs(countryGDP, dataCols=2:35, regions = 1, refCol=35, 
-                    time_trim = 1/3, cstar = 0, HACmethod = "AQSB")
+# Cluster Countries using GDP from year 1970 to year 2003
+clubs <- findClubs(filteredGDP, dataCols=2:35, unit_names = 1, refCol=35,
+                   time_trim = 1/3, cstar = 0, HACmethod = "FQSB")
 summary(clubs)
 
-# Merge clusters using Phillips and Sul (2009) method
+# Merge clusters
 mclubs <- mergeClubs(clubs, mergeMethod='PS', mergeDivergent=FALSE)
 summary(mclubs)
 
-# Merge clusters using von Lyncker and Thoennessen (2016) method
 mclubs <- mergeClubs(clubs, mergeMethod='vLT', mergeDivergent=FALSE)
 summary(mclubs)
 
