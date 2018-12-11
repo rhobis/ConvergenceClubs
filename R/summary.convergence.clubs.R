@@ -8,28 +8,31 @@
 
 summary.convergence.clubs <- function(object, ...){
 
+    x <- object
+    x[['divergent']] <- NULL
+
     # if there are merged clubs, create string vector that indicates which
     # clubs where merged
     merged <- !is.null(object$club1$club)
     if( merged ){
-
-        mc <- sapply(object, FUN = function(x) paste(x$clubs, collapse = ' + ') )
+        mc <- sapply(x, FUN = function(x) paste(x$clubs, collapse = ' + ') )
         mc <- as.character( mc )
     }
 
+    x <- object; x[['divergent']] <- NULL
     #table with number of units per club
     summary_table <-
         data.frame(
-            vapply(object,
+            vapply(x,
                    FUN=function(x) length(x$id),
                    FUN.VALUE=1),
-            beta = round(vapply(object,
+            beta = round(vapply(x,
                                 FUN=function(x) x$model['beta'],
                                 FUN.VALUE=1), 3),
-            std.err = round(vapply(object,
+            std.err = round(vapply(x,
                                    FUN=function(x) x$model['std.err'],
                                    FUN.VALUE=1), 3),
-            tvalue = round(vapply(object,
+            tvalue = round(vapply(x,
                                   FUN=function(x) x$model['tvalue'],
                                   FUN.VALUE=1), 3),
             stringsAsFactors = FALSE
