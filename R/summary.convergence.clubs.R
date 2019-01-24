@@ -81,7 +81,8 @@ print_table <- function(x, merged){
     x1[,is_num] <- sapply(x1[is_num], function(x) paste0(ifelse(x<0, ' ', '  '), x)  )
 
     length_header <- nchar(colnames(x1), type='width')
-    length_data   <- sapply(seq_len(ncol(x1)), function(i) nchar(x1[,i], type='width'))
+    length_data   <- matrix(sapply(seq_len(ncol(x1)), function(i) nchar(x1[,i], type='width')),
+                               nrow=nrow(x1), ncol=ncol(x1))
     max_length    <- sapply(seq_len(ncol(x1)), function(i) max(length_header[i], length_data[,i]) )
     max_lenght_rn <- max(nchar(x1[,1], type='width'))
 

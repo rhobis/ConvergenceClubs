@@ -177,7 +177,6 @@ findClubs<- function(X, #data matrix or data.frame
             clubs$divergent$id <- dati$id
             break #break while loop if out of units
         }else if(nrow(dati) == 0){
-            clubs$divergent$message <- "there are no divergent units"
             break
         }
 

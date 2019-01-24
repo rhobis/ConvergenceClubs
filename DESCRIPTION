@@ -1,8 +1,8 @@
 Package: ConvergenceClubs
 Title: Finding Convergence Clubs
 Description: Functions for clustering regions that form convergence clubs, according to the definition of Phillips and Sul (2009) <doi:10.1002/jae.1080>.
-Version: 1.4.3
-Date: 2018-12-05
+Version: 1.4.4
+Date: 2018-01-24
 Authors@R: c(
     person("Roberto", "Sichera",, "roberto.sichera@unipa.it", c("aut", "cre", "cph")), 
     person("Pietro", "Pizzuto",, "pietro.pizzuto02@unipa.it", "aut")
