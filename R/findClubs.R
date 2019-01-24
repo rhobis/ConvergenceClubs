@@ -59,8 +59,8 @@
 #'        the condition \eqn{t_k >-1.65}{t(k) > -1.65}), the remaining units diverge.
 #'    }
 #'
-#' Note that Phillips and Sul (2007) suggest to make sure \eqn{t_k>-1.65} for the first club.
-#' Otherwise, repeat the procedure by increasing the value of the \eqn{c^*} parameter
+#' Note that Phillips and Sul (2007) suggest to make sure \eqn{t_k>-1.65}{t(k)>-1.65} for the first club.
+#' Otherwise, repeat the procedure by increasing the value of the \eqn{c^*}{c*} parameter
 #' until the condition \eqn{t_k>-1.65} is satisfied for the first club.
 #'
 #'
