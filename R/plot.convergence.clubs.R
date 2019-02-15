@@ -183,7 +183,7 @@ plot.convergence.clubs <- function(x,
     # lw    <- ifelse( !is.null(arguments$lwd), arguments$lwd, 2 )
     # lcol  <- ifelse( !is.null(arguments$col), arguments$col, "darkgrey" )
     # legend_cex <- ifelse( !is.null(arguments$cex), arguments$cex, 0.8 )
-    # legend_lab <- ifelse( identical(unit_names, NULL), "id", "unit_names")
+    legend_lab <- ifelse( identical(unit_names, NULL), "id", "unit_names")
 
     # default values
     default_plot   <- list(lty  = seq_len(num_clubs),
@@ -199,7 +199,7 @@ plot.convergence.clubs <- function(x,
     )
     default_legend   <- list(lty  = seq_len(num_clubs),
                              pch  = seq_len(num_clubs),
-                             cex  = 1,
+                             cex  = 0.8,
                              lwd  = 1,
                              horiz = FALSE,  # CONTROLLARE
                              max_length_labels = 15
@@ -325,10 +325,9 @@ plot.convergence.clubs <- function(x,
             plot(c(0,1),type="n", axes=F, xlab="", ylab="")
             graphics::legend("top",
                              legend = lgn_labs,
-                             col = legend_args[['col']],
                              lty = legend_args[['lty']],
                              cex = legend_args[['cex']],
-                             col = legend_args[['col']],
+                             col = plot_args[['col']],
                              horiz = legend_args[['horiz']],
                              bty = 'n'
             )
@@ -364,10 +363,9 @@ plot.convergence.clubs <- function(x,
             plot(c(0,1),type="n", axes=F, xlab="", ylab="")
             graphics::legend("top",
                              legend = clubs_labs,
-                             col = legend_args[['col']],
                              lty = legend_args[['lty']],
                              cex = legend_args[['cex']],
-                             col = legend_args[['col']],
+                             col = plot_args[['col']],
                              horiz = legend_args[['horiz']],
                              bty = 'n'
             )
