@@ -197,7 +197,8 @@ plot.convergence.clubs <- function(x,
                            col  = seq_len(num_clubs),
                            col_hline = 'black'
     )
-    default_legend   <- list(lty  = seq_len(num_clubs),
+    default_legend   <- list(
+        # lty  = seq_len(num_clubs),
                              pch  = seq_len(num_clubs),
                              cex  = 0.8,
                              lwd  = 1,
@@ -325,7 +326,8 @@ plot.convergence.clubs <- function(x,
             plot(c(0,1),type="n", axes=F, xlab="", ylab="")
             graphics::legend("top",
                              legend = lgn_labs,
-                             lty = legend_args[['lty']],
+                             # lty = legend_args[['lty']],
+                             lwd = legend_args[['lwd']],
                              cex = legend_args[['cex']],
                              col = plot_args[['col']],
                              horiz = legend_args[['horiz']],
@@ -363,7 +365,7 @@ plot.convergence.clubs <- function(x,
             plot(c(0,1),type="n", axes=F, xlab="", ylab="")
             graphics::legend("top",
                              legend = clubs_labs,
-                             lty = legend_args[['lty']],
+                             # lty = legend_args[['lty']],
                              cex = legend_args[['cex']],
                              col = plot_args[['col']],
                              horiz = legend_args[['horiz']],
