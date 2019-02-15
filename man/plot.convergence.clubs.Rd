@@ -7,10 +7,11 @@
 \method{plot}{convergence.clubs}(x, y = NULL, nrows = NULL,
   ncols = NULL, clubs, avgTP = TRUE, avgTP_clubs, y_fixed = FALSE,
   legend = FALSE, save = FALSE, filename, path, width = 7,
-  height = 7, device = c("pdf", "png", "jpeg"), res, ...)
+  height = 7, device = c("pdf", "png", "jpeg"), res, plot_args,
+  legend_args, ...)
 }
 \arguments{
-\item{x}{an x of class \code{convergence.clubs}.}
+\item{x}{an object of class \code{convergence.clubs}.}
 
 \item{y}{unused, added for compatibility with function \code{plot}}
 
@@ -50,6 +51,10 @@ one of "pdf", "png" or "jpeg".}
 
 \item{res}{the resolution of the image, in ppi; only used with \code{device="png"} and \code{device="jpeg"}}
 
+\item{plot_args}{optional; a named list with the graphical parameters for the plot, see Details section for more.}
+
+\item{legend_args}{optional; a named list with the graphical parameters for the legend, see Details section for more.}
+
 \item{...}{other parameters to pass to function \code{plot()}.}
 }
 \description{
@@ -61,14 +66,6 @@ average transition paths of those clubs.
 column number for the plot layout. Both or just one of them may be specified.
 If none of them is specified, the layout dimension is chosen automatically.
 
-Graphical parameters of the horizontal line plotted at y=1 may be modified by
-using the following regular plot parameters:
-\itemize{
-   \item \code{lty} defines the type of line, default is "solid"
-   \item \code{lwd} defines the width of the line, default is 2
-   \item \code{col} defines the color of the line, default is \code{"black"};
-       set it to \code{"white"} to remove the horizontal line.
-}
 
 If \code{legend=TRUE} and a column with units' names is available in the
 \code{x} object, those names are truncated to fit the plot's legend. The graphical

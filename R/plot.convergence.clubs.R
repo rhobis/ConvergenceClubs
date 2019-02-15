@@ -3,7 +3,7 @@
 #'Plot the transition paths of units in the convergence clubs and the
 #'average transition paths of those clubs.
 #'
-#'@param x an x of class \code{convergence.clubs}.
+#'@param x an object of class \code{convergence.clubs}.
 #'@param y unused, added for compatibility with function \code{plot}
 #'@param nrows number of rows of the graphical layout, if NULL, it is automatically defined
 #'@param ncols number of columns of the graphical layout, if NULL, it is automatically defined
@@ -27,7 +27,24 @@
 #'@param device string indicating the format to be used to save the plot;
 #'    one of "pdf", "png" or "jpeg".
 #'@param res the resolution of the image, in ppi; only used with \code{device="png"} and \code{device="jpeg"}
+#'
+#'
+#'
 #'@param ... other parameters to pass to function \code{plot()}.
+#'
+#'@param plot_args optional; a named list with the graphical parameters for the plot, see Details section for more.
+#'@param legend_args optional; a named list with the graphical parameters for the legend, see Details section for more.
+#'
+#'
+#'
+#'
+#'
+#'
+#'
+#'
+#'
+#'
+#'
 #'
 #'
 #'@details
@@ -35,14 +52,14 @@
 #'column number for the plot layout. Both or just one of them may be specified.
 #'If none of them is specified, the layout dimension is chosen automatically.
 #'
-#'Graphical parameters of the horizontal line plotted at y=1 may be modified by
-#'using the following regular plot parameters:
-#'\itemize{
-#'    \item \code{lty} defines the type of line, default is "solid"
-#'    \item \code{lwd} defines the width of the line, default is 2
-#'    \item \code{col} defines the color of the line, default is \code{"black"};
-#'        set it to \code{"white"} to remove the horizontal line.
-#'}
+# Graphical parameters of the horizontal line plotted at y=1 may be modified by
+# using the following regular plot parameters:
+# \itemize{
+#    \item \code{lty} defines the type of line, default is "solid"
+#    \item \code{lwd} defines the width of the line, default is 2
+#    \item \code{col} defines the color of the line, default is \code{"black"};
+#        set it to \code{"white"} to remove the horizontal line.
+# }
 #'
 #'If \code{legend=TRUE} and a column with units' names is available in the
 #'\code{x} object, those names are truncated to fit the plot's legend. The graphical
@@ -105,7 +122,10 @@ plot.convergence.clubs <- function(x,
                                    height = 7,
                                    device = c("pdf", "png", "jpeg"),
                                    res,
-                                   ...){
+                                   plot_args,
+                                   legend_args,
+                                   ...
+){
 
     ### Check input and initialise values ---
 
@@ -156,13 +176,56 @@ plot.convergence.clubs <- function(x,
     } else data <- attributes(x)$data[, -unit_names]
 
 
-    #graphical parameters
-    arguments <- list(...)
-    ltype <- ifelse( !is.null(arguments$lty), arguments$lty, "solid" )
-    lw    <- ifelse( !is.null(arguments$lwd), arguments$lwd, 2 )
-    lcol  <- ifelse( !is.null(arguments$col), arguments$col, "darkgrey" )
-    legend_cex <- ifelse( !is.null(arguments$cex), arguments$cex, 0.8 )
-    legend_lab <- ifelse( identical(unit_names, NULL), "id", "unit_names")
+    ## graphical parameters
+
+    # arguments <- list(...)
+    # ltype <- ifelse( !is.null(arguments$lty), arguments$lty, "solid" )
+    # lw    <- ifelse( !is.null(arguments$lwd), arguments$lwd, 2 )
+    # lcol  <- ifelse( !is.null(arguments$col), arguments$col, "darkgrey" )
+    # legend_cex <- ifelse( !is.null(arguments$cex), arguments$cex, 0.8 )
+    # legend_lab <- ifelse( identical(unit_names, NULL), "id", "unit_names")
+
+    # default values
+    default_plot   <- list(lty  = seq_len(num_clubs),
+                           type = 'l',
+                           pch  = seq_len(num_clubs),
+                           cex  = 1,
+                           lwd  = 1,
+                           xlab = 'Time',
+                           ylab = 'Relative transition path',
+                           cex.lab = 1,
+                           col  = seq_len(num_clubs),
+                           col_hline = 'black'
+    )
+    default_legend   <- list(lty  = seq_len(num_clubs),
+                             pch  = seq_len(num_clubs),
+                             cex  = 1,
+                             lwd  = 1,
+                             horiz = FALSE,  # CONTROLLARE
+                             max_length_labels = 15
+    )
+
+    if(missing(plot_args)){
+        plot_args <- default_plot
+    } else {
+        for(par in names(default_plot)){
+            if(is.null(plot_args[[par]]))
+                plot_args[[par]] <- default_plot[[par]]
+        }
+    }
+    if(missing(legend_args)){
+        legend_args <- default_legend
+    } else {
+        for(par in names(default_legend)){
+            if(is.null(legend_args[[par]]))
+                legend_args[[par]] <- default_legend[[par]]
+        }
+    }
+
+
+
+
+
 
     ### Compute dimensions plot layout ---
     if( !is.null(nrows) & !is.null(ncols) ){
@@ -239,21 +302,35 @@ plot.convergence.clubs <- function(x,
     h <- computeH(data, quantity = "h")
     i <- 1
     while( i <= (prod(pm)-avgTP) & i <= (nplots-avgTP) ) {
-        graphics::matplot( t( h[ x[[ clubs[i] ]]$id, ] ), type='l',
-                           ylim = if(y_fixed){ c(min(h)-0.1, max(h)+0.1) } else NULL ,
-                           ylab="Relative transition path", main = paste("Club", clubs[i]))
-        graphics::abline(h=1, lty=ltype, lwd=lw, col=lcol)
+        graphics::matplot( t( h[ x[[ clubs[i] ]]$id, ] ),
+                           lty  = plot_args[['lty']],
+                           type = plot_args[['type']],
+                           pch  = plot_args[['pch']],
+                           cex  = plot_args[['cex']],
+                           lwd  = plot_args[['lwd']],
+                           xlab = plot_args[['xlab']],
+                           ylab = plot_args[['ylab']],
+                           cex.lab = plot_args[['cex.lab']],
+                           col  = plot_args[['col']],
+                           ylim = if(y_fixed){ c(min(h)-0.1, max(h)+0.1) } else NULL,
+                           main = paste("Club", clubs[i])
+        )
+        graphics::abline(h=1, lty=plot_args[['lty']], lwd=plot_args[['lwd']],
+                         col=plot_args[['col_hline']])
         if( legend ){
             par( mar=mar_lgn )
 
-            lgn_labs <- substr( x[[ clubs[i] ]][[ legend_lab ]], 1, 7)
+            lgn_labs <-
+                substr( x[[ clubs[i] ]][[ legend_lab ]], 1,legend_args[['max_length_labels']])
             plot(c(0,1),type="n", axes=F, xlab="", ylab="")
             graphics::legend("top",
-                             legend=lgn_labs,
-                             col=seq_along(lgn_labs),
-                             lty=seq_along(lgn_labs),
-                             cex=legend_cex,
-                             bty='n'
+                             legend = lgn_labs,
+                             col = legend_args[['col']],
+                             lty = legend_args[['lty']],
+                             cex = legend_args[['cex']],
+                             col = legend_args[['col']],
+                             horiz = legend_args[['horiz']],
+                             bty = 'n'
             )
             graphics::par( mar = mar_plt)
         }
@@ -266,20 +343,33 @@ plot.convergence.clubs <- function(x,
             atpm[i,] <- colMeans(h[ x[[ avgTP_clubs[i] ]]$id, ])
         }
 
-        graphics::matplot( t( atpm ), type='l',
+        graphics::matplot( t( atpm ),
                            ylim = if(y_fixed){ c(min(h)-0.1, max(h)+0.1) } else NULL ,
-                           ylab="Relative transition path", main = "Average transition paths - All clubs" )
-        graphics::abline(h=1, lty = ltype, lwd=lw, col=lcol)
+                           main = "Average transition paths - All clubs",
+                           lty  = plot_args[['lty']],
+                           type = plot_args[['type']],
+                           pch  = plot_args[['pch']],
+                           cex  = plot_args[['cex']],
+                           lwd  = plot_args[['lwd']],
+                           xlab = plot_args[['xlab']],
+                           ylab = plot_args[['ylab']],
+                           cex.lab = plot_args[['cex.lab']],
+                           col  = plot_args[['col']]
+        )
+        graphics::abline(h=1, lty = plot_args[['lty']],
+                         lwd = plot_args[['lwd']], col=plot_args[['col_hline']])
         if( legend ){
             clubs_labs <- paste0('club', avgTP_clubs)
             graphics::par( mar=mar_lgn )
             plot(c(0,1),type="n", axes=F, xlab="", ylab="")
             graphics::legend("top",
-                             legend=clubs_labs,
-                             col=seq_along(clubs_labs),
-                             lty=seq_along(clubs_labs),
-                             cex=legend_cex,
-                             bty='n'
+                             legend = clubs_labs,
+                             col = legend_args[['col']],
+                             lty = legend_args[['lty']],
+                             cex = legend_args[['cex']],
+                             col = legend_args[['col']],
+                             horiz = legend_args[['horiz']],
+                             bty = 'n'
             )
             graphics::par( mar=default_mar)
         }
