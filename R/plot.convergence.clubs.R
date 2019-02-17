@@ -100,7 +100,7 @@
 #'@export
 #'
 #'@importFrom grDevices n2mfrow pdf png jpeg dev.off
-#'@importFrom graphics par plot matplot abline layout legend
+#'@importFrom graphics par plot matplot abline layout legend strwidth strheight
 #'
 
 
@@ -138,11 +138,13 @@ plot.convergence.clubs <- function(x,
     if( !is.logical(save) ) save <- FALSE
     if( !is.logical(avgTP) ) avgTP <- TRUE
 
-    if( missing(path) ) path <- getwd()
-    if( !file.exists(path) ) path <- dir.create(path, recursive=TRUE)
-    if( any( !is.numeric(width), !is.numeric(height) ) ) stop("width and height must be numeric scalars!")
-    if( !all( width>0, height>0) ) stop("width and height must be positive scalars!")
-    device <- match.arg(device)
+    if(save){
+        if( missing(path) ) path <- getwd()
+        if( !file.exists(path) ) path <- dir.create(path, recursive=TRUE)
+        if( any( !is.numeric(width), !is.numeric(height) ) ) stop("width and height must be numeric scalars!")
+        if( !all( width>0, height>0) ) stop("width and height must be positive scalars!")
+        device <- match.arg(device)
+    }
 
     num_clubs <- dim(x)[1]
     if( missing(clubs)  ){
@@ -170,10 +172,7 @@ plot.convergence.clubs <- function(x,
     divergent <- !is.null( x$divergent )
     nplots <- length(clubs) + (avgTP)  # one plot per club plus the club averages (if avgTP is TRUE)
 
-    unit_names <- attributes(x)$unit_names
-    if( identical( unit_names, NULL) ){
-        data <- attributes(x)$data
-    } else data <- attributes(x)$data[, -unit_names]
+    data <- attributes(x)$data[,attributes(x)$dataCols]
 
 
     ## graphical parameters
@@ -183,12 +182,12 @@ plot.convergence.clubs <- function(x,
     # lw    <- ifelse( !is.null(arguments$lwd), arguments$lwd, 2 )
     # lcol  <- ifelse( !is.null(arguments$col), arguments$col, "darkgrey" )
     # legend_cex <- ifelse( !is.null(arguments$cex), arguments$cex, 0.8 )
-    legend_lab <- ifelse( identical(unit_names, NULL), "id", "unit_names")
+
 
     # default values
-    default_plot   <- list(lty  = seq_len(num_clubs),
+    default_plot   <- list(lty  = seq_len(6),
                            type = 'l',
-                           pch  = seq_len(num_clubs),
+                           pch  = seq(15,25,1),
                            cex  = 1,
                            lwd  = 1,
                            xlab = 'Time',
@@ -197,15 +196,6 @@ plot.convergence.clubs <- function(x,
                            col  = seq_len(num_clubs),
                            col_hline = 'black'
     )
-    default_legend   <- list(
-        # lty  = seq_len(num_clubs),
-                             pch  = seq_len(num_clubs),
-                             cex  = 0.8,
-                             lwd  = 1,
-                             horiz = FALSE,  # CONTROLLARE
-                             max_length_labels = 15
-    )
-
     if(missing(plot_args)){
         plot_args <- default_plot
     } else {
@@ -214,18 +204,29 @@ plot.convergence.clubs <- function(x,
                 plot_args[[par]] <- default_plot[[par]]
         }
     }
-    if(missing(legend_args)){
-        legend_args <- default_legend
-    } else {
-        for(par in names(default_legend)){
-            if(is.null(legend_args[[par]]))
-                legend_args[[par]] <- default_legend[[par]]
+    if( legend ){
+        default_legend   <- list(
+            # lty  = seq_len(num_clubs),
+            cex  = 0.8,
+            lwd  = 1,
+            # horiz = FALSE,
+            max_length_labels = 15
+        )
+
+        if(missing(legend_args)){
+            legend_args <- default_legend
+        } else {
+            for(par in names(default_legend)){
+                if(is.null(legend_args[[par]]))
+                    legend_args[[par]] <- default_legend[[par]]
+            }
         }
+
+        unit_names <- attributes(x)$unit_names
+        legend_lab <- ifelse( is.null(unit_names), "id", "unit_names")
+        labs <- if(is.null(unit_names)) seq_len(nrow(data)) else attributes(x)$data[,unit_names]
+
     }
-
-
-
-
 
 
     ### Compute dimensions plot layout ---
@@ -293,8 +294,21 @@ plot.convergence.clubs <- function(x,
         mar_plt <- default_mar; mar_plt[4] <- 0.2  #No margin on the right side of the plot
         mar_lgn <- default_mar; mar_lgn[2] <- 0.2  #No margin on the left side of the legend
 
+        plot(seq_len(ncol(data)),type="n", axes=F, xlab="", ylab="")
+        lgn_width <- max(strwidth( substr(labs, 1, legend_args[['max_length_labels']]), units='inches'))
+        plt_width <- graphics::par()$pin[1]
+
+        # invisible(capture.output(smry_table <- summary(x)))
+        # lngst_lgn <- which.max(smry_table[clubs,'# of units'])
+        # txt_lgn <- paste0( x[[ clubs[lngst_lgn] ]][[legend_lab]], collapse='\n ')
+        # plt_height <- strheight(txt_lgn, units = 'inches')
+
+
         graphics::layout( matrix(seq_len(2*prod(pm)), nrow=pm[1], byrow=TRUE),
-                          width= rep(c(4,1), prod(pm)) )
+                          widths = rep(c(plt_width, lgn_width+0.5), pm[2])
+                          # height = rep(plt_height, pm[1])
+                          )
+
 
         graphics::par( mar = mar_plt)
     }
@@ -318,26 +332,32 @@ plot.convergence.clubs <- function(x,
         )
         graphics::abline(h=1, lty=plot_args[['lty']], lwd=plot_args[['lwd']],
                          col=plot_args[['col_hline']])
+
         if( legend ){
             par( mar=mar_lgn )
-
             lgn_labs <-
                 substr( x[[ clubs[i] ]][[ legend_lab ]], 1,legend_args[['max_length_labels']])
+
             plot(c(0,1),type="n", axes=F, xlab="", ylab="")
             graphics::legend("top",
+                             bty = 'n',
                              legend = lgn_labs,
-                             # lty = legend_args[['lty']],
                              lwd = legend_args[['lwd']],
                              cex = legend_args[['cex']],
+                             # horiz = legend_args[['horiz']],
+                             lty = plot_args[['lty']],
+                             pch = plot_args[['pch']],
                              col = plot_args[['col']],
-                             horiz = legend_args[['horiz']],
-                             bty = 'n'
+                             seg.len = 1,
+                             xjust = 1,
+                             x.intersp=0.5,
+                             y.intersp = 0.5
             )
             graphics::par( mar = mar_plt)
         }
-
         i <- i+1
     }
+
     if( avgTP ){
         atpm <- matrix(0, length(avgTP_clubs), ncol(data))
         for(i in seq_along(avgTP_clubs) ){
@@ -364,12 +384,18 @@ plot.convergence.clubs <- function(x,
             graphics::par( mar=mar_lgn )
             plot(c(0,1),type="n", axes=F, xlab="", ylab="")
             graphics::legend("top",
+                             bty = 'n',
                              legend = clubs_labs,
-                             # lty = legend_args[['lty']],
+                             lwd = legend_args[['lwd']],
                              cex = legend_args[['cex']],
+                             # horiz = legend_args[['horiz']],
+                             lty = plot_args[['lty']],
+                             pch = plot_args[['pch']],
                              col = plot_args[['col']],
-                             horiz = legend_args[['horiz']],
-                             bty = 'n'
+                             seg.len = 1,
+                             xjust = 1,
+                             x.intersp=0.5,
+                             y.intersp = 0.5
             )
             graphics::par( mar=default_mar)
         }
