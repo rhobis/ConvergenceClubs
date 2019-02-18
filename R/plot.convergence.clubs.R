@@ -193,7 +193,7 @@ plot.convergence.clubs <- function(x,
                            xlab = 'Time',
                            ylab = 'Relative transition path',
                            cex.lab = 1,
-                           col  = seq_len(num_clubs),
+                           col  = seq(1,655,5),
                            col_hline = 'black'
     )
     if(missing(plot_args)){
