@@ -209,7 +209,7 @@ plot.convergence.clubs <- function(x,
             # lty  = seq_len(num_clubs),
             cex  = 0.8,
             lwd  = 1,
-            # horiz = FALSE,
+            y.intersp = 1,
             max_length_labels = 15
         )
 
@@ -294,7 +294,7 @@ plot.convergence.clubs <- function(x,
         mar_plt <- default_mar; mar_plt[4] <- 0.2  #No margin on the right side of the plot
         mar_lgn <- default_mar; mar_lgn[2] <- 0.2  #No margin on the left side of the legend
 
-        plot(seq_len(ncol(data)),type="n", axes=F, xlab="", ylab="")
+        for(i in 1) plot(seq_len(ncol(data)),type="n", axes=F, xlab="", ylab="")
         lgn_width <- max(strwidth( substr(labs, 1, legend_args[['max_length_labels']]), units='inches'))
         plt_width <- graphics::par()$pin[1]
 
@@ -351,7 +351,7 @@ plot.convergence.clubs <- function(x,
                              seg.len = 1,
                              xjust = 1,
                              x.intersp=0.5,
-                             y.intersp = 0.5
+                             y.intersp = legend_args[['y.intersp']]
             )
             graphics::par( mar = mar_plt)
         }
@@ -395,7 +395,7 @@ plot.convergence.clubs <- function(x,
                              seg.len = 1,
                              xjust = 1,
                              x.intersp=0.5,
-                             y.intersp = 0.5
+                             y.intersp = legend_args[['y.intersp']]
             )
             graphics::par( mar=default_mar)
         }
