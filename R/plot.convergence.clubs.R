@@ -294,7 +294,7 @@ plot.convergence.clubs <- function(x,
         mar_plt <- default_mar; mar_plt[4] <- 0.2  #No margin on the right side of the plot
         mar_lgn <- default_mar; mar_lgn[2] <- 0.2  #No margin on the left side of the legend
 
-        for(i in 1) plot(seq_len(ncol(data)),type="n", axes=F, xlab="", ylab="")
+        # plot(seq_len(ncol(data)),type="n", axes=F, xlab="", ylab="")
         lgn_width <- max(strwidth( substr(labs, 1, legend_args[['max_length_labels']]), units='inches'))
         plt_width <- graphics::par()$pin[1]
 
