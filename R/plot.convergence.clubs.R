@@ -99,8 +99,8 @@
 #'
 #'@export
 #'
-#'@importFrom grDevices n2mfrow pdf png jpeg dev.off
-#'@importFrom graphics par plot matplot abline layout legend strwidth strheight
+#'@importFrom grDevices n2mfrow pdf png jpeg dev.off dev.flush dev.hold
+#'@importFrom graphics par plot matplot abline layout legend strwidth strheight axis
 #'
 
 
@@ -176,12 +176,7 @@ plot.convergence.clubs <- function(x,
 
 
     ## graphical parameters
-
-    # arguments <- list(...)
-    # ltype <- ifelse( !is.null(arguments$lty), arguments$lty, "solid" )
-    # lw    <- ifelse( !is.null(arguments$lwd), arguments$lwd, 2 )
-    # lcol  <- ifelse( !is.null(arguments$col), arguments$col, "darkgrey" )
-    # legend_cex <- ifelse( !is.null(arguments$cex), arguments$cex, 0.8 )
+    def.par <- par(no.readonly = TRUE)
 
 
     # default values
@@ -194,7 +189,10 @@ plot.convergence.clubs <- function(x,
                            ylab = 'Relative transition path',
                            cex.lab = 1,
                            col  = seq(1,655,5),
-                           col_hline = 'black'
+                           col_hline = 'black',
+                           xmarks = axis_marks(ncol(data)), #vector with tic marks for the x axis
+                           xlabs = NULL, #vector with labels of marks for the x axis
+                           xlabs_dir = 0 #0 for horizontal labels, 2 for perpendicular
     )
     if(missing(plot_args)){
         plot_args <- default_plot
@@ -206,8 +204,7 @@ plot.convergence.clubs <- function(x,
     }
     if( legend ){
         default_legend   <- list(
-            # lty  = seq_len(num_clubs),
-            cex  = 0.8,
+            cex  = 0.9,
             lwd  = 1,
             y.intersp = 1,
             max_length_labels = 15
@@ -252,6 +249,9 @@ plot.convergence.clubs <- function(x,
     }else  pm <- grDevices::n2mfrow(nplots)
 
 
+    grDevices::dev.hold()
+    on.exit(grDevices::dev.flush())
+
     ### Generate/save plots  ---
     if( save ){
 
@@ -285,29 +285,23 @@ plot.convergence.clubs <- function(x,
         }
     }
 
-    def.par <- par(no.readonly = TRUE)
+
     graphics::par( mfrow=pm )
 
     if( legend ){
-        default_mar <- graphics::par()$mar
 
-        mar_plt <- default_mar; mar_plt[4] <- 0.2  #No margin on the right side of the plot
-        mar_lgn <- default_mar; mar_lgn[2] <- 0.2  #No margin on the left side of the legend
+        mar_plt <- def.par$mar; mar_plt[4] <- 0.2  #No margin on the right side of the plot
+        mar_lgn <- def.par$mar; mar_lgn[2] <- 0.2  #No margin on the left side of the legend
 
         # plot(seq_len(ncol(data)),type="n", axes=F, xlab="", ylab="")
         lgn_width <- max(strwidth( substr(labs, 1, legend_args[['max_length_labels']]), units='inches'))
-        plt_width <- graphics::par()$pin[1]
-
-        # invisible(capture.output(smry_table <- summary(x)))
-        # lngst_lgn <- which.max(smry_table[clubs,'# of units'])
-        # txt_lgn <- paste0( x[[ clubs[lngst_lgn] ]][[legend_lab]], collapse='\n ')
-        # plt_height <- strheight(txt_lgn, units = 'inches')
+        plt_width <- def.par$pin[1]
 
 
         graphics::layout( matrix(seq_len(2*prod(pm)), nrow=pm[1], byrow=TRUE),
                           widths = rep(c(plt_width, lgn_width+0.5), pm[2])
                           # height = rep(plt_height, pm[1])
-                          )
+        )
 
 
         graphics::par( mar = mar_plt)
@@ -328,8 +322,13 @@ plot.convergence.clubs <- function(x,
                            cex.lab = plot_args[['cex.lab']],
                            col  = plot_args[['col']],
                            ylim = if(y_fixed){ c(min(h)-0.1, max(h)+0.1) } else NULL,
-                           main = paste("Club", clubs[i])
+                           main = paste("Club", clubs[i]),
+                           xaxt = 'n'
         )
+        graphics::axis(1, at = plot_args[['xmarks']],
+             labels = if(is.null(plot_args[['xmarks']])) plot_args[['xmarks']] else plot_args[['xlabs']],
+             las = plot_args[['xlabs_dir']])
+
         graphics::abline(h=1, lty=plot_args[['lty']], lwd=plot_args[['lwd']],
                          col=plot_args[['col_hline']])
 
@@ -375,10 +374,16 @@ plot.convergence.clubs <- function(x,
                            xlab = plot_args[['xlab']],
                            ylab = plot_args[['ylab']],
                            cex.lab = plot_args[['cex.lab']],
-                           col  = plot_args[['col']]
+                           col  = plot_args[['col']],
+                           xaxt = 'n'
         )
+        graphics::axis(1, at = plot_args[['xmarks']],
+             labels = if(is.null(plot_args[['xmarks']])) plot_args[['xmarks']] else plot_args[['xlabs']],
+             las = plot_args[['xlabs_dir']])
+
         graphics::abline(h=1, lty = plot_args[['lty']],
                          lwd = plot_args[['lwd']], col=plot_args[['col_hline']])
+
         if( legend ){
             clubs_labs <- paste0('club', avgTP_clubs)
             graphics::par( mar=mar_lgn )
@@ -397,7 +402,7 @@ plot.convergence.clubs <- function(x,
                              x.intersp=0.5,
                              y.intersp = legend_args[['y.intersp']]
             )
-            graphics::par( mar=default_mar)
+            graphics::par( mar=def.par$mar )
         }
     }
     par(def.par)
