@@ -3,7 +3,7 @@
 #'Plot the transition paths of units in the convergence clubs and the
 #'average transition paths of those clubs.
 #'
-#'@param x an x of class \code{convergence.clubs}.
+#'@param x an object of class \code{convergence.clubs}.
 #'@param y unused, added for compatibility with function \code{plot}
 #'@param nrows number of rows of the graphical layout, if NULL, it is automatically defined
 #'@param ncols number of columns of the graphical layout, if NULL, it is automatically defined
@@ -150,10 +150,9 @@ plot.convergence.clubs <- function(x,
     divergent <- !is.null( x$divergent )
     nplots <- length(clubs) + (avgTP)  # one plot per club plus the club averages (if avgTP is TRUE)
 
+    dataCols <- attributes(x)$dataCols
     unit_names <- attributes(x)$unit_names
-    if( identical( unit_names, NULL) ){
-        data <- attributes(x)$data
-    } else data <- attributes(x)$data[, -unit_names]
+    data <- attributes(x)$data[, dataCols]
 
 
     #graphical parameters
