@@ -27,16 +27,11 @@
 #'@param device string indicating the format to be used to save the plot;
 #'    one of "pdf", "png" or "jpeg".
 #'@param res the resolution of the image, in ppi; only used with \code{device="png"} and \code{device="jpeg"}
-#'
-#'
-#'
-#'@param ... other parameters to pass to function \code{plot()}.
-#'
 #'@param plot_args optional; a named list with the graphical parameters for the plot, see Details section for more.
 #'@param legend_args optional; a named list with the graphical parameters for the legend, see Details section for more.
 #'@param breaks optional; a numeric vector indicating the columns to be plotted,
 #' the default is to plot all columns.
-#'
+#'@param ... other parameters to pass to function \code{plot()}.
 #'
 #'
 #'
