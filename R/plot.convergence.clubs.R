@@ -169,7 +169,7 @@ plot.convergence.clubs <- function(x,
         stop("Invalid value for argument clubs! The total number of clubs is ",
              num_clubs, ", please be sure to include values within 1 and ", num_clubs )
 
-    divergent <- !is.null( x$divergent )
+    # divergent <- !is.null( x$divergent )
     nplots <- length(clubs) + (avgTP)  # one plot per club plus the club averages (if avgTP is TRUE)
 
     data <- attributes(x)$data[,attributes(x)$dataCols]
