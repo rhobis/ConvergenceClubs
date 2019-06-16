@@ -125,7 +125,7 @@ plot.convergence.clubs <- function(x,
                                    res,
                                    plot_args,
                                    legend_args,
-                                   breaks
+                                   breaks,
                                    ...
 ){
 
