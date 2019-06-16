@@ -8,7 +8,7 @@
   ncols = NULL, clubs, avgTP = TRUE, avgTP_clubs, y_fixed = FALSE,
   legend = FALSE, save = FALSE, filename, path, width = 7,
   height = 7, device = c("pdf", "png", "jpeg"), res, plot_args,
-  legend_args, ...)
+  legend_args, breaks, ...)
 }
 \arguments{
 \item{x}{an object of class \code{convergence.clubs}.}
@@ -54,6 +54,9 @@ one of "pdf", "png" or "jpeg".}
 \item{plot_args}{optional; a named list with the graphical parameters for the plot, see Details section for more.}
 
 \item{legend_args}{optional; a named list with the graphical parameters for the legend, see Details section for more.}
+
+\item{breaks}{optional; a numeric vector indicating the columns to be plotted,
+the default is to plot all columns.}
 
 \item{...}{other parameters to pass to function \code{plot()}.}
 }

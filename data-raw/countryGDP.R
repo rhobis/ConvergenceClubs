@@ -1,4 +1,4 @@
-library(mFilter) #for function hpfilter
+# library(mFilter) #for function hpfilter
 
 dat <- read.csv2("data-raw/countryGDP.csv", dec='.', header=T, stringsAsFactors = FALSE)
 head(dat)
