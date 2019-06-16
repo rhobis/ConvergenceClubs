@@ -34,7 +34,8 @@
 #'
 #'@param plot_args optional; a named list with the graphical parameters for the plot, see Details section for more.
 #'@param legend_args optional; a named list with the graphical parameters for the legend, see Details section for more.
-#'
+#'@param breaks optional; a numeric vector indicating the columns to be plotted,
+#' the default is to plot all columns.
 #'
 #'
 #'
@@ -124,10 +125,11 @@ plot.convergence.clubs <- function(x,
                                    res,
                                    plot_args,
                                    legend_args,
+                                   breaks
                                    ...
 ){
 
-    ### Check input and initialise values ---
+    ### Check input and initialise values ----
 
     if( any( !is.null(nrows) & !is.numeric(nrows),
              !is.null(ncols) & !is.numeric(ncols) ) )
@@ -169,9 +171,10 @@ plot.convergence.clubs <- function(x,
         stop("Invalid value for argument clubs! The total number of clubs is ",
              num_clubs, ", please be sure to include values within 1 and ", num_clubs )
 
+
+
     # divergent <- !is.null( x$divergent )
     nplots <- length(clubs) + (avgTP)  # one plot per club plus the club averages (if avgTP is TRUE)
-
     data <- attributes(x)$data[,attributes(x)$dataCols]
 
 
@@ -226,7 +229,25 @@ plot.convergence.clubs <- function(x,
     }
 
 
-    ### Compute dimensions plot layout ---
+    #breaks
+    if(missing(breaks)){
+        breaks <- seq_len(ncol(data))
+    }else if(is.null(breaks)){
+        breaks <- seq_len(ncol(data))
+    }else if(!is.numeric(breaks)){
+        breaks <- seq_len(ncol(data))
+        message('The breaks argument supplied is not numeric, it will be ignored!')
+    }else{
+        breaks  <- as.integer(breaks)
+        outside <- any(breaks<1) | any(breaks>ncol(data))
+        breaks  <- breaks[breaks>0 & breaks<=ncol(data)]
+        if(outside){
+            message('There were breaks values outside the admissible range, they have been removed!')
+        }
+    }
+
+
+    ### Compute dimensions plot layout ----
     if( !is.null(nrows) & !is.null(ncols) ){
 
         pm <- floor( c(nrows, ncols) )
@@ -247,10 +268,12 @@ plot.convergence.clubs <- function(x,
         pm <- c( ceiling(nplots/ncols), ncols )
 
     }else  pm <- grDevices::n2mfrow(nplots)
-
++
 
     grDevices::dev.hold()
     on.exit(grDevices::dev.flush())
+
+
 
     ### Generate/save plots  ---
     if( save ){
@@ -311,7 +334,7 @@ plot.convergence.clubs <- function(x,
     h <- computeH(data, quantity = "h")
     i <- 1
     while( i <= (prod(pm)-avgTP) & i <= (nplots-avgTP) ) {
-        graphics::matplot( t( h[ x[[ clubs[i] ]]$id, ] ),
+        graphics::matplot( t( h[ x[[ clubs[i] ]]$id, breaks ] ),
                            lty  = plot_args[['lty']],
                            type = plot_args[['type']],
                            pch  = plot_args[['pch']],
@@ -363,7 +386,7 @@ plot.convergence.clubs <- function(x,
             atpm[i,] <- colMeans(h[ x[[ avgTP_clubs[i] ]]$id, ])
         }
 
-        graphics::matplot( t( atpm ),
+        graphics::matplot( t( atpm[,breaks] ),
                            ylim = if(y_fixed){ c(min(h)-0.1, max(h)+0.1) } else NULL ,
                            main = "Average transition paths - All clubs",
                            lty  = plot_args[['lty']],
