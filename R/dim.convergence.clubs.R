@@ -7,7 +7,7 @@
 #'
 #'
 #'@return an integer vector with two values: the first one indicates the number of
-#'clubs, the second one the number of divergent units
+#'clubs, the second one indicates the number of divergent units
 #'
 #'
 #'@export

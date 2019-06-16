@@ -10,7 +10,7 @@
   height = 7, device = c("pdf", "png", "jpeg"), res, ...)
 }
 \arguments{
-\item{x}{an x of class \code{convergence.clubs}.}
+\item{x}{an object of class \code{convergence.clubs}.}
 
 \item{y}{unused, added for compatibility with function \code{plot}}
 
