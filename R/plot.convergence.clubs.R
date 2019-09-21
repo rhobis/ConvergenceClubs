@@ -27,7 +27,20 @@
 #'@param device string indicating the format to be used to save the plot;
 #'    one of "pdf", "png" or "jpeg".
 #'@param res the resolution of the image, in ppi; only used with \code{device="png"} and \code{device="jpeg"}
+#'@param plot_args optional; a named list with the graphical parameters for the plot, see Details section for more.
+#'@param legend_args optional; a named list with the graphical parameters for the legend, see Details section for more.
+#'@param breaks optional; a numeric vector indicating the columns to be plotted,
+#' the default is to plot all columns.
 #'@param ... other parameters to pass to function \code{plot()}.
+#'
+#'
+#'
+#'
+#'
+#'
+#'
+#'
+#'
 #'
 #'
 #'@details
@@ -35,14 +48,14 @@
 #'column number for the plot layout. Both or just one of them may be specified.
 #'If none of them is specified, the layout dimension is chosen automatically.
 #'
-#'Graphical parameters of the horizontal line plotted at y=1 may be modified by
-#'using the following regular plot parameters:
-#'\itemize{
-#'    \item \code{lty} defines the type of line, default is "solid"
-#'    \item \code{lwd} defines the width of the line, default is 2
-#'    \item \code{col} defines the color of the line, default is \code{"black"};
-#'        set it to \code{"white"} to remove the horizontal line.
-#'}
+# Graphical parameters of the horizontal line plotted at y=1 may be modified by
+# using the following regular plot parameters:
+# \itemize{
+#    \item \code{lty} defines the type of line, default is "solid"
+#    \item \code{lwd} defines the width of the line, default is 2
+#    \item \code{col} defines the color of the line, default is \code{"black"};
+#        set it to \code{"white"} to remove the horizontal line.
+# }
 #'
 #'If \code{legend=TRUE} and a column with units' names is available in the
 #'\code{x} object, those names are truncated to fit the plot's legend. The graphical
@@ -82,8 +95,8 @@
 #'
 #'@export
 #'
-#'@importFrom grDevices n2mfrow pdf png jpeg dev.off
-#'@importFrom graphics par plot matplot abline layout legend
+#'@importFrom grDevices n2mfrow pdf png jpeg dev.off dev.flush dev.hold
+#'@importFrom graphics par plot matplot abline layout legend strwidth strheight axis
 #'
 
 
@@ -105,9 +118,13 @@ plot.convergence.clubs <- function(x,
                                    height = 7,
                                    device = c("pdf", "png", "jpeg"),
                                    res,
-                                   ...){
+                                   plot_args,
+                                   legend_args,
+                                   breaks,
+                                   ...
+){
 
-    ### Check input and initialise values ---
+    ### Check input and initialise values ----
 
     if( any( !is.null(nrows) & !is.numeric(nrows),
              !is.null(ncols) & !is.numeric(ncols) ) )
@@ -118,11 +135,13 @@ plot.convergence.clubs <- function(x,
     if( !is.logical(save) ) save <- FALSE
     if( !is.logical(avgTP) ) avgTP <- TRUE
 
-    if( missing(path) ) path <- getwd()
-    if( !file.exists(path) ) path <- dir.create(path, recursive=TRUE)
-    if( any( !is.numeric(width), !is.numeric(height) ) ) stop("width and height must be numeric scalars!")
-    if( !all( width>0, height>0) ) stop("width and height must be positive scalars!")
-    device <- match.arg(device)
+    if(save){
+        if( missing(path) ) path <- getwd()
+        if( !file.exists(path) ) path <- dir.create(path, recursive=TRUE)
+        if( any( !is.numeric(width), !is.numeric(height) ) ) stop("width and height must be numeric scalars!")
+        if( !all( width>0, height>0) ) stop("width and height must be positive scalars!")
+        device <- match.arg(device)
+    }
 
     num_clubs <- dim(x)[1]
     if( missing(clubs)  ){
@@ -147,23 +166,83 @@ plot.convergence.clubs <- function(x,
         stop("Invalid value for argument clubs! The total number of clubs is ",
              num_clubs, ", please be sure to include values within 1 and ", num_clubs )
 
-    divergent <- !is.null( x$divergent )
+
+
+    # divergent <- !is.null( x$divergent )
     nplots <- length(clubs) + (avgTP)  # one plot per club plus the club averages (if avgTP is TRUE)
-
-    dataCols <- attributes(x)$dataCols
-    unit_names <- attributes(x)$unit_names
-    data <- attributes(x)$data[, dataCols]
+    data <- attributes(x)$data[,attributes(x)$dataCols]
 
 
-    #graphical parameters
-    arguments <- list(...)
-    ltype <- ifelse( !is.null(arguments$lty), arguments$lty, "solid" )
-    lw    <- ifelse( !is.null(arguments$lwd), arguments$lwd, 2 )
-    lcol  <- ifelse( !is.null(arguments$col), arguments$col, "darkgrey" )
-    legend_cex <- ifelse( !is.null(arguments$cex), arguments$cex, 0.8 )
-    legend_lab <- ifelse( identical(unit_names, NULL), "id", "unit_names")
+    ## graphical parameters
+    def.par <- par(no.readonly = TRUE)
 
-    ### Compute dimensions plot layout ---
+
+    # default values
+    default_plot   <- list(lty  = seq_len(6),
+                           type = 'l',
+                           pch  = seq(15,25,1),
+                           cex  = 1,
+                           lwd  = 1,
+                           xlab = 'Time',
+                           ylab = 'Relative transition path',
+                           cex.lab = 1,
+                           col  = seq(1,655,5),
+                           col_hline = 'black',
+                           xmarks = axis_marks(ncol(data)), #vector with tic marks for the x axis
+                           xlabs = NULL, #vector with labels of marks for the x axis
+                           xlabs_dir = 0 #0 for horizontal labels, 2 for perpendicular
+    )
+    if(missing(plot_args)){
+        plot_args <- default_plot
+    } else {
+        for(par in names(default_plot)){
+            if(is.null(plot_args[[par]]))
+                plot_args[[par]] <- default_plot[[par]]
+        }
+    }
+    if( legend ){
+        default_legend   <- list(
+            cex  = 0.9,
+            lwd  = 1,
+            y.intersp = 1,
+            max_length_labels = 15
+        )
+
+        if(missing(legend_args)){
+            legend_args <- default_legend
+        } else {
+            for(par in names(default_legend)){
+                if(is.null(legend_args[[par]]))
+                    legend_args[[par]] <- default_legend[[par]]
+            }
+        }
+
+        unit_names <- attributes(x)$unit_names
+        legend_lab <- ifelse( is.null(unit_names), "id", "unit_names")
+        labs <- if(is.null(unit_names)) seq_len(nrow(data)) else attributes(x)$data[,unit_names]
+
+    }
+
+
+    #breaks
+    if(missing(breaks)){
+        breaks <- seq_len(ncol(data))
+    }else if(is.null(breaks)){
+        breaks <- seq_len(ncol(data))
+    }else if(!is.numeric(breaks)){
+        breaks <- seq_len(ncol(data))
+        message('The breaks argument supplied is not numeric, it will be ignored!')
+    }else{
+        breaks  <- as.integer(breaks)
+        outside <- any(breaks<1) | any(breaks>ncol(data))
+        breaks  <- breaks[breaks>0 & breaks<=ncol(data)]
+        if(outside){
+            message('There were breaks values outside the admissible range, they have been removed!')
+        }
+    }
+
+
+    ### Compute dimensions plot layout ----
     if( !is.null(nrows) & !is.null(ncols) ){
 
         pm <- floor( c(nrows, ncols) )
@@ -184,6 +263,11 @@ plot.convergence.clubs <- function(x,
         pm <- c( ceiling(nplots/ncols), ncols )
 
     }else  pm <- grDevices::n2mfrow(nplots)
++
+
+    grDevices::dev.hold()
+    on.exit(grDevices::dev.flush())
+
 
 
     ### Generate/save plots  ---
@@ -219,17 +303,24 @@ plot.convergence.clubs <- function(x,
         }
     }
 
-    def.par <- par(no.readonly = TRUE)
+
     graphics::par( mfrow=pm )
 
     if( legend ){
-        default_mar <- graphics::par()$mar
 
-        mar_plt <- default_mar; mar_plt[4] <- 0.2  #No margin on the right side of the plot
-        mar_lgn <- default_mar; mar_lgn[2] <- 0.2  #No margin on the left side of the legend
+        mar_plt <- def.par$mar; mar_plt[4] <- 0.2  #No margin on the right side of the plot
+        mar_lgn <- def.par$mar; mar_lgn[2] <- 0.2  #No margin on the left side of the legend
+
+        # plot(seq_len(ncol(data)),type="n", axes=F, xlab="", ylab="")
+        lgn_width <- max(strwidth( substr(labs, 1, legend_args[['max_length_labels']]), units='inches'))
+        plt_width <- def.par$pin[1]
+
 
         graphics::layout( matrix(seq_len(2*prod(pm)), nrow=pm[1], byrow=TRUE),
-                          width= rep(c(4,1), prod(pm)) )
+                          widths = rep(c(plt_width, lgn_width+0.5), pm[2])
+                          # height = rep(plt_height, pm[1])
+        )
+
 
         graphics::par( mar = mar_plt)
     }
@@ -238,49 +329,98 @@ plot.convergence.clubs <- function(x,
     h <- computeH(data, quantity = "h")
     i <- 1
     while( i <= (prod(pm)-avgTP) & i <= (nplots-avgTP) ) {
-        graphics::matplot( t( h[ x[[ clubs[i] ]]$id, ] ), type='l',
-                           ylim = if(y_fixed){ c(min(h)-0.1, max(h)+0.1) } else NULL ,
-                           ylab="Relative transition path", main = paste("Club", clubs[i]))
-        graphics::abline(h=1, lty=ltype, lwd=lw, col=lcol)
+        graphics::matplot( t( h[ x[[ clubs[i] ]]$id, breaks ] ),
+                           lty  = plot_args[['lty']],
+                           type = plot_args[['type']],
+                           pch  = plot_args[['pch']],
+                           cex  = plot_args[['cex']],
+                           lwd  = plot_args[['lwd']],
+                           xlab = plot_args[['xlab']],
+                           ylab = plot_args[['ylab']],
+                           cex.lab = plot_args[['cex.lab']],
+                           col  = plot_args[['col']],
+                           ylim = if(y_fixed){ c(min(h)-0.1, max(h)+0.1) } else NULL,
+                           main = paste("Club", clubs[i]),
+                           xaxt = 'n'
+        )
+        graphics::axis(1, at = plot_args[['xmarks']],
+             labels = if(is.null(plot_args[['xmarks']])) plot_args[['xmarks']] else plot_args[['xlabs']],
+             las = plot_args[['xlabs_dir']])
+
+        graphics::abline(h=1, lty=plot_args[['lty']], lwd=plot_args[['lwd']],
+                         col=plot_args[['col_hline']])
+
         if( legend ){
             par( mar=mar_lgn )
+            lgn_labs <-
+                substr( x[[ clubs[i] ]][[ legend_lab ]], 1,legend_args[['max_length_labels']])
 
-            lgn_labs <- substr( x[[ clubs[i] ]][[ legend_lab ]], 1, 7)
             plot(c(0,1),type="n", axes=F, xlab="", ylab="")
             graphics::legend("top",
-                             legend=lgn_labs,
-                             col=seq_along(lgn_labs),
-                             lty=seq_along(lgn_labs),
-                             cex=legend_cex,
-                             bty='n'
+                             bty = 'n',
+                             legend = lgn_labs,
+                             lwd = legend_args[['lwd']],
+                             cex = legend_args[['cex']],
+                             # horiz = legend_args[['horiz']],
+                             lty = plot_args[['lty']],
+                             pch = plot_args[['pch']],
+                             col = plot_args[['col']],
+                             seg.len = 1,
+                             xjust = 1,
+                             x.intersp=0.5,
+                             y.intersp = legend_args[['y.intersp']]
             )
             graphics::par( mar = mar_plt)
         }
-
         i <- i+1
     }
+
     if( avgTP ){
         atpm <- matrix(0, length(avgTP_clubs), ncol(data))
         for(i in seq_along(avgTP_clubs) ){
             atpm[i,] <- colMeans(h[ x[[ avgTP_clubs[i] ]]$id, ])
         }
 
-        graphics::matplot( t( atpm ), type='l',
+        graphics::matplot( t( atpm[,breaks] ),
                            ylim = if(y_fixed){ c(min(h)-0.1, max(h)+0.1) } else NULL ,
-                           ylab="Relative transition path", main = "Average transition paths - All clubs" )
-        graphics::abline(h=1, lty = ltype, lwd=lw, col=lcol)
+                           main = "Average transition paths - All clubs",
+                           lty  = plot_args[['lty']],
+                           type = plot_args[['type']],
+                           pch  = plot_args[['pch']],
+                           cex  = plot_args[['cex']],
+                           lwd  = plot_args[['lwd']],
+                           xlab = plot_args[['xlab']],
+                           ylab = plot_args[['ylab']],
+                           cex.lab = plot_args[['cex.lab']],
+                           col  = plot_args[['col']],
+                           xaxt = 'n'
+        )
+        graphics::axis(1, at = plot_args[['xmarks']],
+             labels = if(is.null(plot_args[['xmarks']])) plot_args[['xmarks']] else plot_args[['xlabs']],
+             las = plot_args[['xlabs_dir']])
+
+        graphics::abline(h=1, lty = plot_args[['lty']],
+                         lwd = plot_args[['lwd']], col=plot_args[['col_hline']])
+
         if( legend ){
             clubs_labs <- paste0('club', avgTP_clubs)
             graphics::par( mar=mar_lgn )
             plot(c(0,1),type="n", axes=F, xlab="", ylab="")
             graphics::legend("top",
-                             legend=clubs_labs,
-                             col=seq_along(clubs_labs),
-                             lty=seq_along(clubs_labs),
-                             cex=legend_cex,
-                             bty='n'
+                             bty = 'n',
+                             legend = clubs_labs,
+                             lwd = legend_args[['lwd']],
+                             cex = legend_args[['cex']],
+                             # horiz = legend_args[['horiz']],
+                             lty = plot_args[['lty']],
+                             pch = plot_args[['pch']],
+                             col = plot_args[['col']],
+                             seg.len = 1,
+                             xjust = 1,
+                             x.intersp=0.5,
+                             y.intersp = legend_args[['y.intersp']]
             )
-            graphics::par( mar=default_mar)
+            graphics::par( mar=def.par$mar )
         }
     }
     par(def.par)
