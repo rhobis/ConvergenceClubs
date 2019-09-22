@@ -91,9 +91,8 @@ summary(clubs)
 # Cluster Countries using GDP from year 1970 to year 2003
 clubs <- findClubs(filteredGDP,  dataCols=2:35, unit_names = 1, refCol=35,
                    time_trim = 1/3, HACmethod = "AQSB", cstar = 0)
-}
 
-\dontrun{
+
 # Cluster Countries using GDP from year 1970 to year 2003
 clubs <- findClubs(filteredGDP,  dataCols=2:35, unit_names = 1, refCol=35,
                    time_trim = 1/3, HACmethod = "AQSB",
