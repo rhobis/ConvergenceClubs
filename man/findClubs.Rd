@@ -32,6 +32,16 @@ The default method is "FQSB".}
 \item{cstar}{numeric scalar, indicating the threshold value of the sieve criterion \eqn{c^*}
 to include units in the detected core (primary) group (step 3 of Phillips and Sul (2007, 2009) clustering algorithm).
 The default value is 0.}
+
+\item{cstar_method}{a string specifying whether cstar should be mantained fixed
+(\code{cstar_method="fixed"}) or increased iteratively until the whole club satisfies
+the condition tvalue>-1.65 #' (\code{cstar_method="incremental"})}
+
+\item{cstar_increment}{a positive value specifying the increment to cstar,
+only valid if \code{cstar_method="incremental"}}
+
+\item{cstar_cap}{scalar indicating the maximum value to which \code{cstar} can
+be increased}
 }
 \value{
 Ad object of class \code{convergence.clubs}, containing a list of
