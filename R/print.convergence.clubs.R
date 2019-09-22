@@ -19,14 +19,16 @@ print.convergence.clubs <- function(x, ...){
         cat( strwrap(paste0(x[[item]][[what]], collapse=', '), width=width), fill=width)
         cat('\n')
         if( item != 'divergent'){
-            beta   <- round(x[[item]][['model']]['beta'],4)
+            beta    <- round(x[[item]][['model']]['beta'],4)
             std.err <- round(x[[item]][['model']]['std.err'],4)
-            tvalue <- round(x[[item]][['model']]['tvalue'],4)
-            pvalue <- round(x[[item]][['model']]['pvalue'],4)
+            tvalue  <- round(x[[item]][['model']]['tvalue'],4)
+            pvalue  <- round(x[[item]][['model']]['pvalue'],4)
+            cstar   <- round(x[[item]][['cstar']],4)
             cat('beta:    ', paste0(ifelse(beta<0, '', ' '), beta, collapse=''), '\n')
             cat('std.err:  ',  std.err, '\n')
-            cat('tvalue   ', paste0(ifelse(tvalue<0, '', ' '), tvalue, collapse=''), '\n')
+            cat('tvalue:  ', paste0(ifelse(tvalue<0, '', ' '), tvalue, collapse=''), '\n')
             cat('pvalue:   ', pvalue, '\n')
+            cat('cstar:    ', cstar, '\n')
             cat('\n')
         }
     }

@@ -81,15 +81,25 @@
 #' @examples
 #' data("filteredGDP")
 #'
+#' clubs <- findClubs(filteredGDP, dataCols=2:35, unit_names = 1, refCol=35,
+#'                    time_trim = 1/3, HACmethod = "FQSB", cstar = 0)
+#' summary(clubs)
+#'
+#'
 #' \dontrun{
 #' # Cluster Countries using GDP from year 1970 to year 2003
 #' clubs <- findClubs(filteredGDP,  dataCols=2:35, unit_names = 1, refCol=35,
-#'                    time_trim = 1/3, cstar = 0, HACmethod = "AQSB")
+#'                    time_trim = 1/3, HACmethod = "AQSB", cstar = 0)
 #' }
 #'
-#' clubs <- findClubs(filteredGDP, dataCols=2:35, unit_names = 1, refCol=35,
-#'                    time_trim = 1/3, cstar = 0, HACmethod = "FQSB")
-#' summary(clubs)
+#' \dontrun{
+#' # Cluster Countries using GDP from year 1970 to year 2003
+#' clubs <- findClubs(filteredGDP,  dataCols=2:35, unit_names = 1, refCol=35,
+#'                    time_trim = 1/3, HACmethod = "AQSB",
+#'                    cstar = 0,
+#'                    cstar_method = 'incremental',
+#'                    cstar_increment = 0.1)
+#' }
 #'
 #'
 #' @export
@@ -102,17 +112,20 @@ findClubs<- function(X, #data matrix or data.frame
                      unit_names = NULL, #column index of units, if present
                      refCol, #column index of year to be used as reference (lastT)
                      time_trim = 1/3, #portion of years to remove from computations (a value between >0 and <1)
+                     HACmethod = c('FQSB','AQSB'),
                      cstar = 0, #c* value for the second step,
-                     HACmethod = c('FQSB','AQSB')){
+                     cstar_method = c('fixed', 'incremental'),
+                     cstar_increment = 0.1){
 
 
     ### Initialise variables ---------------------------------------------------
-    HACmethod <- match.arg(HACmethod)
-    returnNames <- switch(class(unit_names),
-                            NULL = FALSE,
-                            numeric = TRUE,
-                            integer = TRUE,
-                            stop("Not a valid value for argument 'unit_names'; it should be an integer"))
+    HACmethod    <- match.arg(HACmethod)
+    cstar_method <- match.arg(cstar_method)
+    returnNames  <- switch(class(unit_names),
+                          NULL = FALSE,
+                          numeric = TRUE,
+                          integer = TRUE,
+                          stop("Not a valid value for argument 'unit_names'; it should be an integer"))
 
     N <- nrow(X)
     t <- length(dataCols)
@@ -121,15 +134,17 @@ findClubs<- function(X, #data matrix or data.frame
 
     #output
     clubs <- structure(list(),
-                       class = c("convergence.clubs", "list"),
-                       data = X,
+                       class    = c("convergence.clubs", "list"),
+                       data     = X,
                        dataCols = dataCols,
                        unit_names = unit_names,
-                       refCol = refCol,
-                       time_trim = time_trim,
-                       cstar = cstar,
-                       HACmethod = HACmethod
-                       )
+                       refCol     = refCol,
+                       time_trim  = time_trim,
+                       HACmethod  = HACmethod,
+                       cstar           = cstar,
+                       cstar_method    = cstar_method,
+                       cstar_increment = cstar_increment
+    )
     ### Check inputs -----------------------------------------------------------
 
     #unit_names
@@ -159,6 +174,10 @@ findClubs<- function(X, #data matrix or data.frame
 
     #cstar
     if(!is.numeric(cstar) | length(cstar) > 1) stop('cstar must be a numeric scalar')
+    if(cstar_method=='incremental' & (!is.numeric(cstar_increment) | length(cstar) > 1) ){
+        stop('cstar must be a numeric scalar')
+    }
+
 
 
 
@@ -206,11 +225,15 @@ findClubs<- function(X, #data matrix or data.frame
 
         #add units to core group
         convClub <- club(X = dati, dataCols, core = coreGroup, time_trim,
-                         HACmethod = HACmethod, cstar = cstar)
+                         HACmethod = HACmethod,
+                         cstar = cstar,
+                         cstar_method = cstar_method,
+                         cstar_increment = cstar_increment)
         # newcstar <- clubConv$model$cstar
         # xidclub <- which(X[,IDvar] %in% as.character(clubConv$units))
         clubs[[paste('club',l,sep = '')]] <- list( id = convClub$id,
-                                                   model = convClub$model
+                                                   model = convClub$model,
+                                                   cstar = convClub$cstar
         )
         dati <- dati[-convClub$rows,]#remove the club found from the dataset
         l <- l + 1

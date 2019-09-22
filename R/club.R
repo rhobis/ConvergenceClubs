@@ -17,6 +17,11 @@
 #' @param cstar numeric scalar, indicating the threshold value of the sieve criterion \eqn{c^*}
 #' to include units in the detected core (primary) group (step 3 of Phillips and Sul (2007, 2009) clustering algorithm).
 #' The default value is 0.
+#' @param cstar_method a string specifying whether cstar should be mantained fixed
+#' (\code{cstar_method="fixed"}) or increased iteratively until the whole club satisfies
+#' the condition tvalue>-1.65 #' (\code{cstar_method="incremental"})
+#' @param cstar_increment a positive value specifying the increment to cstar,
+#' only valid if \code{cstar_method="incremental"}
 #'
 #' @return A list of three objects: \code{id}, a vector containing the row indices
 #' of club units in the original dataframe (input of function \code{findClubs});
@@ -36,35 +41,57 @@ club <- function(X,
                  core,
                  time_trim,
                  HACmethod = c('FQSB', 'AQSB'),
-                 cstar = 0){
+                 cstar = 0,
+                 cstar_method = c('fixed', 'incremental'),
+                 cstar_increment = 0.1){
 
     ### Initialisation ---------------------------------------------------------
     HACmethod <- match.arg(HACmethod)
+    cstar_method <- match.arg(cstar_method)
+    if(cstar_increment <= 0) cstar_method <- 'fixed'
 
     X$row <- seq_len(nrow(X))
     unitsNoCore <- X[-core, ] #Data without units of the core group
-    tvalue <- vector()
 
     ### t-test for core + one unit ---------------------------------------------
-    for (k in seq_len(nrow(unitsNoCore)) ){
-        #compute H
-        H <- computeH( X[ c(core, unitsNoCore$row[k]), dataCols ])
-        tvalue <- c(tvalue, estimateMod(H, time_trim, HACmethod = HACmethod)['tvalue'])
+    while(TRUE){
+        nr <- nrow(unitsNoCore)
+        tvalue <- vector(length=nr)
+        for (k in seq_len(nr)){
+            #compute H
+            H <- computeH( X[ c(core, unitsNoCore$row[k]), dataCols ])
+            tvalue[k] <- estimateMod(H, time_trim, HACmethod = HACmethod)['tvalue']
+        }
+        #Find group (core + units) such that (core + i)  gives t > cstar
+        ind <- which(tvalue > cstar)
+        clubCandidates_id <- unitsNoCore[ind, 'id']
+        clubCandidates_row <- unitsNoCore[ind, 'row']
+
+
+        #If t-value< -1.65, increase c and repeat
+        clubId   <- c(X[core, 'id'], clubCandidates_id)
+        clubRows <- c(core, clubCandidates_row)
+
+        H <- computeH(X[clubRows, dataCols])
+        mod <- estimateMod(H, time_trim, HACmethod = HACmethod)
+
+        if( (mod['tvalue'] > -1.65) | (cstar_method=='fixed') ){
+            break
+        } else{
+            if(cstar<= 3){
+            cstar <- cstar + cstar_increment
+            } else{#return only the core
+                clubId <- X[core, 'id']
+                clubRows <- core
+                break
+            }
+        }
     }
-    #Find group (core + units) such that (core + i)  gives t > cstar
-    clubCandidates_id <- unitsNoCore[which(tvalue > cstar), 'id']
-    clubCandidates_row <- unitsNoCore[which(tvalue > cstar), 'row']
 
     ### Output -----------------------------------------------------------------
-    clubId <- c(X[core, 'id'], clubCandidates_id)
-    clubRows <- c(core, clubCandidates_row)
-
-    H <- computeH(X[clubRows, dataCols])
-    mod <- estimateMod(H, time_trim, HACmethod = HACmethod)
-    # tvalue <- mod$tvalue
-
     #return club info
     return( list(id = clubId, #id of units in the club
                  rows = clubRows, #row indices of club units in input
-                 model = mod) )
+                 model = mod,
+                 cstar = cstar) )
 }
