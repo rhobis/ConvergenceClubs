@@ -13,7 +13,7 @@ summary.convergence.clubs <- function(object, ...){
 
     # if there are merged clubs, create string vector that indicates which
     # clubs where merged
-    merged <- !is.null(object$club1$club)
+    merged <- !is.null(object$club1$clubs)
     if( merged ){
         mc <- sapply(x, FUN = function(x) paste(x$clubs, collapse = ' + ') )
         mc <- as.character( mc )
@@ -35,14 +35,18 @@ summary.convergence.clubs <- function(object, ...){
             tvalue = round(vapply(x,
                                   FUN=function(x) x$model['tvalue'],
                                   FUN.VALUE=1), 3),
-            cstar = round(vapply(x,
-                                  FUN=function(x) x$cstar,
-                                  FUN.VALUE=1), 3),
             stringsAsFactors = FALSE
         )
-    if(merged) summary_table <- data.frame(mc, summary_table, stringsAsFactors = FALSE)
+    if(merged){
+        summary_table <- data.frame(mc, summary_table, stringsAsFactors = FALSE)
+    }else{
+        summary_table <- data.frame(summary_table,
+                                    cstar = round(vapply(x, FUN=function(x) x$cstar,
+                                                         FUN.VALUE=1), 3),
+                                    stringsAsFactors = FALSE)
+    }
     colnames(summary_table) <- c(if(merged) 'merged clubs', '# of units', 'beta',
-                                 'std.err', 'tvalue', 'cstar')
+                                 'std.err', 'tvalue', if(!merged) 'cstar')
 
     #if the clubs have been merged, add a column showing which ones are merged
 

@@ -11,14 +11,21 @@
 #' @param time_trim a numeric value between 0 and 1, representing the portion of
 #' time periods to trim when running log t regression model.
 #' Phillips and Sul (2007, 2009) suggest to discard the first third of the period.
-#' @param cstar numeric scalar, indicating the threshold value of the sieve criterion \eqn{c^*}
-#' to include units in the detected core (primary) group (step 3 of Phillips and Sul (2007, 2009) clustering algorithm).
-#' The default value is 0.
 #' @param HACmethod string indicating whether a Fixed Quadratic Spectral Bandwidth (\code{HACmethod="FQSB"}) or
 #' an Adaptive Quadratic Spectral Bandwidth (\code{HACmethod="AQSB"}) should be used for the truncation
 #' of the Quadratic Spectral kernel in estimating the \emph{log-t} regression model
 #' with heteroskedasticity and autocorrelation consistent standard errors.
 #' The default method is "FQSB".
+#' @param cstar numeric scalar, indicating the threshold value of the sieve criterion \eqn{c^*}
+#' to include units in the detected core (primary) group (step 3 of Phillips and Sul (2007, 2009) clustering algorithm).
+#' The default value is 0.
+#' @param cstar_method a string specifying whether cstar should be mantained fixed
+#' (\code{cstar_method="fixed"}) or increased iteratively until the whole club satisfies
+#' the condition tvalue>-1.65 #' (\code{cstar_method="incremental"})
+#' @param cstar_increment a positive value specifying the increment to cstar,
+#' only valid if \code{cstar_method="incremental"}
+#' @param cstar_cap scalar indicating the maximum value to which \code{cstar} can
+#' be increased
 #'
 #'
 #' @return Ad object of class \code{convergence.clubs}, containing a list of
