@@ -5,7 +5,8 @@
 \title{Finds convergence clubs}
 \usage{
 findClubs(X, dataCols, unit_names = NULL, refCol, time_trim = 1/3,
-  cstar = 0, HACmethod = c("FQSB", "AQSB"))
+  HACmethod = c("FQSB", "AQSB"), cstar = 0, cstar_method = c("fixed",
+  "incremental"), cstar_increment = 0.05)
 }
 \arguments{
 \item{X}{dataframe containing data (preferably filtered data in order to remove business cycles)}
@@ -22,15 +23,15 @@ data}
 time periods to trim when running log t regression model.
 Phillips and Sul (2007, 2009) suggest to discard the first third of the period.}
 
-\item{cstar}{numeric scalar, indicating the threshold value of the sieve criterion \eqn{c^*}
-to include units in the detected core (primary) group (step 3 of Phillips and Sul (2007, 2009) clustering algorithm).
-The default value is 0.}
-
 \item{HACmethod}{string indicating whether a Fixed Quadratic Spectral Bandwidth (\code{HACmethod="FQSB"}) or
 an Adaptive Quadratic Spectral Bandwidth (\code{HACmethod="AQSB"}) should be used for the truncation
 of the Quadratic Spectral kernel in estimating the \emph{log-t} regression model
 with heteroskedasticity and autocorrelation consistent standard errors.
 The default method is "FQSB".}
+
+\item{cstar}{numeric scalar, indicating the threshold value of the sieve criterion \eqn{c^*}
+to include units in the detected core (primary) group (step 3 of Phillips and Sul (2007, 2009) clustering algorithm).
+The default value is 0.}
 }
 \value{
 Ad object of class \code{convergence.clubs}, containing a list of

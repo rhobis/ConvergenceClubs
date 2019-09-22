@@ -35,7 +35,7 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Roberto Sichera \email{roberto.sichera@unipa.it} [copyright holder]
+\strong{Maintainer}: Roberto Sichera \email{rob.sichera@gmail.com} [copyright holder]
 
 Authors:
 \itemize{
