@@ -2,23 +2,16 @@
 % Please edit documentation in R/summary.convergence.clubs.R
 \name{print_table}
 \alias{print_table}
-\title{#'Print method for S3 object \code{summary.convergence.clubs}
-#'
-#'
-#'@param x an object of class \code{summary.convergence.clubs}.
-#'@param ... only present for compatibility with function \code{print()}
-#'
-#'@export}
+\title{Print method for S3 object \code{summary.convergence.clubs}}
 \usage{
 print_table(x, merged)
 }
+\arguments{
+\item{x}{an object of class \code{summary.convergence.clubs}.}
+
+\item{...}{only present for compatibility with function \code{print()}}
+}
 \description{
-#'Print method for S3 object \code{summary.convergence.clubs}
-#'
-#'
-#'@param x an object of class \code{summary.convergence.clubs}.
-#'@param ... only present for compatibility with function \code{print()}
-#'
-#'@export
+Print method for S3 object \code{summary.convergence.clubs}
 }
 \keyword{internal}

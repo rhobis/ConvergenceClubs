@@ -90,9 +90,8 @@
 #' # Cluster Countries using GDP from year 1970 to year 2003
 #' clubs <- findClubs(filteredGDP,  dataCols=2:35, unit_names = 1, refCol=35,
 #'                    time_trim = 1/3, HACmethod = "AQSB", cstar = 0)
-#' }
 #'
-#' \dontrun{
+#'
 #' # Cluster Countries using GDP from year 1970 to year 2003
 #' clubs <- findClubs(filteredGDP,  dataCols=2:35, unit_names = 1, refCol=35,
 #'                    time_trim = 1/3, HACmethod = "AQSB",
@@ -205,16 +204,17 @@ findClubs<- function(X, #data matrix or data.frame
         }
 
         #Test all units
-        H_all <- computeH(dati[,dataCols])
+        H_all   <- computeH(dati[,dataCols])
         mod_all <- estimateMod(H_all, time_trim, HACmethod=HACmethod)
-        t_all <- mod_all['tvalue']
+        t_all   <- mod_all['tvalue']
         # if tvalue > -1.65, they all form one club,
         #otherwise go one with clustering
         if (t_all > threshold) {
             clubs[[paste('club',l,sep = '')]] <- list(
                 # units = as.character(dati[,IDvar]),
-                id =  dati$id,
-                model = mod_all )
+                id    =  dati$id,
+                model = mod_all,
+                cstar = cstar)
             break
         }
 
