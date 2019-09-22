@@ -115,7 +115,8 @@ findClubs<- function(X, #data matrix or data.frame
                      HACmethod = c('FQSB','AQSB'),
                      cstar = 0, #c* value for the second step,
                      cstar_method = c('fixed', 'incremental'),
-                     cstar_increment = 0.1){
+                     cstar_increment = 0.1,
+                     cstar_cap = 3){
 
 
     ### Initialise variables ---------------------------------------------------
@@ -173,11 +174,15 @@ findClubs<- function(X, #data matrix or data.frame
     if( refCol > ncol(X) ) stop('Wrong refCol value; there is no such column')
 
     #cstar
-    if(!is.numeric(cstar) | length(cstar) > 1) stop('cstar must be a numeric scalar')
-    if(cstar_method=='incremental' & (!is.numeric(cstar_increment) | length(cstar) > 1) ){
-        stop('cstar must be a numeric scalar')
+    if(!is.numeric(cstar) | length(cstar) > 1) stop('cstar must be a numeric scalar!')
+    if(cstar_method=='incremental' &
+       (!is.numeric(cstar_increment) | length(cstar_increment) > 1 | cstar_increment <0) ){
+        stop('cstar_increment must be a positive numeric scalar!')
     }
-
+    if(cstar_method=='incremental' &
+       (!is.numeric(cstar_cap) | length(cstar_cap) > 1 | cstar_cap < 0) ){
+        stop('cstar_cap must be a positive numeric scalar!')
+    }
 
 
 
@@ -228,7 +233,8 @@ findClubs<- function(X, #data matrix or data.frame
                          HACmethod = HACmethod,
                          cstar = cstar,
                          cstar_method = cstar_method,
-                         cstar_increment = cstar_increment)
+                         cstar_increment = cstar_increment,
+                         cstar_cap = cstar_cap)
         # newcstar <- clubConv$model$cstar
         # xidclub <- which(X[,IDvar] %in% as.character(clubConv$units))
         clubs[[paste('club',l,sep = '')]] <- list( id = convClub$id,

@@ -6,7 +6,7 @@
 \usage{
 findClubs(X, dataCols, unit_names = NULL, refCol, time_trim = 1/3,
   HACmethod = c("FQSB", "AQSB"), cstar = 0, cstar_method = c("fixed",
-  "incremental"), cstar_increment = 0.05)
+  "incremental"), cstar_increment = 0.1, cstar_cap = 3)
 }
 \arguments{
 \item{X}{dataframe containing data (preferably filtered data in order to remove business cycles)}
@@ -82,15 +82,25 @@ until the condition \eqn{t_k>-1.65} is satisfied for the first club.
 \examples{
 data("filteredGDP")
 
+clubs <- findClubs(filteredGDP, dataCols=2:35, unit_names = 1, refCol=35,
+                   time_trim = 1/3, HACmethod = "FQSB", cstar = 0)
+summary(clubs)
+
+
 \dontrun{
 # Cluster Countries using GDP from year 1970 to year 2003
 clubs <- findClubs(filteredGDP,  dataCols=2:35, unit_names = 1, refCol=35,
-                   time_trim = 1/3, cstar = 0, HACmethod = "AQSB")
+                   time_trim = 1/3, HACmethod = "AQSB", cstar = 0)
 }
 
-clubs <- findClubs(filteredGDP, dataCols=2:35, unit_names = 1, refCol=35,
-                   time_trim = 1/3, cstar = 0, HACmethod = "FQSB")
-summary(clubs)
+\dontrun{
+# Cluster Countries using GDP from year 1970 to year 2003
+clubs <- findClubs(filteredGDP,  dataCols=2:35, unit_names = 1, refCol=35,
+                   time_trim = 1/3, HACmethod = "AQSB",
+                   cstar = 0,
+                   cstar_method = 'incremental',
+                   cstar_increment = 0.1)
+}
 
 
 }

@@ -6,7 +6,7 @@
 \usage{
 club(X, dataCols, core, time_trim, HACmethod = c("FQSB", "AQSB"),
   cstar = 0, cstar_method = c("fixed", "incremental"),
-  cstar_increment = 0.05)
+  cstar_increment = 0.1, cstar_cap = 3)
 }
 \arguments{
 \item{X}{matrix or dataframe containing data (preferably filtered data in order to remove business cycles)}
@@ -35,6 +35,9 @@ the condition tvalue>-1.65 #' (\code{cstar_method="incremental"})}
 
 \item{cstar_increment}{a positive value specifying the increment to cstar,
 only valid if \code{cstar_method="incremental"}}
+
+\item{cstar_cap}{scalar indicating the maximum value to which \code{cstar} can
+be increased}
 }
 \value{
 A list of three objects: \code{id}, a vector containing the row indices

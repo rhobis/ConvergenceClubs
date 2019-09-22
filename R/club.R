@@ -22,6 +22,8 @@
 #' the condition tvalue>-1.65 #' (\code{cstar_method="incremental"})
 #' @param cstar_increment a positive value specifying the increment to cstar,
 #' only valid if \code{cstar_method="incremental"}
+#' @param cstar_cap scalar indicating the maximum value to which \code{cstar} can
+#' be increased
 #'
 #' @return A list of three objects: \code{id}, a vector containing the row indices
 #' of club units in the original dataframe (input of function \code{findClubs});
@@ -43,7 +45,8 @@ club <- function(X,
                  HACmethod = c('FQSB', 'AQSB'),
                  cstar = 0,
                  cstar_method = c('fixed', 'incremental'),
-                 cstar_increment = 0.1){
+                 cstar_increment = 0.1,
+                 cstar_cap = 3){
 
     ### Initialisation ---------------------------------------------------------
     HACmethod <- match.arg(HACmethod)
@@ -78,7 +81,7 @@ club <- function(X,
         if( (mod['tvalue'] > -1.65) | (cstar_method=='fixed') ){
             break
         } else{
-            if(cstar<= 3){
+            if(cstar<= cstar_cap){
             cstar <- cstar + cstar_increment
             } else{#return only the core
                 clubId <- X[core, 'id']
