@@ -31,12 +31,13 @@ The default value is 0.}
 
 \item{cstar_method}{a string specifying whether cstar should be mantained fixed
 (\code{cstar_method="fixed"}) or increased iteratively until the whole club satisfies
-the condition tvalue>-1.65 #' (\code{cstar_method="incremental"})}
+the condition \eqn{tvalue>-1.65} (\code{cstar_method="incremental"}).
+Default is \code{cstar_method="fixed"} (see Details).}
 
 \item{cstar_increment}{a positive value specifying the increment to cstar,
-only valid if \code{cstar_method="incremental"}}
+only valid if \code{cstar_method="incremental"} (see Details).}
 
-\item{cstar_cap}{scalar indicating the maximum value to which \code{cstar} can
+\item{cstar_cap}{scalar indicating the maximum value up to which \code{cstar} can
 be increased}
 }
 \value{
@@ -55,3 +56,4 @@ Phillips, P. C.; Sul, D., 2007. Transition modeling and econometric convergence 
 
 Phillips, P. C.; Sul, D., 2009. Economic transition and growth. Journal of Applied Econometrics 24 (7), 1153-1185.
 }
+\keyword{internal}

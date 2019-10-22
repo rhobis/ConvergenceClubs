@@ -25,6 +25,9 @@ Phillips, P. C.; Sul, D., 2009. Economic transition and growth. Journal of Appli
 
 von Lyncker, K.; Thoennessen, R., 2017. Regional club convergence in the EU: evidence from a panel data analysis.
 Empirical Economics 52 (2),  525-553
+
+Sichera, R.; Pizzuto, P., 2019. ConvergenceClubs: A Package for Performing the Phillips and
+Sul's Club Convergence Clustering Procedure. The R Journal.
 }
 \seealso{
 Useful links:

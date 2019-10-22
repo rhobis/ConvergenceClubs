@@ -19,10 +19,11 @@
 #' The default value is 0.
 #' @param cstar_method a string specifying whether cstar should be mantained fixed
 #' (\code{cstar_method="fixed"}) or increased iteratively until the whole club satisfies
-#' the condition tvalue>-1.65 #' (\code{cstar_method="incremental"})
+#' the condition \eqn{tvalue>-1.65} (\code{cstar_method="incremental"}).
+#' Default is \code{cstar_method="fixed"} (see Details).
 #' @param cstar_increment a positive value specifying the increment to cstar,
-#' only valid if \code{cstar_method="incremental"}
-#' @param cstar_cap scalar indicating the maximum value to which \code{cstar} can
+#' only valid if \code{cstar_method="incremental"} (see Details).
+#' @param cstar_cap scalar indicating the maximum value up to which \code{cstar} can
 #' be increased
 #'
 #' @return A list of three objects: \code{id}, a vector containing the row indices
@@ -36,6 +37,8 @@
 #'
 #' Phillips, P. C.; Sul, D., 2009. Economic transition and growth. Journal of Applied Econometrics 24 (7), 1153-1185.
 #'
+#'
+#'@keywords internal
 
 
 club <- function(X,

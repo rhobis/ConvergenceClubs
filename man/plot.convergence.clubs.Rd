@@ -6,8 +6,8 @@
 \usage{
 \method{plot}{convergence.clubs}(x, y = NULL, nrows = NULL,
   ncols = NULL, clubs, avgTP = TRUE, avgTP_clubs, y_fixed = FALSE,
-  legend = FALSE, save = FALSE, filename, path, width = 7,
-  height = 7, device = c("pdf", "png", "jpeg"), res, plot_args,
+  legend = FALSE, save = FALSE, filename, path, width = 20,
+  height = 15, device = c("pdf", "png", "jpeg"), res, plot_args,
   legend_args, breaks, ...)
 }
 \arguments{
