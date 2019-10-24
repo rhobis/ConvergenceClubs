@@ -7,30 +7,32 @@
 #'@param y unused, added for compatibility with function \code{plot}
 #'@param nrows number of rows of the graphical layout, if NULL, it is automatically defined
 #'@param ncols number of columns of the graphical layout, if NULL, it is automatically defined
-#'@param y_fixed logical, should the scale of the y axis be the same for all plots?
-#'@param legend logical, should a legend be displayed?
+#'@param y_fixed logical, should the scale of the y axis be the same for all plots? Default is \code{FALSE}.
+#'@param legend logical, should a legend be displayed? Default is \code{FALSE}.
 #'@param clubs numeric scalar or vector, indicating for which clubs the transition
 #'path plot should be generated. Optional, if omitted, plots for all clubs are produced.
 #'If \code{clubs=NULL}, transition path are not plotted for any club.
-#'@param avgTP logical, indicates if a plot of the average transition paths of
-#'the convergence clubs should be produced, default to \code{TRUE}
-#'@param avgTP_clubs numeric scalar or vector, indicating for which clubs the average transition
-#'path should be displayed. Optional, if omitted, average transition paths for all clubs are plotted
-#'numeric scalar or vector, indicating for which clubs the average
+#'@param avgTP logical, indicates if a plot with the average transition paths of
+#'each convergence club should be produced. Default is \code{TRUE}.
+#'@param avgTP_clubs numeric scalar or vector, indicating for which clubs the average
+#'transition path should be displayed. Optional, if omitted, average transition paths
+#'for all clubs are plotted.
 #'@param save logical, should the plot be saved as a file?
 #'@param filename optional, a string indicating the name of the file where the plot
 #'    should be saved; must include the extension (e.g. "plot.pdf")
-#'@param path optional, a string representing the path of the directory where the plot should
-#'    saved; the path should not contain the a final slash symbol ("/")
+#'@param path optional, a string representing the path of the directory where the
+#'plot should be saved; the path should not end with a slash symbol ("/")
 #'@param width the width of the plot, in inches.
 #'@param height the height of the plot, in inches.
 #'@param device string indicating the format to be used to save the plot;
-#'    one of "pdf", "png" or "jpeg".
+#'one of "pdf", "png" or "jpeg". The default is "pdf".
 #'@param res the resolution of the image, in ppi; only used with \code{device="png"} and \code{device="jpeg"}
-#'@param plot_args optional; a named list with the graphical parameters for the plot, see Details section for more.
-#'@param legend_args optional; a named list with the graphical parameters for the legend, see Details section for more.
-#'@param breaks optional; a numeric vector indicating the columns to be plotted,
-#' the default is to plot all columns.
+#'@param plot_args optional, a named list with the graphical parameters for the plot, see Details section.
+#'@param legend_args optional, a named list with the graphical parameters for the legend, see Details section.
+#'@param breaks a vector of integer values representing the columns (time periods)
+#'to be plotted. Accepted values are integers from 1 to \code{T}, that is the number
+#'of time periods included in the convergence procedure. Optional, if omitted, all
+#'periods are plotted.
 #'@param ... other parameters to pass to function \code{plot()}.
 #'
 #'
@@ -67,6 +69,60 @@
 #' Enlarging the plot window usually solves the problem.
 #'
 #'
+#'
+#'
+#'
+#'
+#'List of argument that could be included in \code{plot_args} as a list:
+#'\itemize{
+#' \item \code{lty} numeric scalar or vector indicating the line type (values available range from 1 to 6)
+#' \item \code{type} a string indicating whether the points (markers) should be displayed.
+#' If  'l' no markers are displayed; if  'o'  markers are displayed;
+#' \item \code{pch} numeric scalar or vector to specify symbols to use when plotting
+#' points (markers). If omitted, customized markers are used for each line.
+#' If fixed (e.g. pch=1) the same marker is used for each line. (Values available range from 0 to 25)
+#' \item \code{cex} number indicating the amount by which plotting text and symbols
+#' should be scaled relative to the default. 1=default, 1.5 is 50% larger, 0.5 is 50% smaller, and so on. Default is 1
+#' \item \code{lwd} number indicating the line width. Default is 1
+#' \item \code{xlab} string indicating x-axis label. If omitted, 'Time', is displayed
+#' \item \code{ylab} string indicating y-axis label. If omitted, 'Relative transition path', is displayed
+#' \item \code{cex.lab} number indicating the amount by which plotting x and y
+#' labels should be scaled relative to cex. Default is 1.
+#' \item \code{col} option to specify colors for each line. Colors could be specified
+#' by index, name, hexadecimal, or RGB. For example col=1, col="white",
+#' and col="#FFFFFF" are equivalent. If omitted, colors are chosen randomly.
+#' \item \code{col_hline} color of the horizontal line for h=1. Default is 'black'.
+#' \item \code{xmarks} vector with tic marks to be displayed in the x axis.
+#' \item \code{xlabs} vector with labels of marks to be displayed in the x axis.
+#' \item \code{xlabs_dir} number indicating the direction of x-axis labels.
+#' For horizontal labels xlabs_dir=0; for vertical labels xlabs_dir=2.
+#' }
+#'
+#'List of argument that could be included in \code{legend_args} as a list:
+#'\itemize{
+#' \item \code{cex} number indicating the amount by which plotting text and symbols
+#' should be scaled relative to the default. Default is 0.9
+#' \item \code{lwd} Number indicating the line width. Default is 1.
+#' \item \code{y.intersp} number indicating the space between each legend entry. Default is 1.
+#' \item \code{max_length_labels} maximum length of the labels displayed for each legend entry.
+#'
+#'}
+#'
+#'
+#'
+#' Note that, when using \emph{RStudio}, one may incur in an error if the plot window
+#' is too small.
+#' Enlarging the plot window usually solves the problem. We suggest to export plots
+#' in the available formats ("pdf", "png" or "jpeg") using adequate values of width and height.
+#'
+#'
+#'
+#'
+#'
+#'
+#'
+#'
+#'
 #'@examples
 #'
 #' data("filteredGDP")
@@ -74,7 +130,9 @@
 #' clubs <- findClubs(filteredGDP, dataCols=2:35, unit_names = 1, refCol=35, time_trim = 1/3,
 #'                    cstar = 0, HACmethod = "FQSB")
 #'
-#' #plot transition paths for all clubs
+#'
+#'
+#' ### Plot transition paths for all clubs
 #' plot(clubs)
 #' plot(clubs, y_fixed=TRUE)
 #' plot(clubs, nrows=2,ncols=4)
@@ -82,15 +140,56 @@
 #' plot(clubs, ncols=3, lty='dotdash', lwd=3, col="blue")
 #' plot(clubs, ncols=3, y_fixed=TRUE, lty='dotdash', lwd=3, col="blue")
 #'
-#' #Plot transition paths only for some clubs
+#' ### Plot transition paths only for some clubs
 #' plot(clubs, clubs=c(2,4,5))
 #' plot(clubs, nrows=1, ncols=3, clubs=c(2,4,5), avgTP = FALSE)
 #' plot(clubs, nrows=1, ncols=3, clubs=c(2,4,5), avgTP = FALSE, legend=TRUE)
 #' plot(clubs, clubs=c(2,4,5), avgTP_clubs = c(1,3))
 #' plot(clubs, clubs=c(2,4,5), avgTP_clubs = c(1,3), legend=TRUE)
 #'
+#'
+#' ### Export customized plots
 #' #Only plot average transition paths
 #' plot(clubs, clubs=NULL, avgTP = TRUE, legend=TRUE)
+#'
+#' #only lines, without markers and legend
+#' plot(clubs, save = TRUE, filename ="name.pdf" , path = tempdir(), width = 15, height = 10)
+#'
+#' #markers and legend (up to the fourth characther is shown)
+#' plot(clubs, legend=TRUE, plot_args=list(type='o'),
+#'     legend_args=list(max_length_labels=4, y.intersp=1),
+#'     save = TRUE, filename ="name.pdf", path = tempdir(), width = 15, height = 10)
+#'
+#' #for large samples the legend could be better displayed by plotting each club
+#' #in turn and by increasing the plot dimension (through width and height)
+#' plot(clubs, clubs=1, avgTP=FALSE, legend=TRUE, plot_args=list(type='o'),
+#'     legend_args=list(max_length_labels=8, y.intersp=1),
+#'     save = TRUE, filename ="name.pdf", path = tempdir(), width = 20, height = 15)
+#'
+#' #customize x-labels - 1
+#' plot(clubs, legend=TRUE, plot_args=list(type='o', xmarks=seq(1,34),xlabs=seq(1970,2003),
+#'     xlabs_dir=0), legend_args=list(max_length_labels=4, y.intersp=1),
+#'     save = TRUE, filename ="name.pdf" , path = tempdir(), width = 15, height = 10)
+#'
+#' #customize x-labels - 2
+#' plot(clubs, legend=TRUE, plot_args=list(type='o', xmarks=seq(1,34,1), xlabs=seq(1970,2003,1),
+#'     xlabs_dir=2), legend_args=list(max_length_labels=4, y.intersp=1),
+#'     save = TRUE, filename ="name.pdf" , path = tempdir(), width = 15, height = 10)
+#'
+#' #show only the plot with the average transition paths of each club
+#' plot(clubs, clubs=NULL, avgTP=TRUE, legend=TRUE,
+#'     plot_args=list(type='o', xmarks=seq(1,34), xlabs=seq(1970,2003), xlabs_dir=0),
+#'     save = TRUE, filename ="name.pdf" , path = tempdir(), width = 15, height = 10)
+#'
+#' #markers and legend - png format
+#' plot(clubs, legend=TRUE, plot_args=list(type='o'),
+#'     legend_args=list(max_length_labels=4, y.intersp=1),
+#'     save = TRUE, filename ="name.png" , path = tempdir(), width = 15, height = 10,
+#'     device= "png", res=100)
+#'
+#'
+#'
+#'
 #'
 #'
 #'@export
