@@ -95,8 +95,9 @@ If  'l' no markers are displayed; if  'o'  markers are displayed;
 points (markers). If omitted, customized markers are used for each line.
 If fixed (e.g. pch=1) the same marker is used for each line. (Values available range from 0 to 25)
 \item \code{cex} number indicating the amount by which plotting text and symbols
-should be scaled relative to the default. 1=default, 1.5 is 50% larger, 0.5 is 50% smaller, and so on. Default is 1
-\item \code{lwd} number indicating the line width. Default is 1
+should be scaled relative to the default. 1=default, 1.5 is 50\% larger,
+0.5 is 50\% smaller, and so on. Default is 1.
+\item \code{lwd} number indicating the line width. Default is 1.
 \item \code{xlab} string indicating x-axis label. If omitted, 'Time', is displayed
 \item \code{ylab} string indicating y-axis label. If omitted, 'Relative transition path', is displayed
 \item \code{cex.lab} number indicating the amount by which plotting x and y

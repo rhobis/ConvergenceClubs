@@ -39,10 +39,10 @@ the condition \eqn{tvalue>-1.65} (\code{cstar_method="incremental"}).
 Default is \code{cstar_method="fixed"} (see Details).}
 
 \item{cstar_increment}{a positive value specifying the increment to cstar,
-only valid if \code{cstar_method="incremental"} (see Details).}
+only valid if \code{cstar_method="incremental"} (see Details); the default value is 0.1.}
 
 \item{cstar_cap}{scalar indicating the maximum value up to which \code{cstar} can
-be increased}
+be increased; the default value is 3.}
 }
 \value{
 Ad object of class \code{convergence.clubs}, containing a list of
@@ -81,16 +81,7 @@ to the Phillips and Sul clustering procedure, the following steps are implemente
        increasing the value of the \eqn{c^*}{c*} parameter until the condition
        \eqn{t_k>-1.65}{t(k) > -1.65} is satisfied for the subconvergence group;
 
-       \item (Recursion and stopping rule): If there are units for which the
-       previous condition fails, gather all these units in one group and run
-       the \emph{log-t} test to see if  the condition \eqn{t_k >-1.65}{t(k) > -1.65} holds.
-       If the condition is satisfied, conclude that there are two convergence clubs.
-       Otherwise, step 1 to 3 should be repeated on the same group to determine
-       whether there are other subgroups that constitute convergence clubs.
-       If no further convergence clubs are found (hence, no k in step 2 satisfies
-       the condition \eqn{t_k >-1.65}{t(k) > -1.65}), the remaining units diverge.
-
-       (Recursion and stopping rule): If there are units for which the previous
+       \item (Recursion and stopping rule): If there are units for which the previous
        condition fails (\eqn{t_k <c^*}{t(k) < c*}), gather all these units in one
        group and run the \emph{log-t}  test to see if the condition \eqn{t_k >-1.65}{t(k) > -1.65}
        holds. If the condition is satisfied, conclude that there are two convergence clubs.
@@ -100,17 +91,15 @@ to the Phillips and Sul clustering procedure, the following steps are implemente
        the remaining units diverge.
    }
 
-Note that Phillips and Sul (2007) suggest to make sure \eqn{t_k>-1.65}{t(k)>-1.65} for the first club.
-Otherwise, repeat the procedure by increasing the value of the \eqn{c^*}{c*} parameter
-until the condition \eqn{t_k>-1.65} is satisfied for the first club.
+
 
 Note that the clustering procedure may return groups with \eqn{t_k <-1.65}{t(k) < -1.65},
 which are not really convergence clubs. In this case, following step 3 of
 the clustering procedure there are two options:
 (i) allow an iterative increase
 of the cstar parameter until the subconvergence club satisfies the condition
-\eqn{t_k >-1.65}{t(k) > -1.65}. In this case it should be set the parameter
-\code{cstar_method="incremental"} and a positive argument for the \code{cstar_increment}
+\eqn{t_k >-1.65}{t(k) > -1.65}. In this case it should the argument \code{cstar_method}
+should be set to \code{"incremental"} and a positive argument for the \code{cstar_increment}
 argument should be chosen;
 (ii) increase the value of the \code{cstar} in order to increase the discriminatory
 power of the \emph{log-t} test in the formation of each club.
@@ -122,9 +111,14 @@ a specific method for the \code{convergence.clubs} class.
 \examples{
 data("filteredGDP")
 
-clubs <- findClubs(filteredGDP, dataCols=2:35, unit_names = 1, refCol=35,
-                   time_trim = 1/3, HACmethod = "FQSB", cstar = 0)
-summary(clubs)
+
+# Cluster Countries using GDP from year 1970 to year 2003
+clubs <- findClubs(filteredGDP,  dataCols=2:35, unit_names = 1, refCol=35,
+                   time_trim = 1/3, HACmethod = "FQSB",
+                   cstar = 0,
+                   cstar_method = 'incremental',
+                   cstar_increment = 0.1)
+
 
 
 \dontrun{
@@ -132,15 +126,7 @@ summary(clubs)
 clubs <- findClubs(filteredGDP,  dataCols=2:35, unit_names = 1, refCol=35,
                    time_trim = 1/3, HACmethod = "AQSB", cstar = 0)
 
-
-# Cluster Countries using GDP from year 1970 to year 2003
-clubs <- findClubs(filteredGDP,  dataCols=2:35, unit_names = 1, refCol=35,
-                   time_trim = 1/3, HACmethod = "AQSB",
-                   cstar = 0,
-                   cstar_method = 'incremental',
-                   cstar_increment = 0.1)
 }
-
 
 }
 \references{
@@ -153,5 +139,5 @@ Andrews, D. W., 1991. Heteroskedasticity and autocorrelation consistent covarian
 \seealso{
 \code{\link{mergeClubs}}, Merges a list of clubs created by \code{findClubs};
 
-\code{\link{mergeDivergent}}, Merges divergent units according to the algorithm proposed by von Lyncker and Thoennessen (2016)
+\code{\link{mergeDivergent}}, Merges divergent units according to the algorithm proposed by von Lyncker and Thoennessen (2017)
 }

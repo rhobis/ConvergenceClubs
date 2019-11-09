@@ -15,7 +15,7 @@ former finds clubs of convergence, given a dataset with units in rows and
 years in columns, returning an object of class \code{convergence.clubs}. The
 latter takes as argument an object of class \code{convergence.clubs} and
 applies the clustering procedure to the convergence clubs contained in the argument,
-according to either Phillips and Sul (2009) or  von Lyncker and Thoennessen (2016) procedure.
+according to either Phillips and Sul (2009) or  von Lyncker and Thoennessen (2017) procedure.
 }
 
 \references{
@@ -25,6 +25,9 @@ Phillips, P. C.; Sul, D., 2009. Economic transition and growth. Journal of Appli
 
 von Lyncker, K.; Thoennessen, R., 2017. Regional club convergence in the EU: evidence from a panel data analysis.
 Empirical Economics 52 (2),  525-553
+
+Andrews, D. W., 1991. Heteroskedasticity and autocorrelation consistent covariance matrix estimation.
+Econometrica: Journal of the Econometric Society, 817-858.
 
 Sichera, R.; Pizzuto, P., 2019. ConvergenceClubs: A Package for Performing the Phillips and
 Sul's Club Convergence Clustering Procedure. The R Journal.
