@@ -2,7 +2,8 @@
 #'
 #' Find convergence clubs by means of Phillips and Sul clustering procedure.
 #'
-#' @param X dataframe containing data (preferably filtered data in order to remove business cycles)
+#' @param X dataframe containing data (preferably filtered data in order to remove business cycles).
+#'  Data must not contain any NA or NaN values, otherwise the clustering procedure will be stopped with an error.
 #' @param dataCols integer vector with the column indices of the data
 #' @param unit_names integer scalar indicating, if present, the index of a column
 #' with codes of the units
@@ -96,11 +97,15 @@
 #'
 #'
 #' @references
+#'
+#' Andrews, D. W., 1991. Heteroskedasticity and autocorrelation consistent covariance matrix estimation. Econometrica: Journal of the Econometric Society, 817-858.
+#'
 #' Phillips, P. C.; Sul, D., 2007. Transition modeling and econometric convergence tests. Econometrica 75 (6), 1771-1855.
 #'
 #' Phillips, P. C.; Sul, D., 2009. Economic transition and growth. Journal of Applied Econometrics 24 (7), 1153-1185.
 #'
-#' Andrews, D. W., 1991. Heteroskedasticity and autocorrelation consistent covariance matrix estimation. Econometrica: Journal of the Econometric Society, 817-858.
+#'
+#'
 #'
 #' @seealso
 #' \code{\link{mergeClubs}}, Merges a list of clubs created by \code{findClubs};

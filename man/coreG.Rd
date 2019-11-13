@@ -8,7 +8,8 @@ coreG(X, dataCols, time_trim, threshold = -1.65, HACmethod = c("FQSB",
   "AQSB"), type = c("max", "all"))
 }
 \arguments{
-\item{X}{matrix or dataframe containing data (preferably filtered data in order to remove business cycles)}
+\item{X}{dataframe containing data (preferably filtered data in order to remove business cycles).
+Data must not contain any NA or NaN values, otherwise the clustering procedure will be stopped with an error.}
 
 \item{dataCols}{integer vector with the column indices of the data}
 

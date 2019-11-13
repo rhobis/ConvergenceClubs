@@ -9,9 +9,8 @@ club(X, dataCols, core, time_trim, HACmethod = c("FQSB", "AQSB"),
   cstar_increment = 0.1, cstar_cap = 3)
 }
 \arguments{
-\item{X}{matrix or dataframe containing data (preferably filtered data in order to remove business cycles)}
-
-\item{dataCols}{integer vector with the column indices of the data}
+\item{X}{dataframe containing data (preferably filtered data in order to remove business cycles).
+Data must not contain any NA or NaN values, otherwise the clustering procedure will be stopped with an error.#' @param dataCols integer vector with the column indices of the data}
 
 \item{core}{an integer vector containing the id's of units in core group}
 

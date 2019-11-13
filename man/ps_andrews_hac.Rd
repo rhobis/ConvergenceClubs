@@ -22,7 +22,10 @@ This function computes the long run variance of residuals of an lm model
     which was written in \emph{GAUSS}.
 }
 \references{
-Phillips, P. C.; Sul, D., 2007.
+Andrews, D. W., 1991. Heteroskedasticity and autocorrelation consistent covariance matrix estimation.
+Econometrica: Journal of the Econometric Society, 817-858.
+
+ Phillips, P. C.; Sul, D., 2007.
 Transition modeling and econometric convergence tests. Econometrica 75 (6), 1771-1855.
 }
 \keyword{internal}

@@ -3,8 +3,8 @@
 #' Add units to core group according to step 3 of the clustering algorithm by
 #' Phillips and Sul (2007, 2009), in order to find the enlarged club.
 #'
-#' @param X matrix or dataframe containing data (preferably filtered data in order to remove business cycles)
-#' @param dataCols integer vector with the column indices of the data
+#' @param X dataframe containing data (preferably filtered data in order to remove business cycles).
+#'  Data must not contain any NA or NaN values, otherwise the clustering procedure will be stopped with an error.#' @param dataCols integer vector with the column indices of the data
 #' @param core an integer vector containing the id's of units in core group
 #' @param time_trim a numeric value between 0 and 1, representing the portion of
 #' time periods to trim when running log t regression model.

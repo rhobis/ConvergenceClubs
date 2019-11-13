@@ -9,7 +9,8 @@ findClubs(X, dataCols, unit_names = NULL, refCol, time_trim = 1/3,
   "incremental"), cstar_increment = 0.1, cstar_cap = 3)
 }
 \arguments{
-\item{X}{dataframe containing data (preferably filtered data in order to remove business cycles)}
+\item{X}{dataframe containing data (preferably filtered data in order to remove business cycles).
+Data must not contain any NA or NaN values, otherwise the clustering procedure will be stopped with an error.}
 
 \item{dataCols}{integer vector with the column indices of the data}
 
@@ -130,11 +131,11 @@ clubs <- findClubs(filteredGDP,  dataCols=2:35, unit_names = 1, refCol=35,
 
 }
 \references{
+Andrews, D. W., 1991. Heteroskedasticity and autocorrelation consistent covariance matrix estimation. Econometrica: Journal of the Econometric Society, 817-858.
+
 Phillips, P. C.; Sul, D., 2007. Transition modeling and econometric convergence tests. Econometrica 75 (6), 1771-1855.
 
 Phillips, P. C.; Sul, D., 2009. Economic transition and growth. Journal of Applied Econometrics 24 (7), 1153-1185.
-
-Andrews, D. W., 1991. Heteroskedasticity and autocorrelation consistent covariance matrix estimation. Econometrica: Journal of the Econometric Society, 817-858.
 }
 \seealso{
 \code{\link{mergeClubs}}, Merges a list of clubs created by \code{findClubs};

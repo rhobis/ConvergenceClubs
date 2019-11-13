@@ -3,7 +3,8 @@
 #' Find the Core (primary) group according to step 2 of the clustering algorithm
 #' by Phillips and Sul (2007, 2009)
 #'
-#' @param X matrix or dataframe containing data (preferably filtered data in order to remove business cycles)
+#' @param X dataframe containing data (preferably filtered data in order to remove business cycles).
+#'  Data must not contain any NA or NaN values, otherwise the clustering procedure will be stopped with an error.
 #' @param dataCols integer vector with the column indices of the data
 #' @param time_trim a numeric value between 0 and 1, representing the portion of
 #' time periods to trim when running log t regression model.
