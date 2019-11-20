@@ -4,8 +4,14 @@
 \alias{mergeClubs}
 \title{Merge convergence clubs}
 \usage{
-mergeClubs(clubs, time_trim, mergeMethod = c("PS", "vLT"),
-  threshold = -1.65, mergeDivergent = FALSE, estar = -1.65)
+mergeClubs(
+  clubs,
+  time_trim,
+  mergeMethod = c("PS", "vLT"),
+  threshold = -1.65,
+  mergeDivergent = FALSE,
+  estar = -1.65
+)
 }
 \arguments{
 \item{clubs}{an object of class \code{convergence.clubs} (created by findClubs function)}

@@ -4,9 +4,18 @@
 \alias{findClubs}
 \title{Finds convergence clubs}
 \usage{
-findClubs(X, dataCols, unit_names = NULL, refCol, time_trim = 1/3,
-  HACmethod = c("FQSB", "AQSB"), cstar = 0, cstar_method = c("fixed",
-  "incremental"), cstar_increment = 0.1, cstar_cap = 3)
+findClubs(
+  X,
+  dataCols,
+  unit_names = NULL,
+  refCol,
+  time_trim = 1/3,
+  HACmethod = c("FQSB", "AQSB"),
+  cstar = 0,
+  cstar_method = c("fixed", "incremental"),
+  cstar_increment = 0.1,
+  cstar_cap = 3
+)
 }
 \arguments{
 \item{X}{dataframe containing data (preferably filtered data in order to remove business cycles).

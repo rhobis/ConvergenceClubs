@@ -4,8 +4,14 @@
 \alias{coreG}
 \title{Find core (primary) group}
 \usage{
-coreG(X, dataCols, time_trim, threshold = -1.65, HACmethod = c("FQSB",
-  "AQSB"), type = c("max", "all"))
+coreG(
+  X,
+  dataCols,
+  time_trim,
+  threshold = -1.65,
+  HACmethod = c("FQSB", "AQSB"),
+  type = c("max", "all")
+)
 }
 \arguments{
 \item{X}{dataframe containing data (preferably filtered data in order to remove business cycles).

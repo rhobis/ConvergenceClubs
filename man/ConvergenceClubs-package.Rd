@@ -6,7 +6,7 @@
 \alias{ConvergenceClubs-package}
 \title{ConvergenceClubs: Finding Convergence Clubs}
 \description{
-Functions for clustering regions that form convergence clubs, according to the definition of Phillips and Sul (2009) <doi:10.1002/jae.1080>. A package description is available in Sichera and Pizzuto (2019) <doi:10.32614/RJ-2019-021>.
+Functions for clustering regions that form convergence clubs, according to the definition of Phillips and Sul (2009) <doi:10.1002/jae.1080>. A package description is available in Sichera and Pizzuto (2019).
 }
 \section{Main functions}{
 

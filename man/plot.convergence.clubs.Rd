@@ -4,11 +4,28 @@
 \alias{plot.convergence.clubs}
 \title{Plot method for S3 class \code{convergence.clubs}}
 \usage{
-\method{plot}{convergence.clubs}(x, y = NULL, nrows = NULL,
-  ncols = NULL, clubs, avgTP = TRUE, avgTP_clubs, y_fixed = FALSE,
-  legend = FALSE, save = FALSE, filename, path, width = 20,
-  height = 15, device = c("pdf", "png", "jpeg"), res, plot_args,
-  legend_args, breaks, ...)
+\method{plot}{convergence.clubs}(
+  x,
+  y = NULL,
+  nrows = NULL,
+  ncols = NULL,
+  clubs,
+  avgTP = TRUE,
+  avgTP_clubs,
+  y_fixed = FALSE,
+  legend = FALSE,
+  save = FALSE,
+  filename,
+  path,
+  width = 20,
+  height = 15,
+  device = c("pdf", "png", "jpeg"),
+  res,
+  plot_args,
+  legend_args,
+  breaks,
+  ...
+)
 }
 \arguments{
 \item{x}{an object of class \code{convergence.clubs}.}
