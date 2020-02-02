@@ -246,7 +246,12 @@ plot.convergence.clubs <- function(x,
     num_clubs <- dim(x)[1]
     if( missing(clubs)  ){
         clubs <- seq_len(num_clubs)
-    }else if( !is.null(clubs) & !is.vector(clubs) ){
+    }else if(is.null(clubs)){
+        if(!avgTP){
+            stop("Nothing plotted, please modify your `clubs` and/or `avgTP` argument settings!")
+        }
+    }
+    else if( !is.null(clubs) & !is.vector(clubs) ){
         stop("argument clubs should be vector!")
     }else{
         clubs <- suppressWarnings( as.numeric(clubs) )
@@ -363,9 +368,9 @@ plot.convergence.clubs <- function(x,
         pm <- c( ceiling(nplots/ncols), ncols )
 
     }else  pm <- grDevices::n2mfrow(nplots)
-+
+    +
 
-    grDevices::dev.hold()
+        grDevices::dev.hold()
     on.exit(grDevices::dev.flush())
 
 
@@ -412,7 +417,8 @@ plot.convergence.clubs <- function(x,
         mar_lgn <- def.par$mar; mar_lgn[2] <- 0.2  #No margin on the left side of the legend
 
         # plot(seq_len(ncol(data)),type="n", axes=F, xlab="", ylab="")
-        lgn_width <- max(strwidth( substr(labs, 1, legend_args[['max_length_labels']]), units='inches'))
+        labs_len  <- min( max(nchar(labs)), legend_args[['max_length_labels']])
+        lgn_width <- max(strwidth( substr(labs, 1, labs_len), units='inches'))
         plt_width <- def.par$pin[1]
 
 
@@ -444,8 +450,8 @@ plot.convergence.clubs <- function(x,
                            xaxt = 'n'
         )
         graphics::axis(1, at = plot_args[['xmarks']],
-             labels = if(is.null(plot_args[['xmarks']])) plot_args[['xmarks']] else plot_args[['xlabs']],
-             las = plot_args[['xlabs_dir']])
+                       labels = if(is.null(plot_args[['xmarks']])) plot_args[['xmarks']] else plot_args[['xlabs']],
+                       las = plot_args[['xlabs_dir']])
 
         graphics::abline(h=1, lty=plot_args[['lty']], lwd=plot_args[['lwd']],
                          col=plot_args[['col_hline']])
@@ -463,7 +469,8 @@ plot.convergence.clubs <- function(x,
                              cex = legend_args[['cex']],
                              # horiz = legend_args[['horiz']],
                              lty = plot_args[['lty']],
-                             pch = plot_args[['pch']],
+                             # pch = plot_args[['pch']],
+                             if(plot_args[['type']] != 'l') pch = plot_args[['pch']] else pch=NA,
                              col = plot_args[['col']],
                              seg.len = 1,
                              xjust = 1,
@@ -496,8 +503,8 @@ plot.convergence.clubs <- function(x,
                            xaxt = 'n'
         )
         graphics::axis(1, at = plot_args[['xmarks']],
-             labels = if(is.null(plot_args[['xmarks']])) plot_args[['xmarks']] else plot_args[['xlabs']],
-             las = plot_args[['xlabs_dir']])
+                       labels = if(is.null(plot_args[['xmarks']])) plot_args[['xmarks']] else plot_args[['xlabs']],
+                       las = plot_args[['xlabs_dir']])
 
         graphics::abline(h=1, lty = plot_args[['lty']],
                          lwd = plot_args[['lwd']], col=plot_args[['col_hline']])
@@ -513,7 +520,8 @@ plot.convergence.clubs <- function(x,
                              cex = legend_args[['cex']],
                              # horiz = legend_args[['horiz']],
                              lty = plot_args[['lty']],
-                             pch = plot_args[['pch']],
+                             # pch = plot_args[['pch']],
+                             if(plot_args[['type']] != 'l') pch = plot_args[['pch']] else pch=NA,
                              col = plot_args[['col']],
                              seg.len = 1,
                              xjust = 1,
@@ -523,8 +531,8 @@ plot.convergence.clubs <- function(x,
             graphics::par( mar=def.par$mar )
         }
     }
-    par(def.par)
 
     if( save ) grDevices::dev.off()
+    par(def.par)
 
 }

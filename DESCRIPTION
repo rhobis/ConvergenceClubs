@@ -1,8 +1,8 @@
 Package: ConvergenceClubs
 Title: Finding Convergence Clubs
 Description: Functions for clustering regions that form convergence clubs, according to the definition of Phillips and Sul (2009) <doi:10.1002/jae.1080>. A package description is available in Sichera and Pizzuto (2019).
-Version: 2.2.1
-Date: 2019-11-20
+Version: 2.2.2
+Date: 2020-02-02
 Authors@R: c(
     person("Roberto", "Sichera",, "rob.sichera@gmail.com", c("aut", "cre", "cph")), 
     person("Pietro", "Pizzuto",, "pietro.pizzuto02@unipa.it", "aut")
@@ -14,7 +14,7 @@ Depends:
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 7.0.0
+RoxygenNote: 7.0.2
 Imports:
     lmtest (>= 0.9-35),
     sandwich (>= 2.3-4)
