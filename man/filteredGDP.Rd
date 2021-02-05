@@ -4,7 +4,9 @@
 \name{filteredGDP}
 \alias{filteredGDP}
 \title{Filtered per-capita GDP of 152 Countries from 1970 to 2003}
-\format{A data frame with 152 rows and 35 variables.}
+\format{
+A data frame with 152 rows and 35 variables.
+}
 \usage{
 data(filteredGDP)
 }

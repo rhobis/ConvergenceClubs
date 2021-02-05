@@ -22,8 +22,8 @@
 #'    should be saved; must include the extension (e.g. "plot.pdf")
 #'@param path optional, a string representing the path of the directory where the
 #'plot should be saved; the path should not end with a slash symbol ("/")
-#'@param width the width of the plot, in inches.
-#'@param height the height of the plot, in inches.
+#'@param width the image width when saving the plot, in inches.
+#'@param height the image height when saving the plot, in inches.
 #'@param device string indicating the format to be used to save the plot;
 #'one of "pdf", "png" or "jpeg". The default is "pdf".
 #'@param res the resolution of the image, in ppi; only used with \code{device="png"} and \code{device="jpeg"}
