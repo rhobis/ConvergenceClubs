@@ -59,9 +59,9 @@ should be saved; must include the extension (e.g. "plot.pdf")}
 \item{path}{optional, a string representing the path of the directory where the
 plot should be saved; the path should not end with a slash symbol ("/")}
 
-\item{width}{the width of the plot, in inches.}
+\item{width}{the image width when saving the plot, in inches.}
 
-\item{height}{the height of the plot, in inches.}
+\item{height}{the image height when saving the plot, in inches.}
 
 \item{device}{string indicating the format to be used to save the plot;
 one of "pdf", "png" or "jpeg". The default is "pdf".}
