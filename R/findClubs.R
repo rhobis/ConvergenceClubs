@@ -4,6 +4,8 @@
 #'
 #' @param X dataframe containing data (preferably filtered data in order to remove business cycles).
 #'  Data must not contain any NA or NaN values, otherwise the clustering procedure will be stopped with an error.
+#'  In order for the clustering procedure to work, data must be arranged such that
+#'  each row represents a unit and each column represents a time period (year, month, ...)
 #' @param dataCols integer vector with the column indices of the data
 #' @param unit_names integer scalar indicating, if present, the index of a column
 #' with codes of the units
