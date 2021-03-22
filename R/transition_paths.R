@@ -9,13 +9,15 @@
 #' \code{findClubs} or \code{\link{mergeClubs}}).
 #' @param include_unit_names logical, if TRUE (the default) adds a column with unit names (only
 #' if present in the \code{convergence.clubs} object passed to \code{clubs}).
+#' @param output_type string indicating if the function should output a list or a data frame.
+#' Possible options are "list" and "data.frame", default is "list".
 #'
 #'
 #'
 #'
-#'
-#' @return A list of data frames, one for each club. Each data frame contains transition paths for
-#' the units in the correspondent club.
+#' @return If \code{output_type=="list"}, a list of data frames, one for each club;
+#' each data frame will contain transition paths for the units in the correspondent club.
+#' If \code{output_type=="data.frame"}, a data.frame.
 #'
 #'
 #' @references
@@ -50,16 +52,20 @@
 #' tp <- transition_paths(mclubs)
 #'
 #'
+#'
+#'
+#'
 #' @export
 #'
 
 
 
-transition_paths <- function(clubs, include_unit_names = TRUE){
+transition_paths <- function(clubs, include_unit_names = TRUE, output_type = c("list", "data.frame")){
 
     #check input
     if(!inherits(clubs,'convergence.clubs')) stop('clubs must be an object of class convergence.clubs')
     if(!is.logical(include_unit_names)) stop('include_unit_names argument should be a logical value')
+    output_type <- match.arg(output_type)
 
     #extract data from club data
     data <- attributes(clubs)$data[, attributes(clubs)$dataCols]
@@ -82,15 +88,24 @@ transition_paths <- function(clubs, include_unit_names = TRUE){
                   function(n){
                       id <- clubs[[n]][['id']]
                       if(include_unit_names){
-
-                          data.frame(unit_name=unit_names[id], h[id, ] )
+                          dt <- data.frame(unit_name=unit_names[id],
+                                           h[id, ]
+                          )
                       }else{
-                          as.data.frame(h[id, ])
+                          dt <- as.data.frame( h[id, ] )
+                      }
+                      if( output_type == "data.frame"){
+                          dt <- data.frame(club = n, dt)
                       }
 
+                      return(dt)
                   }
     )
-    names(out) <- nm
+    if( output_type == "list"){
+        names(out) <- nm
+    }else{
+        out <- Reduce(rbind, out)
+    }
 
     #return output
     return(out)

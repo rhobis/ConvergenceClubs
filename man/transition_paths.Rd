@@ -4,7 +4,11 @@
 \alias{transition_paths}
 \title{Extract transition paths from a \code{convergence.clubs} object}
 \usage{
-transition_paths(clubs, include_unit_names = TRUE)
+transition_paths(
+  clubs,
+  include_unit_names = TRUE,
+  output_type = c("list", "data.frame")
+)
 }
 \arguments{
 \item{clubs}{an object of class \code{convergence.clubs} (created by either function
@@ -12,10 +16,14 @@ transition_paths(clubs, include_unit_names = TRUE)
 
 \item{include_unit_names}{logical, if TRUE (the default) adds a column with unit names (only
 if present in the \code{convergence.clubs} object passed to \code{clubs}).}
+
+\item{output_type}{string indicating if the function should output a list or a data frame.
+Possible options are "list" and "data.frame", default is "list".}
 }
 \value{
-A list of data frames, one for each club. Each data frame contains transition paths for
-the units in the correspondent club.
+If \code{output_type=="list"}, a list of data frames, one for each club;
+each data frame will contain transition paths for the units in the correspondent club.
+If \code{output_type=="data.frame"}, a data.frame.
 }
 \description{
 Given a \code{convergence.clubs} object (created by either \code{findClubs}
@@ -36,6 +44,9 @@ summary(mclubs)
 # Extract Transition Paths
 tp <- transition_paths(clubs)
 tp <- transition_paths(mclubs)
+
+
+
 
 
 }
