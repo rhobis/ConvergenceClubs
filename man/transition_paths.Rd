@@ -37,13 +37,9 @@ data("filteredGDP")
 clubs <- findClubs(filteredGDP, dataCols=2:35, unit_names = 1, refCol=35,
                    time_trim = 1/3, cstar = 0, HACmethod = "FQSB")
 
-# Merge clusters
-mclubs <- mergeClubs(clubs, mergeMethod='PS', mergeDivergent=FALSE)
-summary(mclubs)
-
 # Extract Transition Paths
 tp <- transition_paths(clubs)
-tp <- transition_paths(mclubs)
+tp <- transition_paths(clubs, output_type = 'data.frame')
 
 
 
