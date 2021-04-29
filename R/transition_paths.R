@@ -77,18 +77,16 @@ transition_paths <- function(clubs, include_unit_names = TRUE, output_type = c("
     }
 
     #extract transition paths
-    h <- computeH(data, quantity = "h")
+    h <- as.data.frame(computeH(data, quantity = "h"))
 
     nm  <- names(clubs)
     out <- lapply(nm,
                   function(n){
                       id <- clubs[[n]][['id']]
                       if(include_unit_names){
-                          dt <- data.frame(unit_name=unit_names[id],
-                                           h[id, ]
-                          )
+                          dt <- data.frame(unit_name=unit_names[id], h[id,])
                       }else{
-                          dt <- as.data.frame( h[id, ] )
+                          dt <- h[id,]
                       }
                       if( output_type == "data.frame"){
                           dt <- data.frame(club = n, dt)
