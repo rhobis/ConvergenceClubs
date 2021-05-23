@@ -4,7 +4,8 @@ ConvergenceClubs
 [![Travis-CI Build Status](https://travis-ci.org/rhobis/ConvergenceClubs.svg?branch=master)](https://travis-ci.org/rhobis/ConvergenceClubs)
 [![CRAN\_Status\_Badge](https://www.r-pkg.org/badges/version/ConvergenceClubs)](https://cran.r-project.org/package=ConvergenceClubs)
 [![](https://cranlogs.r-pkg.org/badges/grand-total/ConvergenceClubs)](https://cran.r-project.org/package=ConvergenceClubs)
-
+[![DOI:10.1007/978-3-319-76207-4_15](https://zenodo.org/badge/DOI/10.32614/RJ-2019-021.svg)](https://doi.org/10.32614/RJ-2019-021)
+[![R badge](https://img.shields.io/badge/-Support%20us-brightgreen)](https://www.buymeacoffee.com/rhobis)
 
 Description 
 -----------------
@@ -80,3 +81,8 @@ More
 
 - Please, report any bug or issue [here](https://github.com/rhobis/ConvergenceClubs/issues).
 - For more information, please contact the maintainer at `roberto.sichera@unipa.it`. 
+
+<br/>
+
+<script type="text/javascript" src="https://cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js" data-name="bmc-button" data-slug="rhobis" data-color="#FFDD00" data-emoji="🍵"  data-font="Cookie" data-text="Buy me a tea" data-outline-color="#000000" data-font-color="#000000" data-coffee-color="#ffffff" ></script>
+
