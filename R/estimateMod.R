@@ -78,6 +78,8 @@ estimateMod <- function(H, time_trim=1/3, HACmethod = c('FQSB','AQSB')){
         return(c(beta    = unname(out[2,1]),
                  std.err = unname(out[2,2]),
                  tvalue  = unname(out[2,3]),
-                 pvalue  = unname(out[2,4]) ))
+                 pvalue  = unname(pnorm(q=out[2,3]))
+                 )
+        )
     }else stop("An error occurred, check the value of HACmethod!")
 }
