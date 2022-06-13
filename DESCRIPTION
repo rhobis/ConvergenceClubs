@@ -1,8 +1,8 @@
 Package: ConvergenceClubs
 Title: Finding Convergence Clubs
 Description: Functions for clustering regions that form convergence clubs, according to the definition of Phillips and Sul (2009) <doi:10.1002/jae.1080>. A package description is available in Sichera and Pizzuto (2019).
-Version: 2.2.3
-Date: 2020-02-02
+Version: 2.2.4
+Date: 2022-06-13
 Authors@R: c(
     person("Roberto", "Sichera",, "rob.sichera@gmail.com", c("aut", "cre", "cph")), 
     person("Pietro", "Pizzuto",, "pietro.pizzuto02@unipa.it", "aut")
@@ -10,7 +10,7 @@ Authors@R: c(
 URL: https://CRAN.R-project.org/package=ConvergenceClubs
 BugReports: https://github.com/rhobis/ConvergenceClubs/issues
 Depends:
-    R (>= 3.0.1)
+    R (>= 4.0.0)
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
