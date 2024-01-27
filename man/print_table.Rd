@@ -4,7 +4,7 @@
 \alias{print_table}
 \title{Print method for S3 object \code{summary.convergence.clubs}}
 \usage{
-print_table(x, merged)
+print_table(x, ...)
 }
 \arguments{
 \item{x}{an object of class \code{summary.convergence.clubs}.}

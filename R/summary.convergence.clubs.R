@@ -80,7 +80,7 @@ summary.convergence.clubs <- function(object, ...){
 #'
 #' @keywords internal
 
-print_table <- function(x, merged){
+print_table <- function(x, ...){
     merged <- attr(x, 'merged')
     if(merged){
         x[, 'merged clubs'] <- sapply(x[,'merged clubs'],
