@@ -1,6 +1,5 @@
-citHeader("To cite the 'ConvergenceClubs' package, please use:")
-
-citEntry(entry = "article",
+bibentry(
+  bibtype = "article",
   author = c(
     person("Roberto", "Sichera",, "rob.sichera@gmail.com", c("aut", "cre", "cph")), 
     person("Pietro", "Pizzuto",, "pietro.pizzuto02@unipa.it", "aut")
@@ -11,5 +10,6 @@ citEntry(entry = "article",
   journal = "The R Journal",
   url = "https://journal.r-project.org/archive/2019/RJ-2019-021/index.html",
   textVersion = "R. Sichera and P. Pizzuto, 2019. ConvergenceClubs: A Package for Performing the Phillips and
-          Sul's Club Convergence Clustering Procedure. The R Journal."
+          Sul's Club Convergence Clustering Procedure. The R Journal.",
+  header = "To cite the 'ConvergenceClubs' package, please use:"
 )
