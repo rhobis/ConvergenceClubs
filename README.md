@@ -2,10 +2,9 @@ ConvergenceClubs
 ======================================================
 
 
-[![CRAN\_Status\_Badge](https://www.r-pkg.org/badges/version/ConvergenceClubs)](https://cran.r-project.org/package=ConvergenceClubs)
-[![](https://cranlogs.r-pkg.org/badges/grand-total/ConvergenceClubs)](https://cran.r-project.org/package=ConvergenceClubs)
+[![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/ConvergenceClubs)](https://cran.r-project.org/package=ConvergenceClubs)
+[![Downloads_Badge](https://cranlogs.r-pkg.org/badges/grand-total/ConvergenceClubs)](https://cran.r-project.org/package=ConvergenceClubs)
 [![DOI:10.1007/978-3-319-76207-4_15](https://zenodo.org/badge/DOI/10.32614/RJ-2019-021.svg)](https://doi.org/10.32614/RJ-2019-021)
-[![R badge](https://img.shields.io/badge/-Support%20us-brightgreen)](https://www.buymeacoffee.com/rhobis)
 
 Description 
 -----------------
