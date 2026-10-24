@@ -89,6 +89,8 @@ club <- function(X,
             } else{#return only the core
                 clubId <- X[core, 'id']
                 clubRows <- core
+                H <- computeH(X[clubRows, dataCols])
+                mod <- estimateMod(H, time_trim, HACmethod = HACmethod)
                 break
             }
         }

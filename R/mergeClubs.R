@@ -162,7 +162,7 @@ mergeClubs <- function(clubs,
                 if(mergeMethod=='vLT' & k <= ll-1){#method by von Lyncker and Rasmus Thoennessen (2016)
                     nextcouple <- c(clubs[[k]]$id,clubs[[k+1]]$id)
                     H <- computeH(X[nextcouple, dataCols])
-                    mod2 <- estimateMod(H,time_trim)
+                    mod2 <- estimateMod(H,time_trim, HACmethod = HACmethod)
                     tvalue2 <- mod2['tvalue']
                     if(tvalue > tvalue2){#if true, merge
                         units <- c(units,addunits)
